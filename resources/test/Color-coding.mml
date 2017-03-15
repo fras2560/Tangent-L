@@ -1,0 +1,1864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="k" text="k" fragid="p1.m1">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="G=(V,E)" text="G = open-interval@(V, E)" fragid="p1.m2">
+        <m:math alttext="G=(V,E)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>G</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>E</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G=(V,E)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="k" text="k" fragid="p1.m3">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="V^{\omega}" text="V ^ omega" fragid="p1.m4">
+        <m:math alttext="V^{\omega}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mi>V</m:mi>
+              <m:mi>ω</m:mi>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">V^{\omega}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="V^{\omega}\log V" text="V ^ omega * logarithm@(V)" fragid="p1.m5">
+        <m:math alttext="V^{\omega}\log V" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>V</m:mi>
+                <m:mi>ω</m:mi>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>V</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">V^{\omega}\log V</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="\omega" text="omega" fragid="p1.m6">
+        <m:math alttext="\omega" display="inline">
+          <m:semantics>
+            <m:mi>ω</m:mi>
+            <m:annotation encoding="application/x-tex">\omega</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="k" text="k" fragid="p1.m7">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="G=(V,E)" text="G = open-interval@(V, E)" fragid="p1.m8">
+        <m:math alttext="G=(V,E)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>G</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>E</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G=(V,E)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="G" text="G" fragid="p1.m9">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="k" text="k" fragid="p1.m10">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="V" text="V" fragid="p1.m11">
+        <m:math alttext="V" display="inline">
+          <m:semantics>
+            <m:mi>V</m:mi>
+            <m:annotation encoding="application/x-tex">V</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="V\log V" text="V * logarithm@(V)" fragid="p1.m12">
+        <m:math alttext="V\log V" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>V</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>V</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">V\log V</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="G=(V,E)" text="G = open-interval@(V, E)" fragid="p1.m13">
+        <m:math alttext="G=(V,E)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>G</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>E</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G=(V,E)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m14" tex="O(\log V)" text="O * logarithm@(V)" fragid="p1.m14">
+        <m:math alttext="O(\log V)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>O</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>log</m:mi>
+                  <m:mo>⁡</m:mo>
+                  <m:mi>V</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">O(\log V)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m15" tex="H=(V_{H},E_{H})" text="H = open-interval@(V _ H, E _ H)" fragid="p1.m15">
+        <m:math alttext="H=(V_{H},E_{H})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>H</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>H</m:mi>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>H</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H=(V_{H},E_{H})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m16" tex="G=(V,E)" text="G = open-interval@(V, E)" fragid="p1.m16">
+        <m:math alttext="G=(V,E)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>G</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>E</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G=(V,E)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m17" tex="H" text="H" fragid="p1.m17">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m18" tex="|V_{H}|=O(\log V)" text="absolute-value@(V _ H) = O * logarithm@(V)" fragid="p1.m18">
+        <m:math alttext="|V_{H}|=O(\log V)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo fence="true">|</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>H</m:mi>
+                </m:msub>
+                <m:mo fence="true">|</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mi>O</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>log</m:mi>
+                    <m:mo>⁡</m:mo>
+                    <m:mi>V</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">|V_{H}|=O(\log V)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m19" tex="G" text="G" fragid="p1.m19">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m20" tex="k=|V_{H}|" text="k = absolute-value@(V _ H)" fragid="p1.m20">
+        <m:math alttext="k=|V_{H}|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo fence="true">|</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>H</m:mi>
+                </m:msub>
+                <m:mo fence="true">|</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k=|V_{H}|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m21" tex="H" text="H" fragid="p1.m21">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m22" tex="G" text="G" fragid="p1.m22">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m23" tex="H" text="H" fragid="p1.m23">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Color-coding.tex ̵Line ̵25 ̵**** -->
+      <Math mode="inline" xml:id="p1.m24" tex="p" text="p" fragid="p1.m24">
+        <m:math alttext="p" display="inline">
+          <m:semantics>
+            <m:mi>p</m:mi>
+            <m:annotation encoding="application/x-tex">p</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m25" tex="\tfrac{1}{p}" text="[\tfrac] * 1 * p" fragid="p1.m25">
+        <m:math alttext="\tfrac{1}{p}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>⁢</m:mo>
+              <m:mi>p</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{1}{p}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m26" tex="H" text="H" fragid="p1.m26">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m27" tex="p" text="p" fragid="p1.m27">
+        <m:math alttext="p" display="inline">
+          <m:semantics>
+            <m:mi>p</m:mi>
+            <m:annotation encoding="application/x-tex">p</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m28" tex="|V_{H}|=O(\log V)" text="absolute-value@(V _ H) = O * logarithm@(V)" fragid="p1.m28">
+        <m:math alttext="|V_{H}|=O(\log V)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo fence="true">|</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>H</m:mi>
+                </m:msub>
+                <m:mo fence="true">|</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mi>O</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>log</m:mi>
+                    <m:mo>⁡</m:mo>
+                    <m:mi>V</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">|V_{H}|=O(\log V)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m29" tex="p" text="p" fragid="p1.m29">
+        <m:math alttext="p" display="inline">
+          <m:semantics>
+            <m:mi>p</m:mi>
+            <m:annotation encoding="application/x-tex">p</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m30" tex="G" text="G" fragid="p1.m30">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m31" tex="G" text="G" fragid="p1.m31">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m32" tex="k" text="k" fragid="p1.m32">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m33" tex="H" text="H" fragid="p1.m33">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m34" tex="O(r)" text="O * r" fragid="p1.m34">
+        <m:math alttext="O(r)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>O</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">O(r)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m35" tex="H" text="H" fragid="p1.m35">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m36" tex="G" text="G" fragid="p1.m36">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m37" tex="O(\tfrac{r}{p})" text="O * [\tfrac] * r * p" fragid="p1.m37">
+        <m:math alttext="O(\tfrac{r}{p})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>O</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">O(\tfrac{r}{p})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m38" tex="k" text="k" fragid="p1.m38">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m39" tex="G=(V,E)" text="G = open-interval@(V, E)" fragid="p1.m39">
+        <m:math alttext="G=(V,E)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>G</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>E</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G=(V,E)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m40" tex="k!/k^{k}&gt;\tfrac{1}{e^{k}}" text="kfactorial / k ^ k &gt; [\tfrac] * 1 * e ^ k" fragid="p1.m40">
+        <m:math alttext="k!/k^{k}&gt;\tfrac{1}{e^{k}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mi mathvariant="normal">!</m:mi>
+                </m:mrow>
+                <m:mo>/</m:mo>
+                <m:msup>
+                  <m:mi>k</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msup>
+              </m:mrow>
+              <m:mo>&gt;</m:mo>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>⁢</m:mo>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k!/k^{k}&gt;\tfrac{1}{e^{k}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m41" tex="k^{k}" text="k ^ k" fragid="p1.m41">
+        <m:math alttext="k^{k}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mi>k</m:mi>
+              <m:mi>k</m:mi>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">k^{k}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m42" tex="k" text="k" fragid="p1.m42">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m43" tex="k!" text="kfactorial" fragid="p1.m43">
+        <m:math alttext="k!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mi mathvariant="normal">!</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m44" tex="O(V^{\omega})" text="O * V ^ omega" fragid="p1.m44">
+        <m:math alttext="O(V^{\omega})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>O</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>V</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">O(V^{\omega})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m45" tex="G" text="G" fragid="p1.m45">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m46" tex="e^{k}\cdot O(V^{\omega})" text="(e ^ k cdot O) * V ^ omega" fragid="p1.m46">
+        <m:math alttext="e^{k}\cdot O(V^{\omega})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msup>
+                <m:mo>⋅</m:mo>
+                <m:mi>O</m:mi>
+              </m:mrow>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>V</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">e^{k}\cdot O(V^{\omega})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m47" tex="k" text="k" fragid="p1.m47">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m48" tex="G" text="G" fragid="p1.m48">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Color-coding.tex ̵Line ̵50 ̵**** -->
+      <Math mode="inline" xml:id="p1.m49" tex="c:V\rightarrow\{1,\dots,k\}" text="c colon V rightarrow set@(1, dots, k)" fragid="p1.m49">
+        <m:math alttext="c:V\rightarrow\{1,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>c</m:mi>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mi>V</m:mi>
+                <m:mo>→</m:mo>
+                <m:mrow>
+                  <m:mo>{</m:mo>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi mathvariant="normal">…</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>k</m:mi>
+                  </m:mrow>
+                  <m:mo>}</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">c:V\rightarrow\{1,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m50" tex="G" text="G" fragid="p1.m50">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m51" tex="\{1,\dots,k\}" text="set@(1, dots, k)" fragid="p1.m51">
+        <m:math alttext="\{1,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m52" tex="C_{1}" text="C _ 1" fragid="p1.m52">
+        <m:math alttext="C_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>C</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">C_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m53" tex="C_{2}" text="C _ 2" fragid="p1.m53">
+        <m:math alttext="C_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>C</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">C_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m54" tex="k/2" text="k / 2" fragid="p1.m54">
+        <m:math alttext="k/2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mo>/</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k/2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m55" tex="V" text="V" fragid="p1.m55">
+        <m:math alttext="V" display="inline">
+          <m:semantics>
+            <m:mi>V</m:mi>
+            <m:annotation encoding="application/x-tex">V</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m56" tex="V_{1}" text="V _ 1" fragid="p1.m56">
+        <m:math alttext="V_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m57" tex="V_{2}" text="V _ 2" fragid="p1.m57">
+        <m:math alttext="V_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m58" tex="G_{1}" text="G _ 1" fragid="p1.m58">
+        <m:math alttext="G_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m59" tex="G_{2}" text="G _ 2" fragid="p1.m59">
+        <m:math alttext="G_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m60" tex="V_{1}" text="V _ 1" fragid="p1.m60">
+        <m:math alttext="V_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m61" tex="V_{2}" text="V _ 2" fragid="p1.m61">
+        <m:math alttext="V_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m62" tex="k/2-1" text="k / 2 - 1" fragid="p1.m62">
+        <m:math alttext="k/2-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>k</m:mi>
+                <m:mo>/</m:mo>
+                <m:mn>2</m:mn>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k/2-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m63" tex="G_{1}" text="G _ 1" fragid="p1.m63">
+        <m:math alttext="G_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m64" tex="G_{2}" text="G _ 2" fragid="p1.m64">
+        <m:math alttext="G_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m65" tex="A_{1}" text="A _ 1" fragid="p1.m65">
+        <m:math alttext="A_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">A_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m66" tex="A_{2}" text="A _ 2" fragid="p1.m66">
+        <m:math alttext="A_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">A_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m67" tex="G_{1}" text="G _ 1" fragid="p1.m67">
+        <m:math alttext="G_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m68" tex="G_{2}" text="G _ 2" fragid="p1.m68">
+        <m:math alttext="G_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">G_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m69" tex="B" text="B" fragid="p1.m69">
+        <m:math alttext="B" display="inline">
+          <m:semantics>
+            <m:mi>B</m:mi>
+            <m:annotation encoding="application/x-tex">B</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m70" tex="V_{1}" text="V _ 1" fragid="p1.m70">
+        <m:math alttext="V_{1}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m71" tex="V_{2}" text="V _ 2" fragid="p1.m71">
+        <m:math alttext="V_{2}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>V</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">V_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m72" tex="A_{1}BA_{2}" text="A _ 1 * B * A _ 2" fragid="p1.m72">
+        <m:math alttext="A_{1}BA_{2}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>A</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mi>B</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:msub>
+                <m:mi>A</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">A_{1}BA_{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m73" tex="V" text="V" fragid="p1.m73">
+        <m:math alttext="V" display="inline">
+          <m:semantics>
+            <m:mi>V</m:mi>
+            <m:annotation encoding="application/x-tex">V</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Color-coding.tex ̵Line ̵75 ̵**** -->
+      <Math mode="inline" xml:id="p1.m74" tex="k-1" text="k - 1" fragid="p1.m74">
+        <m:math alttext="k-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m75" tex="t(k)\leq 2^{k}\cdot t(k/2)" text="t * k less= (2 ^ k cdot t) * (k / 2)" fragid="p1.m75">
+        <m:math alttext="t(k)\leq 2^{k}\cdot t(k/2)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>k</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>≤</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mi>k</m:mi>
+                  </m:msup>
+                  <m:mo>⋅</m:mo>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">t(k)\leq 2^{k}\cdot t(k/2)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m76" tex="2^{{O(k)}}\cdot V^{\omega}\in O(V^{\omega})" text="2 ^ (O * k) cdot V ^ omega element-of O * V ^ omega" fragid="p1.m76">
+        <m:math alttext="2^{{O(k)}}\cdot V^{\omega}\in O(V^{\omega})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mrow>
+                    <m:mi>O</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>k</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mi>V</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msup>
+              </m:mrow>
+              <m:mo>∈</m:mo>
+              <m:mrow>
+                <m:mi>O</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>V</m:mi>
+                    <m:mi>ω</m:mi>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{O(k)}}\cdot V^{\omega}\in O(V^{\omega})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m77" tex="G" text="G" fragid="p1.m77">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m78" tex="G" text="G" fragid="p1.m78">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m79" tex="H" text="H" fragid="p1.m79">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m80" tex="G" text="G" fragid="p1.m80">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m81" tex="H" text="H" fragid="p1.m81">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m82" tex="k" text="k" fragid="p1.m82">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m83" tex="F" text="F" fragid="p1.m83">
+        <m:math alttext="F" display="inline">
+          <m:semantics>
+            <m:mi>F</m:mi>
+            <m:annotation encoding="application/x-tex">F</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m84" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m84">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m85" tex="\{1,2,\dots,k\}" text="set@(1, 2, dots, k)" fragid="p1.m85">
+        <m:math alttext="\{1,2,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m86" tex="F" text="F" fragid="p1.m86">
+        <m:math alttext="F" display="inline">
+          <m:semantics>
+            <m:mi>F</m:mi>
+            <m:annotation encoding="application/x-tex">F</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m87" tex="S" text="S" fragid="p1.m87">
+        <m:math alttext="S" display="inline">
+          <m:semantics>
+            <m:mi>S</m:mi>
+            <m:annotation encoding="application/x-tex">S</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m88" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m88">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m89" tex="|S|=k" text="absolute-value@(S) = k" fragid="p1.m89">
+        <m:math alttext="|S|=k" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo fence="true">|</m:mo>
+                <m:mi>S</m:mi>
+                <m:mo fence="true">|</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>k</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">|S|=k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m90" tex="h\in F" text="h element-of F" fragid="p1.m90">
+        <m:math alttext="h\in F" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>h</m:mi>
+              <m:mo>∈</m:mo>
+              <m:mi>F</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">h\in F</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m91" tex="h:S\rightarrow\{1,2,\dots,k\}" text="h colon S rightarrow set@(1, 2, dots, k)" fragid="p1.m91">
+        <m:math alttext="h:S\rightarrow\{1,2,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>h</m:mi>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mi>S</m:mi>
+                <m:mo>→</m:mo>
+                <m:mrow>
+                  <m:mo>{</m:mo>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi mathvariant="normal">…</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>k</m:mi>
+                  </m:mrow>
+                  <m:mo>}</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">h:S\rightarrow\{1,2,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m92" tex="F" text="F" fragid="p1.m92">
+        <m:math alttext="F" display="inline">
+          <m:semantics>
+            <m:mi>F</m:mi>
+            <m:annotation encoding="application/x-tex">F</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m93" tex="k" text="k" fragid="p1.m93">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m94" tex="k" text="k" fragid="p1.m94">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m95" tex="k" text="k" fragid="p1.m95">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m96" tex="e^{k}k^{{O(\log k)}}\log|V|" text="e ^ k * k ^ (O * logarithm@(k)) * logarithm@(absolute-value@(V))" fragid="p1.m96">
+        <m:math alttext="e^{k}k^{{O(\log k)}}\log|V|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>e</m:mi>
+                <m:mi>k</m:mi>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:msup>
+                <m:mi>k</m:mi>
+                <m:mrow>
+                  <m:mi>O</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>log</m:mi>
+                      <m:mo>⁡</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">e^{k}k^{{O(\log k)}}\log|V|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m97" tex="2^{{O(k)}}\log^{2}|V|" text="2 ^ (O * k) * (logarithm ^ 2)@(absolute-value@(V))" fragid="p1.m97">
+        <m:math alttext="2^{{O(k)}}\log^{2}|V|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mi>O</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>log</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>⁡</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{O(k)}}\log^{2}|V|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m98" tex="k" text="k" fragid="p1.m98">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Color-coding.tex ̵Line ̵100 ̵**** -->
+      <Math mode="inline" xml:id="p1.m99" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m99">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m100" tex="\{1,2,\dots,k^{2}\}" text="set@(1, 2, dots, k ^ 2)" fragid="p1.m100">
+        <m:math alttext="\{1,2,\dots,k^{2}\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:msup>
+                  <m:mi>k</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k^{2}\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m101" tex="k" text="k" fragid="p1.m101">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m102" tex="\{1,2,\dots,k^{2}\}" text="set@(1, 2, dots, k ^ 2)" fragid="p1.m102">
+        <m:math alttext="\{1,2,\dots,k^{2}\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:msup>
+                  <m:mi>k</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k^{2}\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m103" tex="\{1,2,\dots,k\}" text="set@(1, 2, dots, k)" fragid="p1.m103">
+        <m:math alttext="\{1,2,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m104" tex="2n\log k" text="2 * n * logarithm@(k)" fragid="p1.m104">
+        <m:math alttext="2n\log k" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>2</m:mn>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2n\log k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m105" tex="2\log k" text="2 * logarithm@(k)" fragid="p1.m105">
+        <m:math alttext="2\log k" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>2</m:mn>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\log k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m106" tex="k^{{O(1)}}\log|V|" text="k ^ (O * 1) * logarithm@(absolute-value@(V))" fragid="p1.m106">
+        <m:math alttext="k^{{O(1)}}\log|V|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>k</m:mi>
+                <m:mrow>
+                  <m:mi>O</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k^{{O(1)}}\log|V|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m107" tex="k" text="k" fragid="p1.m107">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m108" tex="2^{{O(k)}}" text="2 ^ (O * k)" fragid="p1.m108">
+        <m:math alttext="2^{{O(k)}}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mrow>
+                <m:mi>O</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>k</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{{O(k)}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m109" tex="k" text="k" fragid="p1.m109">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m110" tex="k" text="k" fragid="p1.m110">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m111" tex="2^{{O(k)}}\log|V|" text="2 ^ (O * k) * logarithm@(absolute-value@(V))" fragid="p1.m111">
+        <m:math alttext="2^{{O(k)}}\log|V|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mi>O</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{O(k)}}\log|V|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m112" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m112">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m113" tex="\{1,2,\dots,k\}" text="set@(1, 2, dots, k)" fragid="p1.m113">
+        <m:math alttext="\{1,2,\dots,k\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m114" tex="k" text="k" fragid="p1.m114">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m115" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m115">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m116" tex="\{1,2,\dots,k!\}" text="set@(1, 2, dots, kfactorial)" fragid="p1.m116">
+        <m:math alttext="\{1,2,\dots,k!\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mi mathvariant="normal">!</m:mi>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k!\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m117" tex="k" text="k" fragid="p1.m117">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m118" tex="\{1,2,\dots,|V|\}" text="set@(1, 2, dots, absolute-value@(V))" fragid="p1.m118">
+        <m:math alttext="\{1,2,\dots,|V|\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,|V|\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m119" tex="\{1,2,\dots,k^{k}\}" text="set@(1, 2, dots, k ^ k)" fragid="p1.m119">
+        <m:math alttext="\{1,2,\dots,k^{k}\}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mi mathvariant="normal">…</m:mi>
+                <m:mo>,</m:mo>
+                <m:msup>
+                  <m:mi>k</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msup>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\{1,2,\dots,k^{k}\}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m120" tex="nk\log k" text="n * k * logarithm@(k)" fragid="p1.m120">
+        <m:math alttext="nk\log k" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mi>k</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">nk\log k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m121" tex="k\log k" text="k * logarithm@(k)" fragid="p1.m121">
+        <m:math alttext="k\log k" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mi>k</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k\log k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m122" tex="k" text="k" fragid="p1.m122">
+        <m:math alttext="k" display="inline">
+          <m:semantics>
+            <m:mi>k</m:mi>
+            <m:annotation encoding="application/x-tex">k</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m123" tex="k^{{O(k)}}\log|V|" text="k ^ (O * k) * logarithm@(absolute-value@(V))" fragid="p1.m123">
+        <m:math alttext="k^{{O(k)}}\log|V|" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>k</m:mi>
+                <m:mrow>
+                  <m:mi>O</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mi>log</m:mi>
+                <m:mo>⁡</m:mo>
+                <m:mrow>
+                  <m:mo fence="true">|</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo fence="true">|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k^{{O(k)}}\log|V|</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Color-coding.tex ̵Line ̵125 ̵**** -->
+      <Math mode="inline" xml:id="p1.m124" tex="k=O(\log n)" text="k = O * logarithm@(n)" fragid="p1.m124">
+        <m:math alttext="k=O(\log n)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mi>O</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>log</m:mi>
+                    <m:mo>⁡</m:mo>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k=O(\log n)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m125" tex="G" text="G" fragid="p1.m125">
+        <m:math alttext="G" display="inline">
+          <m:semantics>
+            <m:mi>G</m:mi>
+            <m:annotation encoding="application/x-tex">G</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m126" tex="n" text="n" fragid="p1.m126">
+        <m:math alttext="n" display="inline">
+          <m:semantics>
+            <m:mi>n</m:mi>
+            <m:annotation encoding="application/x-tex">n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

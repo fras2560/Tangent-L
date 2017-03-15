@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="C_{{p^{{\lambda_{i}}}}}," text="C _ (p ^ (lambda _ i))" fragid="p1.m1">
+        <m:math alttext="C_{{p^{{\lambda_{i}}}}}," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>C</m:mi>
+                <m:msup>
+                  <m:mi>p</m:mi>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                </m:msup>
+              </m:msub>
+              <m:mo>,</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">C_{{p^{{\lambda_{i}}}}},</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="\lambda=(\lambda_{1},\lambda_{2},\ldots)" text="lambda = vector@(lambda _ 1, lambda _ 2, ldots)" fragid="p1.m2">
+        <m:math alttext="\lambda=(\lambda_{1},\lambda_{2},\ldots)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>λ</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:mi mathvariant="normal">…</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\lambda=(\lambda_{1},\lambda_{2},\ldots)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="n" text="n" fragid="p1.m3">
+        <m:math alttext="n" display="inline">
+          <m:semantics>
+            <m:mi>n</m:mi>
+            <m:annotation encoding="application/x-tex">n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="g^{\lambda}_{{\mu,\nu}}(p)" text="(g ^ lambda) _ (list@(mu, nu)) * p" fragid="p1.m4">
+        <m:math alttext="g^{\lambda}_{{\mu,\nu}}(p)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>μ</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>ν</m:mi>
+                </m:mrow>
+                <m:mi>λ</m:mi>
+              </m:msubsup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>p</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">g^{\lambda}_{{\mu,\nu}}(p)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="\nu" text="nu" fragid="p1.m5">
+        <m:math alttext="\nu" display="inline">
+          <m:semantics>
+            <m:mi>ν</m:mi>
+            <m:annotation encoding="application/x-tex">\nu</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="\mu" text="mu" fragid="p1.m6">
+        <m:math alttext="\mu" display="inline">
+          <m:semantics>
+            <m:mi>μ</m:mi>
+            <m:annotation encoding="application/x-tex">\mu</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="g^{\lambda}_{{\mu,\nu}}(q)\in\mathbb{Z}[q].\," text="(g ^ lambda) _ (list@(mu, nu)) * q element-of [\mathbb] * Z * q" fragid="p1.m7">
+        <m:math alttext="g^{\lambda}_{{\mu,\nu}}(q)\in\mathbb{Z}[q].\," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mi>g</m:mi>
+                    <m:mrow>
+                      <m:mi>μ</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>ν</m:mi>
+                    </m:mrow>
+                    <m:mi>λ</m:mi>
+                  </m:msubsup>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>q</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>∈</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>Z</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mi>q</m:mi>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">g^{\lambda}_{{\mu,\nu}}(q)\in\mathbb{Z}[q].\,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="H" text="H" fragid="p1.m8">
+        <m:math alttext="H" display="inline">
+          <m:semantics>
+            <m:mi>H</m:mi>
+            <m:annotation encoding="application/x-tex">H</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="\mathbb{Z}[q]" text="[\mathbb] * Z * q" fragid="p1.m9">
+        <m:math alttext="\mathbb{Z}[q]" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\mathbb</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>Z</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:mi>q</m:mi>
+                <m:mo>]</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathbb{Z}[q]</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="u_{\lambda}" text="u _ lambda" fragid="p1.m10">
+        <m:math alttext="u_{\lambda}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>λ</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">u_{\lambda}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="u_{\mu}u_{\nu}=\sum_{\lambda}g^{\lambda}_{{\mu,\nu}}(q)u_{\lambda}.\," text="u _ mu * u _ nu = (sum _ lambda)@((g ^ lambda) _ (list@(mu, nu)) * q * u _ lambda)" fragid="p1.m11">
+        <m:math alttext="u_{\mu}u_{\nu}=\sum_{\lambda}g^{\lambda}_{{\mu,\nu}}(q)u_{\lambda}.\," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mi>μ</m:mi>
+                  </m:msub>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mi>ν</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mo>∑</m:mo>
+                    <m:mi>λ</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mi>g</m:mi>
+                      <m:mrow>
+                        <m:mi>μ</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>ν</m:mi>
+                      </m:mrow>
+                      <m:mi>λ</m:mi>
+                    </m:msubsup>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>q</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>⁢</m:mo>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>λ</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">u_{\mu}u_{\nu}=\sum_{\lambda}g^{\lambda}_{{\mu,\nu}}(q)u_{\lambda}.\,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="u_{{\mathbf{1}^{n}}}" text="u _ (1 ^ n)" fragid="p1.m12">
+        <m:math alttext="u_{{\mathbf{1}^{n}}}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:msup>
+                <m:mn>𝟏</m:mn>
+                <m:mi>n</m:mi>
+              </m:msup>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">u_{{\mathbf{1}^{n}}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="u_{{\mathbf{1}^{n}}}\mapsto q^{{-n(n-1)}}e_{n}\," text="u _ (1 ^ n) maps-to q ^ (- n * (n - 1)) * e _ n" fragid="p1.m13">
+        <m:math alttext="u_{{\mathbf{1}^{n}}}\mapsto q^{{-n(n-1)}}e_{n}\," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:msup>
+                  <m:mn>𝟏</m:mn>
+                  <m:mi>n</m:mi>
+                </m:msup>
+              </m:msub>
+              <m:mo>↦</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>q</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>⁢</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mi>n</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:msub>
+                  <m:mi>e</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">u_{{\mathbf{1}^{n}}}\mapsto q^{{-n(n-1)}}e_{n}\,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m14" tex="u_{\lambda}" text="u _ lambda" fragid="p1.m14">
+        <m:math alttext="u_{\lambda}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>λ</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">u_{\lambda}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

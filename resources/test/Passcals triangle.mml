@@ -1,0 +1,1906 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="(x+y)^{n}=\sum_{{k=0}}^{n}{n\choose k}x^{{n-k}}y^{{k}}" text="(x + y) ^ n = ((sum _ (k = 0)) ^ n)@(binomial@(n, k) * x ^ (n - k) * y ^ k)" fragid="p1.m1">
+        <m:math alttext="(x+y)^{n}=\sum_{{k=0}}^{n}{n\choose k}x^{{n-k}}y^{{k}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>x</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mi>y</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>n</m:mi>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msubsup>
+                  <m:mo>∑</m:mo>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                  <m:mi>n</m:mi>
+                </m:msubsup>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>k</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>⁢</m:mo>
+                  <m:msup>
+                    <m:mi>x</m:mi>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:msup>
+                    <m:mi>y</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">(x+y)^{n}=\sum_{{k=0}}^{n}{n\choose k}x^{{n-k}}y^{{k}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="{n\choose k}={n-1\choose k-1}+{n-1\choose k}" text="binomial@(n, k) = binomial@(n - 1, k - 1) + binomial@(n - 1, k)" fragid="p1.m2">
+        <m:math alttext="{n\choose k}={n-1\choose k-1}+{n-1\choose k}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mstyle scriptlevel="+1">
+                  <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>n</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>k</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mstyle>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose k}={n-1\choose k-1}+{n-1\choose k}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="\scriptstyle{n\choose k}" text="binomial@(n, k)" fragid="p1.m3">
+        <m:math alttext="\scriptstyle{n\choose k}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mstyle scriptlevel="+1">
+                <m:mstyle scriptlevel="+1">
+                  <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>n</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>k</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mstyle>
+              </m:mstyle>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\scriptstyle{n\choose k}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="a_{i}={n\choose i}." text="a _ i = binomial@(n, i)" fragid="p1.m4">
+        <m:math alttext="a_{i}={n\choose i}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>i</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">a_{i}={n\choose i}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{i}." text="(x + 1) ^ n = ((sum _ (i = 0)) ^ n)@(a _ i * x ^ i)" fragid="p1.m5">
+        <m:math alttext="(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{i}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>x</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>n</m:mi>
+                </m:msup>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mi>n</m:mi>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:msup>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msup>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{i}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="(x+1)^{{n+1}}=(x+1)(x+1)^{n}=x(x+1)^{n}+(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{{i+1%&#10;}}+\sum_{{i=0}}^{n}a_{i}x^{i}." text="(x + 1) ^ (n + 1) = (x + 1) * (x + 1) ^ n = x * (x + 1) ^ n + (x + 1) ^ n = ((sum _ (i = 0)) ^ n)@(a _ i * x ^ (i + 1)) + ((sum _ (i = 0)) ^ n)@(a _ i * x ^ i)" fragid="p1.m6">
+        <m:math alttext="(x+1)^{{n+1}}=(x+1)(x+1)^{n}=x(x+1)^{n}+(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{{i+1%&#10;}}+\sum_{{i=0}}^{n}a_{i}x^{i}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>x</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>x</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>⁢</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mi>x</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mi>x</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mi>x</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mi>x</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mi>n</m:mi>
+                    </m:msubsup>
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>⁢</m:mo>
+                      <m:msup>
+                        <m:mi>x</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:msup>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mi>n</m:mi>
+                    </m:msubsup>
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>⁢</m:mo>
+                      <m:msup>
+                        <m:mi>x</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msup>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">(x+1)^{{n+1}}=(x+1)(x+1)^{n}=x(x+1)^{n}+(x+1)^{n}=\sum_{{i=0}}^{n}a_{i}x^{{i+1%
+}}+\sum_{{i=0}}^{n}a_{i}x^{i}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="{n\choose 0}+{n\choose 1}+\cdots+{n\choose n-1}+{n\choose n}=2^{n}." text="binomial@(n, 0) + binomial@(n, 1) + cdots + binomial@(n, n - 1) + binomial@(n, n) = 2 ^ n" fragid="p1.m7">
+        <m:math alttext="{n\choose 0}+{n\choose 1}+\cdots+{n\choose n-1}+{n\choose n}=2^{n}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi mathvariant="normal">⋯</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mi>n</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mi>n</m:mi>
+                </m:msup>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose 0}+{n\choose 1}+\cdots+{n\choose n-1}+{n\choose n}=2^{n}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="\mathbf{C}(n,k)=\mathbf{C}_{k}^{n}={{}_{n}C_{k}}={n\choose k}=\frac{n!}{k!(n-k%&#10;)!}." text="C * open-interval@(n, k) = (C _ k) ^ n = _ n C _ k = binomial@(n, k) = nfactorial / (kfactorial * (n - k)factorial)" fragid="p1.m8">
+        <m:math alttext="\mathbf{C}(n,k)=\mathbf{C}_{k}^{n}={{}_{n}C_{k}}={n\choose k}=\frac{n!}{k!(n-k%&#10;)!}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mi>𝐂</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msubsup>
+                  <m:mi>𝐂</m:mi>
+                  <m:mi>k</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msubsup>
+                <m:mo>=</m:mo>
+                <m:mmultiscripts>
+                  <m:mi>C</m:mi>
+                  <m:mi>k</m:mi>
+                  <m:none/>
+                  <m:mprescripts/>
+                  <m:mi>n</m:mi>
+                  <m:none/>
+                </m:mmultiscripts>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mi mathvariant="normal">!</m:mi>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mi mathvariant="normal">!</m:mi>
+                    </m:mrow>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mi>n</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mi>k</m:mi>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi mathvariant="normal">!</m:mi>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathbf{C}(n,k)=\mathbf{C}_{k}^{n}={{}_{n}C_{k}}={n\choose k}=\frac{n!}{k!(n-k%
+)!}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="\sum_{{k=0}}^{n}{n\choose k}^{2}={2n\choose n}." text="((sum _ (k = 0)) ^ n)@((binomial@(n, k)) ^ 2) = binomial@(2 * n, n)" fragid="p1.m9">
+        <m:math alttext="\sum_{{k=0}}^{n}{n\choose k}^{2}={2n\choose n}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mi>n</m:mi>
+                  </m:msubsup>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mstyle scriptlevel="+1">
+                        <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                          <m:mtr>
+                            <m:mtd>
+                              <m:mi>n</m:mi>
+                            </m:mtd>
+                          </m:mtr>
+                          <m:mtr>
+                            <m:mtd>
+                              <m:mi>k</m:mi>
+                            </m:mtd>
+                          </m:mtr>
+                        </m:mtable>
+                      </m:mstyle>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mn>2</m:mn>
+                            <m:mo>⁢</m:mo>
+                            <m:mi>n</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\sum_{{k=0}}^{n}{n\choose k}^{2}={2n\choose n}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="p\in\mathbb{P}" text="p element-of [\mathbb] * P" fragid="p1.m10">
+        <m:math alttext="p\in\mathbb{P}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>p</m:mi>
+              <m:mo>∈</m:mo>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mi>P</m:mi>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">p\in\mathbb{P}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="(p-k)!" text="(p - k)factorial" fragid="p1.m11">
+        <m:math alttext="(p-k)!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mi>k</m:mi>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi mathvariant="normal">!</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">(p-k)!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="k!" text="kfactorial" fragid="p1.m12">
+        <m:math alttext="k!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>k</m:mi>
+              <m:mi mathvariant="normal">!</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">k!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="p!\," text="pfactorial" fragid="p1.m13">
+        <m:math alttext="p!\," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>p</m:mi>
+              <m:mpadded width="+1.666667pt">
+                <m:mi mathvariant="normal">!</m:mi>
+              </m:mpadded>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">p!\,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m14" tex="P_{d}(n)=\frac{1}{d!}\prod_{{k=0}}^{{d-1}}(n+k)={n^{{(d)}}\over d!}=\binom{n+d%&#10;-1}{d}" text="P _ d * n = (1 / dfactorial) * ((product _ (k = 0)) ^ (d - 1))@(n + k) = n ^ d / dfactorial = ([\binom] * n + d) - 1 * d" fragid="p1.m14">
+        <m:math alttext="P_{d}(n)=\frac{1}{d!}\prod_{{k=0}}^{{d-1}}(n+k)={n^{{(d)}}\over d!}=\binom{n+d%&#10;-1}{d}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mi>d</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi mathvariant="normal">!</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mo>∏</m:mo>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:msup>
+                  <m:mi>n</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>d</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi mathvariant="normal">!</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\binom</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>d</m:mi>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>d</m:mi>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">P_{d}(n)=\frac{1}{d!}\prod_{{k=0}}^{{d-1}}(n+k)={n^{{(d)}}\over d!}=\binom{n+d%
+-1}{d}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m15" tex="n" text="n" fragid="p1.m15">
+        <m:math alttext="n" display="inline">
+          <m:semantics>
+            <m:mi>n</m:mi>
+            <m:annotation encoding="application/x-tex">n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m16" tex="\tbinom{n}{0}" text="[\tbinom] * n * 0" fragid="p1.m16">
+        <m:math alttext="\tbinom{n}{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m17" tex="\tbinom{n}{1}" text="[\tbinom] * n * 1" fragid="p1.m17">
+        <m:math alttext="\tbinom{n}{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m18" tex="\tbinom{n}{n}" text="[\tbinom] * n * n" fragid="p1.m18">
+        <m:math alttext="\tbinom{n}{n}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{n}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m19" tex="\tbinom{n}{0}=1" text="[\tbinom] * n * 0 = 1" fragid="p1.m19">
+        <m:math alttext="\tbinom{n}{0}=1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{0}=1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m20" tex="{n\choose k}={n\choose k-1}\times\frac{n+1-k}{k}." text="binomial@(n, k) = binomial@(n, k - 1) * (((n + 1) - k) / k)" fragid="p1.m20">
+        <m:math alttext="{n\choose k}={n\choose k-1}\times\frac{n+1-k}{k}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>n</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mi>k</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>×</m:mo>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mi>k</m:mi>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose k}={n\choose k-1}\times\frac{n+1-k}{k}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m21" tex="\tfrac{5}{1}" text="[\tfrac] * 51" fragid="p1.m21">
+        <m:math alttext="\tfrac{5}{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>51</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{5}{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m22" tex="\tfrac{4}{2}" text="[\tfrac] * 42" fragid="p1.m22">
+        <m:math alttext="\tfrac{4}{2}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>42</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{4}{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m23" tex="\tfrac{3}{3}" text="[\tfrac] * 33" fragid="p1.m23">
+        <m:math alttext="\tfrac{3}{3}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>33</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{3}{3}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Pascals ̵triangle.tex ̵Line ̵25 ̵**** -->
+      <Math mode="inline" xml:id="p1.m24" tex="\tfrac{2}{4}" text="[\tfrac] * 24" fragid="p1.m24">
+        <m:math alttext="\tfrac{2}{4}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>24</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{2}{4}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m25" tex="\tfrac{1}{5}" text="[\tfrac] * 15" fragid="p1.m25">
+        <m:math alttext="\tfrac{1}{5}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>15</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{1}{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m26" tex="\tbinom{5}{0}=1" text="[\tbinom] * 50 = 1" fragid="p1.m26">
+        <m:math alttext="\tbinom{5}{0}=1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>50</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{0}=1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m27" tex="\tbinom{5}{1}=1\times\tfrac{5}{1}=5" text="[\tbinom] * 51 = 1 * [\tfrac] * 51 = 5" fragid="p1.m27">
+        <m:math alttext="\tbinom{5}{1}=1\times\tfrac{5}{1}=5" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>51</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>×</m:mo>
+                  <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:mn>51</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>5</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{1}=1\times\tfrac{5}{1}=5</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m28" tex="\tbinom{5}{2}=5\times\tfrac{4}{2}=10" text="[\tbinom] * 52 = 5 * [\tfrac] * 42 = 10" fragid="p1.m28">
+        <m:math alttext="\tbinom{5}{2}=5\times\tfrac{4}{2}=10" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>52</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:mo>×</m:mo>
+                  <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:mn>42</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>10</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{2}=5\times\tfrac{4}{2}=10</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m29" tex="\tbinom{n}{0}" text="[\tbinom] * n * 0" fragid="p1.m29">
+        <m:math alttext="\tbinom{n}{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m30" tex="\tbinom{n+1}{1}" text="[\tbinom] * n + 11" fragid="p1.m30">
+        <m:math alttext="\tbinom{n+1}{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mi>n</m:mi>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>11</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n+1}{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m31" tex="\tbinom{n+2}{2}" text="[\tbinom] * n + 22" fragid="p1.m31">
+        <m:math alttext="\tbinom{n+2}{2}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mi>n</m:mi>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>22</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n+2}{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m32" tex="\tbinom{n}{0}=1" text="[\tbinom] * n * 0 = 1" fragid="p1.m32">
+        <m:math alttext="\tbinom{n}{0}=1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{n}{0}=1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m33" tex="{n+k\choose k}={n+k-1\choose k-1}\times\frac{n+k}{1+k}." text="binomial@(n + k, k) = binomial@((n + k) - 1, k - 1) * ((n + k) / (1 + k))" fragid="p1.m33">
+        <m:math alttext="{n+k\choose k}={n+k-1\choose k-1}\times\frac{n+k}{1+k}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mi>k</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mi>n</m:mi>
+                              <m:mo>+</m:mo>
+                              <m:mi>k</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mi>k</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>×</m:mo>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n+k\choose k}={n+k-1\choose k-1}\times\frac{n+k}{1+k}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m34" tex="\tbinom{5}{0}" text="[\tbinom] * 50" fragid="p1.m34">
+        <m:math alttext="\tbinom{5}{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>50</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m35" tex="\tfrac{6}{1}" text="[\tfrac] * 61" fragid="p1.m35">
+        <m:math alttext="\tfrac{6}{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>61</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{6}{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m36" tex="\tfrac{7}{2}" text="[\tfrac] * 72" fragid="p1.m36">
+        <m:math alttext="\tfrac{7}{2}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>72</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{7}{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m37" tex="\tfrac{8}{3}" text="[\tfrac] * 83" fragid="p1.m37">
+        <m:math alttext="\tfrac{8}{3}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tfrac</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>83</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tfrac{8}{3}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m38" tex="\tbinom{5}{0}=1" text="[\tbinom] * 50 = 1" fragid="p1.m38">
+        <m:math alttext="\tbinom{5}{0}=1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>50</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{0}=1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m39" tex="\tbinom{6}{1}=1\times\tfrac{6}{1}=6" text="[\tbinom] * 61 = 1 * [\tfrac] * 61 = 6" fragid="p1.m39">
+        <m:math alttext="\tbinom{6}{1}=1\times\tfrac{6}{1}=6" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>61</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>×</m:mo>
+                  <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:mn>61</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>6</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{6}{1}=1\times\tfrac{6}{1}=6</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m40" tex="\tbinom{7}{2}=6\times\tfrac{7}{2}=21" text="[\tbinom] * 72 = 6 * [\tfrac] * 72 = 21" fragid="p1.m40">
+        <m:math alttext="\tbinom{7}{2}=6\times\tfrac{7}{2}=21" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mtext mathvariant="italic">\tbinom</m:mtext>
+                <m:mo>⁢</m:mo>
+                <m:mn>72</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>6</m:mn>
+                  <m:mo>×</m:mo>
+                  <m:mtext mathvariant="italic">\tfrac</m:mtext>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:mn>72</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>21</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{7}{2}=6\times\tfrac{7}{2}=21</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m41" tex="\tbinom{5}{5}" text="[\tbinom] * 55" fragid="p1.m41">
+        <m:math alttext="\tbinom{5}{5}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>55</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{5}{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m42" tex="\tbinom{6}{5}" text="[\tbinom] * 65" fragid="p1.m42">
+        <m:math alttext="\tbinom{6}{5}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>65</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{6}{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m43" tex="\tbinom{7}{5}" text="[\tbinom] * 75" fragid="p1.m43">
+        <m:math alttext="\tbinom{7}{5}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\tbinom</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mn>75</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\tbinom{7}{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m44" tex="{n\choose k}=2\times{n-1\choose k-1}+{n-1\choose k}." text="binomial@(n, k) = 2 * binomial@(n - 1, k - 1) + binomial@(n - 1, k)" fragid="p1.m44">
+        <m:math alttext="{n\choose k}=2\times{n-1\choose k-1}+{n-1\choose k}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mo>×</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mstyle scriptlevel="+1">
+                        <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                          <m:mtr>
+                            <m:mtd>
+                              <m:mrow>
+                                <m:mi>n</m:mi>
+                                <m:mo>-</m:mo>
+                                <m:mn>1</m:mn>
+                              </m:mrow>
+                            </m:mtd>
+                          </m:mtr>
+                          <m:mtr>
+                            <m:mtd>
+                              <m:mrow>
+                                <m:mi>k</m:mi>
+                                <m:mo>-</m:mo>
+                                <m:mn>1</m:mn>
+                              </m:mrow>
+                            </m:mtd>
+                          </m:mtr>
+                        </m:mtable>
+                      </m:mstyle>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mstyle scriptlevel="+1">
+                      <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mi>n</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mi>k</m:mi>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mstyle>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose k}=2\times{n-1\choose k-1}+{n-1\choose k}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m45" tex="1+8+24+32+16=81" text="1 + 8 + 24 + 32 + 16 = 81" fragid="p1.m45">
+        <m:math alttext="1+8+24+32+16=81" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>8</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>24</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>32</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>16</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>81</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">1+8+24+32+16=81</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m46" tex="3^{4}=81" text="3 ^ 4 = 81" fragid="p1.m46">
+        <m:math alttext="3^{4}=81" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>3</m:mn>
+                <m:mn>4</m:mn>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mn>81</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3^{4}=81</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m47" tex="\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{5}}{x}\right]\right)" text="[\mathfrak] * R * e * [\text] * F * o * u * r * i * e * r * ([sin(x)5] / x)" fragid="p1.m47">
+        <m:math alttext="\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{5}}{x}\right]\right)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\mathfrak</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>R</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mi>e</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\text</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>F</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>o</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>e</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>sin</m:mi>
+                        <m:msup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>x</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mn>5</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mi>x</m:mi>
+                    </m:mfrac>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{5}}{x}\right]\right)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m48" tex="\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{1}}{x}\right]\right)" text="[\mathfrak] * R * e * [\text] * F * o * u * r * i * e * r * ([sin(x)1] / x)" fragid="p1.m48">
+        <m:math alttext="\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{1}}{x}\right]\right)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\mathfrak</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:mi>R</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mi>e</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\text</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>F</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>o</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>e</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>sin</m:mi>
+                        <m:msup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>x</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mn>1</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mi>x</m:mi>
+                    </m:mfrac>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\,\mathfrak{Re}\left(\text{Fourier}\left[\frac{\sin(x)^{1}}{x}\right]\right)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Pascals ̵triangle.tex ̵Line ̵50 ̵**** -->
+      <Math mode="inline" xml:id="p1.m49" tex="\,+i,-1,-i,+1,+i,\ldots\," text="list@(+ i, - 1, - i, + 1, + i, ldots)" fragid="p1.m49">
+        <m:math alttext="\,+i,-1,-i,+1,+i,\ldots\," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>i</m:mi>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:mi>i</m:mi>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>i</m:mi>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mpadded width="+1.666667pt">
+                <m:mi mathvariant="normal">…</m:mi>
+              </m:mpadded>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\,+i,-1,-i,+1,+i,\ldots\,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m50" tex="{n\choose m}={n-1\choose m-1}+{n-1\choose m}" text="binomial@(n, m) = binomial@(n - 1, m - 1) + binomial@(n - 1, m)" fragid="p1.m50">
+        <m:math alttext="{n\choose m}={n-1\choose m-1}+{n-1\choose m}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mstyle scriptlevel="+1">
+                  <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>n</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>m</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mstyle>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>m</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>m</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose m}={n-1\choose m-1}+{n-1\choose m}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m51" tex="{n-1\choose m}={n\choose m}-{n-1\choose m-1}" text="binomial@(n - 1, m) = binomial@(n, m) - binomial@(n - 1, m - 1)" fragid="p1.m51">
+        <m:math alttext="{n-1\choose m}={n\choose m}-{n-1\choose m-1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mstyle scriptlevel="+1">
+                  <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mrow>
+                          <m:mi>n</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>m</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mstyle>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>n</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mi>m</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mstyle scriptlevel="+1">
+                    <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>m</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mstyle>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n-1\choose m}={n\choose m}-{n-1\choose m-1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m52" tex="{n\choose k}=\frac{n!}{(n-k)!k!}\equiv\frac{\Gamma(n+1)}{\Gamma(n-k+1)\Gamma(k%&#10;+1)}" text="binomial@(n, k) = nfactorial / ((n - k)factorial * kfactorial) equivalent-to (Gamma * (n + 1)) / (Gamma * ((n - k) + 1) * Gamma * (k + 1))" fragid="p1.m52">
+        <m:math alttext="{n\choose k}=\frac{n!}{(n-k)!k!}\equiv\frac{\Gamma(n+1)}{\Gamma(n-k+1)\Gamma(k%&#10;+1)}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mstyle scriptlevel="+1">
+                  <m:mtable rowspacing="0.2ex" columnspacing="0.4em">
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>n</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mi>k</m:mi>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mstyle>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mi mathvariant="normal">!</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi mathvariant="normal">!</m:mi>
+                  </m:mrow>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mi mathvariant="normal">!</m:mi>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>≡</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi mathvariant="normal">Γ</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi mathvariant="normal">Γ</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>k</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>⁢</m:mo>
+                  <m:mi mathvariant="normal">Γ</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">{n\choose k}=\frac{n!}{(n-k)!k!}\equiv\frac{\Gamma(n+1)}{\Gamma(n-k+1)\Gamma(k%
++1)}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m53" tex="\Gamma(z)" text="Gamma * z" fragid="p1.m53">
+        <m:math alttext="\Gamma(z)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi mathvariant="normal">Γ</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>z</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\Gamma(z)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

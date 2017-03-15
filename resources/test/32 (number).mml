@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="2^{5}" text="2 ^ 5" fragid="p1.m1">
+        <m:math alttext="2^{5}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>5</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

@@ -1,0 +1,3256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="m=a_{k}n^{k}+a_{{k-1}}n^{{k-1}}+\cdots+a_{0}," text="m = a _ k * n ^ k + a _ (k - 1) * n ^ (k - 1) + cdots + a _ 0" fragid="p1.m1">
+        <m:math alttext="m=a_{k}n^{k}+a_{{k-1}}n^{{k-1}}+\cdots+a_{0}," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>m</m:mi>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msup>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi mathvariant="normal">⋯</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">m=a_{k}n^{k}+a_{{k-1}}n^{{k-1}}+\cdots+a_{0},</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="a_{i}" text="a _ i" fragid="p1.m2">
+        <m:math alttext="a_{i}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mi>i</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">a_{i}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="0\leq a_{i}&lt;n" text="0 less= a _ i less n" fragid="p1.m3">
+        <m:math alttext="0\leq a_{i}&lt;n" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>0</m:mn>
+              <m:mo>≤</m:mo>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>&lt;</m:mo>
+              <m:mi>n</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">0\leq a_{i}&lt;n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="a_{k}\not=0" text="a _ k not-equals 0" fragid="p1.m4">
+        <m:math alttext="a_{k}\not=0" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>≠</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">a_{k}\not=0</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="35=32+2+1=2^{5}+2^{1}+2^{0}." text="35 = 32 + 2 + 1 = 2 ^ 5 + 2 ^ 1 + 2 ^ 0" fragid="p1.m5">
+        <m:math alttext="35=32+2+1=2^{5}+2^{1}+2^{0}." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>35</m:mn>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mn>32</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mn>5</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mn>1</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mn>0</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">35=32+2+1=2^{5}+2^{1}+2^{0}.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="2^{5}+2^{1}+2^{0}" text="2 ^ 5 + 2 ^ 1 + 2 ^ 0" fragid="p1.m6">
+        <m:math alttext="2^{5}+2^{1}+2^{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>5</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>0</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{5}+2^{1}+2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="100=81+18+1=3^{4}+2\cdot 3^{2}+1." text="100 = 81 + 18 + 1 = 3 ^ 4 + 2 cdot 3 ^ 2 + 1." fragid="p1.m7">
+        <m:math alttext="100=81+18+1=3^{4}+2\cdot 3^{2}+1." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>100</m:mn>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mn>81</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>18</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>3</m:mn>
+                  <m:mn>4</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>3</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>1.</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">100=81+18+1=3^{4}+2\cdot 3^{2}+1.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="2^{5}" text="2 ^ 5" fragid="p1.m8">
+        <m:math alttext="2^{5}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>5</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="3^{4}" text="3 ^ 4" fragid="p1.m9">
+        <m:math alttext="3^{4}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>3</m:mn>
+              <m:mn>4</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">3^{4}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="2^{5}+2+1" text="2 ^ 5 + 2 + 1" fragid="p1.m10">
+        <m:math alttext="2^{5}+2+1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>5</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{5}+2+1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="35=2^{{2^{2}+1}}+2+1," text="35 = 2 ^ (2 ^ 2 + 1) + 2 + 1" fragid="p1.m11">
+        <m:math alttext="35=2^{{2^{2}+1}}+2+1," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>35</m:mn>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mn>2</m:mn>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">35=2^{{2^{2}+1}}+2+1,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="5=2^{2}+1." text="5 = 2 ^ 2 + 1." fragid="p1.m12">
+        <m:math alttext="5=2^{2}+1." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>5</m:mn>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mn>1.</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">5=2^{2}+1.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="100=3^{{3+1}}+2\cdot 3^{2}+1." text="100 = 3 ^ (3 + 1) + 2 cdot 3 ^ 2 + 1." fragid="p1.m13">
+        <m:math alttext="100=3^{{3+1}}+2\cdot 3^{2}+1." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>100</m:mn>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>3</m:mn>
+                  <m:mrow>
+                    <m:mn>3</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>3</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>1.</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">100=3^{{3+1}}+2\cdot 3^{2}+1.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m14" tex="2^{1}+1" text="2 ^ 1 + 1" fragid="p1.m14">
+        <m:math alttext="2^{1}+1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{1}+1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m15" tex="3^{1}+1-1=3^{1}" text="(3 ^ 1 + 1) - 1 = 3 ^ 1" fragid="p1.m15">
+        <m:math alttext="3^{1}+1-1=3^{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>3</m:mn>
+                  <m:mn>1</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mn>3</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3^{1}+1-1=3^{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m16" tex="4^{1}-1=3" text="4 ^ 1 - 1 = 3" fragid="p1.m16">
+        <m:math alttext="4^{1}-1=3" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>4</m:mn>
+                  <m:mn>1</m:mn>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>3</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">4^{1}-1=3</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m17" tex="3-1=2" text="3 - 1 = 2" fragid="p1.m17">
+        <m:math alttext="3-1=2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>3</m:mn>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3-1=2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m18" tex="2-1=1" text="2 - 1 = 1" fragid="p1.m18">
+        <m:math alttext="2-1=1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2-1=1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m19" tex="1-1=0" text="1 - 1 = 0" fragid="p1.m19">
+        <m:math alttext="1-1=0" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">1-1=0</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m20" tex="2^{2}" text="2 ^ 2" fragid="p1.m20">
+        <m:math alttext="2^{2}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m21" tex="3^{3}-1=2\cdot 3^{2}+2\cdot 3+2" text="3 ^ 3 - 1 = 2 cdot 3 ^ 2 + 2 cdot 3 + 2" fragid="p1.m21">
+        <m:math alttext="3^{3}-1=2\cdot 3^{2}+2\cdot 3+2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>3</m:mn>
+                  <m:mn>3</m:mn>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>3</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:mn>3</m:mn>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>2</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3^{3}-1=2\cdot 3^{2}+2\cdot 3+2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m22" tex="2\cdot 4^{2}+2\cdot 4+1" text="2 cdot 4 ^ 2 + 2 cdot 4 + 1" fragid="p1.m22">
+        <m:math alttext="2\cdot 4^{2}+2\cdot 4+1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>4</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:mn>4</m:mn>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 4^{2}+2\cdot 4+1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m23" tex="2\cdot 5^{2}+2\cdot 5" text="2 cdot 5 ^ 2 + 2 cdot 5" fragid="p1.m23">
+        <m:math alttext="2\cdot 5^{2}+2\cdot 5" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>5</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:mn>5</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 5^{2}+2\cdot 5</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Goodsteins ̵theorem.tex ̵Line ̵25 ̵**** -->
+      <Math mode="inline" xml:id="p1.m24" tex="2\cdot 6^{2}+2\cdot 6-1=2\cdot 6^{2}+6+5" text="(2 cdot 6 ^ 2 + 2 cdot 6) - 1 = 2 cdot 6 ^ 2 + 6 + 5" fragid="p1.m24">
+        <m:math alttext="2\cdot 6^{2}+2\cdot 6-1=2\cdot 6^{2}+6+5" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>6</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:mn>6</m:mn>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>6</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>6</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>5</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 6^{2}+2\cdot 6-1=2\cdot 6^{2}+6+5</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m25" tex="2\cdot 7^{2}+7+4" text="2 cdot 7 ^ 2 + 7 + 4" fragid="p1.m25">
+        <m:math alttext="2\cdot 7^{2}+7+4" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>7</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>7</m:mn>
+              <m:mo>+</m:mo>
+              <m:mn>4</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 7^{2}+7+4</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m26" tex="\vdots" text="vdots" fragid="p1.m26">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m27" tex="\vdots" text="vdots" fragid="p1.m27">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m28" tex="2\cdot 11^{2}+11" text="2 cdot 11 ^ 2 + 11" fragid="p1.m28">
+        <m:math alttext="2\cdot 11^{2}+11" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>11</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>11</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 11^{2}+11</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m29" tex="2\cdot 12^{2}+12-1=2\cdot 12^{2}+11" text="(2 cdot 12 ^ 2 + 12) - 1 = 2 cdot 12 ^ 2 + 11" fragid="p1.m29">
+        <m:math alttext="2\cdot 12^{2}+12-1=2\cdot 12^{2}+11" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>12</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>12</m:mn>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>12</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mn>11</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2\cdot 12^{2}+12-1=2\cdot 12^{2}+11</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m30" tex="\vdots" text="vdots" fragid="p1.m30">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m31" tex="\vdots" text="vdots" fragid="p1.m31">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m32" tex="3\cdot 2^{{402653209}}" text="3 cdot 2 ^ 402653209" fragid="p1.m32">
+        <m:math alttext="3\cdot 2^{{402653209}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>3</m:mn>
+              <m:mo>⋅</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>402653209</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3\cdot 2^{{402653209}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m33" tex="3\cdot 2^{{402653210}}-1" text="3 cdot 2 ^ 402653210 - 1" fragid="p1.m33">
+        <m:math alttext="3\cdot 2^{{402653210}}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>3</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>402653210</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3\cdot 2^{{402653210}}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m34" tex="3\cdot 2^{{402653209}}" text="3 cdot 2 ^ 402653209" fragid="p1.m34">
+        <m:math alttext="3\cdot 2^{{402653209}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>3</m:mn>
+              <m:mo>⋅</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>402653209</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3\cdot 2^{{402653209}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m35" tex="3\cdot 2^{{402653211}}-1" text="3 cdot 2 ^ 402653211 - 1" fragid="p1.m35">
+        <m:math alttext="3\cdot 2^{{402653211}}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>3</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>402653211</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3\cdot 2^{{402653211}}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m36" tex="3\cdot 2^{{402653211}}-1=402653184\cdot 2^{{402653184}}-1" text="3 cdot 2 ^ 402653211 - 1 = 402653184 cdot 2 ^ 402653184 - 1" fragid="p1.m36">
+        <m:math alttext="3\cdot 2^{{402653211}}-1=402653184\cdot 2^{{402653184}}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>3</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mn>402653211</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>402653184</m:mn>
+                  <m:mo>⋅</m:mo>
+                  <m:msup>
+                    <m:mn>2</m:mn>
+                    <m:mn>402653184</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3\cdot 2^{{402653211}}-1=402653184\cdot 2^{{402653184}}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m37" tex="2^{{2^{2}}}+2+1" text="2 ^ 2 ^ 2 + 2 + 1" fragid="p1.m37">
+        <m:math alttext="2^{{2^{2}}}+2+1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2^{2}}}+2+1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m38" tex="3^{{3^{3}}}+3" text="3 ^ 3 ^ 3 + 3" fragid="p1.m38">
+        <m:math alttext="3^{{3^{3}}}+3" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>3</m:mn>
+                <m:msup>
+                  <m:mn>3</m:mn>
+                  <m:mn>3</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>3</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">3^{{3^{3}}}+3</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m39" tex="4^{{4^{4}}}+3" text="4 ^ 4 ^ 4 + 3" fragid="p1.m39">
+        <m:math alttext="4^{{4^{4}}}+3" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>4</m:mn>
+                <m:msup>
+                  <m:mn>4</m:mn>
+                  <m:mn>4</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>3</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">4^{{4^{4}}}+3</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m40" tex="\approx 1.3\times 10^{{154}}" text="absent approximately-equals 1.3 * 10 ^ 154" fragid="p1.m40">
+        <m:math alttext="\approx 1.3\times 10^{{154}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>1.3</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mn>154</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 1.3\times 10^{{154}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m41" tex="5^{{5^{5}}}+2" text="5 ^ 5 ^ 5 + 2" fragid="p1.m41">
+        <m:math alttext="5^{{5^{5}}}+2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>5</m:mn>
+                <m:msup>
+                  <m:mn>5</m:mn>
+                  <m:mn>5</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">5^{{5^{5}}}+2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m42" tex="\approx 1.8\times 10^{{2184}}" text="absent approximately-equals 1.8 * 10 ^ 2184" fragid="p1.m42">
+        <m:math alttext="\approx 1.8\times 10^{{2184}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>1.8</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mn>2184</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 1.8\times 10^{{2184}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m43" tex="6^{{6^{6}}}+1" text="6 ^ 6 ^ 6 + 1" fragid="p1.m43">
+        <m:math alttext="6^{{6^{6}}}+1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>6</m:mn>
+                <m:msup>
+                  <m:mn>6</m:mn>
+                  <m:mn>6</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">6^{{6^{6}}}+1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m44" tex="\approx 2.6\times 10^{{36,305}}" text="absent approximately-equals 2.6 * 10 ^ (list@(36, 305))" fragid="p1.m44">
+        <m:math alttext="\approx 2.6\times 10^{{36,305}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>2.6</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mrow>
+                    <m:mn>36</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>305</m:mn>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 2.6\times 10^{{36,305}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m45" tex="7^{{7^{7}}}" text="7 ^ 7 ^ 7" fragid="p1.m45">
+        <m:math alttext="7^{{7^{7}}}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>7</m:mn>
+              <m:msup>
+                <m:mn>7</m:mn>
+                <m:mn>7</m:mn>
+              </m:msup>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">7^{{7^{7}}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m46" tex="\approx 3.8\times 10^{{695,974}}" text="absent approximately-equals 3.8 * 10 ^ (list@(695, 974))" fragid="p1.m46">
+        <m:math alttext="\approx 3.8\times 10^{{695,974}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>3.8</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mrow>
+                    <m:mn>695</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>974</m:mn>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 3.8\times 10^{{695,974}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m47" tex="8^{{8^{8}}}-1=7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+%&#10;7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7)}}" text="8 ^ 8 ^ 8 - 1 = 7 cdot 8 ^ (7 cdot 8 ^ 7 + 7 cdot 8 ^ 6 + 7 cdot 8 ^ 5 + 7 cdot 8 ^ 4 + 7 cdot 8 ^ 3 + 7 cdot 8 ^ 2 + 7 cdot 8 + 7)" fragid="p1.m47">
+        <m:math alttext="8^{{8^{8}}}-1=7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+%&#10;7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7)}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:msup>
+                    <m:mn>8</m:mn>
+                    <m:mn>8</m:mn>
+                  </m:msup>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>7</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>6</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>5</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>4</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>3</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:mn>8</m:mn>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mn>7</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">8^{{8^{8}}}-1=7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+%
+7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7)}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m48" tex="+7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+7\cdot 8^{3}+%&#10;7\cdot 8^{2}+7\cdot 8+6)}}+\cdots" text="+ 7 cdot 8 ^ (7 cdot 8 ^ 7 + 7 cdot 8 ^ 6 + 7 cdot 8 ^ 5 + 7 cdot 8 ^ 4 + 7 cdot 8 ^ 3 + 7 cdot 8 ^ 2 + 7 cdot 8 + 6) + cdots" fragid="p1.m48">
+        <m:math alttext="+7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+7\cdot 8^{3}+%&#10;7\cdot 8^{2}+7\cdot 8+6)}}+\cdots" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>7</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>6</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>5</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>4</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>3</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>8</m:mn>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:mn>8</m:mn>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mn>6</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi mathvariant="normal">⋯</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 8^{{(7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}+7\cdot 8^{3}+%
+7\cdot 8^{2}+7\cdot 8+6)}}+\cdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Goodsteins ̵theorem.tex ̵Line ̵50 ̵**** -->
+      <Math mode="inline" xml:id="p1.m49" tex="+7\cdot 8^{{(8+2)}}+7\cdot 8^{{(8+1)}}+7\cdot 8^{8}" text="+ 7 cdot 8 ^ (8 + 2) + 7 cdot 8 ^ (8 + 1) + 7 cdot 8 ^ 8" fragid="p1.m49">
+        <m:math alttext="+7\cdot 8^{{(8+2)}}+7\cdot 8^{{(8+1)}}+7\cdot 8^{8}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mn>8</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mn>8</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>8</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 8^{{(8+2)}}+7\cdot 8^{{(8+1)}}+7\cdot 8^{8}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m50" tex="+7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}" text="+ 7 cdot 8 ^ 7 + 7 cdot 8 ^ 6 + 7 cdot 8 ^ 5 + 7 cdot 8 ^ 4" fragid="p1.m50">
+        <m:math alttext="+7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>7</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>6</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>5</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>4</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 8^{7}+7\cdot 8^{6}+7\cdot 8^{5}+7\cdot 8^{4}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m51" tex="+7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7" text="+ 7 cdot 8 ^ 3 + 7 cdot 8 ^ 2 + 7 cdot 8 + 7" fragid="p1.m51">
+        <m:math alttext="+7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>3</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>8</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:mn>8</m:mn>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>7</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 8^{3}+7\cdot 8^{2}+7\cdot 8+7</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m52" tex="\approx 6\times 10^{{15,151,335}}" text="absent approximately-equals 6 * 10 ^ (list@(15, 151, 335))" fragid="p1.m52">
+        <m:math alttext="\approx 6\times 10^{{15,151,335}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>6</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mrow>
+                    <m:mn>15</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>151</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>335</m:mn>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 6\times 10^{{15,151,335}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m53" tex="7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+7%&#10;\cdot 9^{2}+7\cdot 9+7)}}" text="7 cdot 9 ^ (7 cdot 9 ^ 7 + 7 cdot 9 ^ 6 + 7 cdot 9 ^ 5 + 7 cdot 9 ^ 4 + 7 cdot 9 ^ 3 + 7 cdot 9 ^ 2 + 7 cdot 9 + 7)" fragid="p1.m53">
+        <m:math alttext="7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+7%&#10;\cdot 9^{2}+7\cdot 9+7)}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>7</m:mn>
+              <m:mo>⋅</m:mo>
+              <m:msup>
+                <m:mn>9</m:mn>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>7</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>6</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>5</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>4</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>3</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:msup>
+                        <m:mn>9</m:mn>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mn>7</m:mn>
+                      <m:mo>⋅</m:mo>
+                      <m:mn>9</m:mn>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mn>7</m:mn>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+7%
+\cdot 9^{2}+7\cdot 9+7)}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m54" tex="+7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+%&#10;7\cdot 9^{2}+7\cdot 9+6)}}+\cdots" text="+ 7 cdot 9 ^ (7 cdot 9 ^ 7 + 7 cdot 9 ^ 6 + 7 cdot 9 ^ 5 + 7 cdot 9 ^ 4 + 7 cdot 9 ^ 3 + 7 cdot 9 ^ 2 + 7 cdot 9 + 6) + cdots" fragid="p1.m54">
+        <m:math alttext="+7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+%&#10;7\cdot 9^{2}+7\cdot 9+6)}}+\cdots" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>7</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>6</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>5</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>4</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>3</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:msup>
+                          <m:mn>9</m:mn>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mrow>
+                        <m:mn>7</m:mn>
+                        <m:mo>⋅</m:mo>
+                        <m:mn>9</m:mn>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mn>6</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi mathvariant="normal">⋯</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 9^{{(7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}+7\cdot 9^{3}+%
+7\cdot 9^{2}+7\cdot 9+6)}}+\cdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m55" tex="+7\cdot 9^{{(9+2)}}+7\cdot 9^{{(9+1)}}+7\cdot 9^{9}" text="+ 7 cdot 9 ^ (9 + 2) + 7 cdot 9 ^ (9 + 1) + 7 cdot 9 ^ 9" fragid="p1.m55">
+        <m:math alttext="+7\cdot 9^{{(9+2)}}+7\cdot 9^{{(9+1)}}+7\cdot 9^{9}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mn>9</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mn>9</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>9</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 9^{{(9+2)}}+7\cdot 9^{{(9+1)}}+7\cdot 9^{9}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m56" tex="+7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}" text="+ 7 cdot 9 ^ 7 + 7 cdot 9 ^ 6 + 7 cdot 9 ^ 5 + 7 cdot 9 ^ 4" fragid="p1.m56">
+        <m:math alttext="+7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>7</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>6</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>5</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>4</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 9^{7}+7\cdot 9^{6}+7\cdot 9^{5}+7\cdot 9^{4}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m57" tex="+7\cdot 9^{3}+7\cdot 9^{2}+7\cdot 9+6" text="+ 7 cdot 9 ^ 3 + 7 cdot 9 ^ 2 + 7 cdot 9 + 6" fragid="p1.m57">
+        <m:math alttext="+7\cdot 9^{3}+7\cdot 9^{2}+7\cdot 9+6" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>3</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:msup>
+                  <m:mn>9</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mn>7</m:mn>
+                <m:mo>⋅</m:mo>
+                <m:mn>9</m:mn>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mn>6</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">+7\cdot 9^{3}+7\cdot 9^{2}+7\cdot 9+6</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m58" tex="\approx 4.3\times 10^{{369,693,099}}" text="absent approximately-equals 4.3 * 10 ^ (list@(369, 693, 099))" fragid="p1.m58">
+        <m:math alttext="\approx 4.3\times 10^{{369,693,099}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:none/>
+              <m:mo>≈</m:mo>
+              <m:mrow>
+                <m:mn>4.3</m:mn>
+                <m:mo>×</m:mo>
+                <m:msup>
+                  <m:mn>10</m:mn>
+                  <m:mrow>
+                    <m:mn>369</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>693</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>099</m:mn>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\approx 4.3\times 10^{{369,693,099}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m59" tex="\vdots" text="vdots" fragid="p1.m59">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m60" tex="\vdots" text="vdots" fragid="p1.m60">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m61" tex="4^{{4^{4}}}+4" text="4 ^ 4 ^ 4 + 4" fragid="p1.m61">
+        <m:math alttext="4^{{4^{4}}}+4" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>4</m:mn>
+                <m:msup>
+                  <m:mn>4</m:mn>
+                  <m:mn>4</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>4</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">4^{{4^{4}}}+4</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m62" tex="\omega^{{\omega^{\omega}}}+\omega" text="omega ^ omega ^ omega + omega" fragid="p1.m62">
+        <m:math alttext="\omega^{{\omega^{\omega}}}+\omega" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>ω</m:mi>
+                <m:msup>
+                  <m:mi>ω</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mi>ω</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\omega^{{\omega^{\omega}}}+\omega</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m63" tex="\omega^{{\omega^{\omega}}}+4" text="omega ^ omega ^ omega + 4" fragid="p1.m63">
+        <m:math alttext="\omega^{{\omega^{\omega}}}+4" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>ω</m:mi>
+                <m:msup>
+                  <m:mi>ω</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>4</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\omega^{{\omega^{\omega}}}+4</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m64" tex="\mathcal{G}:\mathbb{N}\to\mathbb{N}\,\!" text="G colon [\mathbb] * N to [\mathbb] * N" fragid="p1.m64">
+        <m:math alttext="\mathcal{G}:\mathbb{N}\to\mathbb{N}\,\!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>𝒢</m:mi>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>N</m:mi>
+                </m:mrow>
+                <m:mo>→</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mpadded width="+3.333334pt">
+                    <m:mi>N</m:mi>
+                  </m:mpadded>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}:\mathbb{N}\to\mathbb{N}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m65" tex="\mathcal{G}(n)" text="G * n" fragid="p1.m65">
+        <m:math alttext="\mathcal{G}(n)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>𝒢</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}(n)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m66" tex="\mathcal{G}\,\!" text="G" fragid="p1.m66">
+        <m:math alttext="\mathcal{G}\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>𝒢</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">\mathcal{G}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m67" tex="H_{\alpha}\,\!" text="H _ alpha" fragid="p1.m67">
+        <m:math alttext="H_{\alpha}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>H</m:mi>
+              <m:mi>α</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">H_{\alpha}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m68" tex="f_{\alpha}\,\!" text="f _ alpha" fragid="p1.m68">
+        <m:math alttext="f_{\alpha}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>f</m:mi>
+              <m:mi>α</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">f_{\alpha}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m69" tex="\mathcal{G}\,\!" text="G" fragid="p1.m69">
+        <m:math alttext="\mathcal{G}\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>𝒢</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">\mathcal{G}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m70" tex="H_{{\epsilon_{0}}}\,\!" text="H _ epsilon _ 0" fragid="p1.m70">
+        <m:math alttext="H_{{\epsilon_{0}}}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>H</m:mi>
+              <m:msub>
+                <m:mi>ϵ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">H_{{\epsilon_{0}}}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m71" tex="f_{{\epsilon_{0}}}\,\!" text="f _ epsilon _ 0" fragid="p1.m71">
+        <m:math alttext="f_{{\epsilon_{0}}}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>f</m:mi>
+              <m:msub>
+                <m:mi>ϵ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">f_{{\epsilon_{0}}}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m72" tex="\mathcal{G}\,\!" text="G" fragid="p1.m72">
+        <m:math alttext="\mathcal{G}\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>𝒢</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">\mathcal{G}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m73" tex="H_{\alpha}\,\!" text="H _ alpha" fragid="p1.m73">
+        <m:math alttext="H_{\alpha}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>H</m:mi>
+              <m:mi>α</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">H_{\alpha}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Goodsteins ̵theorem.tex ̵Line ̵75 ̵**** -->
+      <Math mode="inline" xml:id="p1.m74" tex="\alpha&lt;\epsilon_{0}\,\!" text="alpha less epsilon _ 0" fragid="p1.m74">
+        <m:math alttext="\alpha&lt;\epsilon_{0}\,\!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>α</m:mi>
+              <m:mo>&lt;</m:mo>
+              <m:msub>
+                <m:mi>ϵ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\alpha&lt;\epsilon_{0}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m75" tex="H_{{\epsilon_{0}}}\,\!" text="H _ epsilon _ 0" fragid="p1.m75">
+        <m:math alttext="H_{{\epsilon_{0}}}\,\!" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>H</m:mi>
+              <m:msub>
+                <m:mi>ϵ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">H_{{\epsilon_{0}}}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m76" tex="\mathcal{G}\,\!." text="G" fragid="p1.m76">
+        <m:math alttext="\mathcal{G}\,\!." display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mpadded width="+3.333334pt">
+                <m:mi>𝒢</m:mi>
+              </m:mpadded>
+              <m:mo>.</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}\,\!.</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m77" tex="f,g:\mathbb{N}\to\mathbb{N}\,\!" text="list@(f, g) colon [\mathbb] * N to [\mathbb] * N" fragid="p1.m77">
+        <m:math alttext="f,g:\mathbb{N}\to\mathbb{N}\,\!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>f</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>g</m:mi>
+              </m:mrow>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>N</m:mi>
+                </m:mrow>
+                <m:mo>→</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:mpadded width="+3.333334pt">
+                    <m:mi>N</m:mi>
+                  </m:mpadded>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f,g:\mathbb{N}\to\mathbb{N}\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m78" tex="f\,\!" text="f" fragid="p1.m78">
+        <m:math alttext="f\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>f</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">f\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m79" tex="g\,\!" text="g" fragid="p1.m79">
+        <m:math alttext="g\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>g</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">g\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m80" tex="f(n)&gt;g(n)\,\!" text="f * n &gt; g * n" fragid="p1.m80">
+        <m:math alttext="f(n)&gt;g(n)\,\!" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>f</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>&gt;</m:mo>
+              <m:mrow>
+                <m:mi>g</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f(n)&gt;g(n)\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m81" tex="n\,\!" text="n" fragid="p1.m81">
+        <m:math alttext="n\,\!" display="inline">
+          <m:semantics>
+            <m:mpadded width="+3.333334pt">
+              <m:mi>n</m:mi>
+            </m:mpadded>
+            <m:annotation encoding="application/x-tex">n\,\!</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m82" tex="\mathcal{G}(n)=H_{{R_{2}^{\omega}(n+1)}}(1)-1," text="G * n = H _ ((R _ 2) ^ omega * (n + 1)) * 1 - 1" fragid="p1.m82">
+        <m:math alttext="\mathcal{G}(n)=H_{{R_{2}^{\omega}(n+1)}}(1)-1," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mi>𝒢</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>n</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>H</m:mi>
+                      <m:mrow>
+                        <m:msubsup>
+                          <m:mi>R</m:mi>
+                          <m:mn>2</m:mn>
+                          <m:mi>ω</m:mi>
+                        </m:msubsup>
+                        <m:mo>⁢</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mrow>
+                            <m:mi>n</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}(n)=H_{{R_{2}^{\omega}(n+1)}}(1)-1,</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m83" tex="R_{2}^{\omega}(n)" text="(R _ 2) ^ omega * n" fragid="p1.m83">
+        <m:math alttext="R_{2}^{\omega}(n)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>R</m:mi>
+                <m:mn>2</m:mn>
+                <m:mi>ω</m:mi>
+              </m:msubsup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">R_{2}^{\omega}(n)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m84" tex="n=2^{{m_{1}}}+2^{{m_{2}}}+\cdots+2^{{m_{k}}}" text="n = 2 ^ (m _ 1) + 2 ^ (m _ 2) + cdots + 2 ^ (m _ k)" fragid="p1.m84">
+        <m:math alttext="n=2^{{m_{1}}}+2^{{m_{2}}}+\cdots+2^{{m_{k}}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>n</m:mi>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>m</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>m</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mi mathvariant="normal">⋯</m:mi>
+                <m:mo>+</m:mo>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>m</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                </m:msup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">n=2^{{m_{1}}}+2^{{m_{2}}}+\cdots+2^{{m_{k}}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m85" tex="m_{1}&gt;m_{2}&gt;\cdots&gt;m_{k}," text="m _ 1 &gt; m _ 2 &gt; cdots &gt; m _ k" fragid="p1.m85">
+        <m:math alttext="m_{1}&gt;m_{2}&gt;\cdots&gt;m_{k}," display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>m</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>&gt;</m:mo>
+                <m:msub>
+                  <m:mi>m</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>&gt;</m:mo>
+                <m:mi mathvariant="normal">⋯</m:mi>
+                <m:mo>&gt;</m:mo>
+                <m:msub>
+                  <m:mi>m</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">m_{1}&gt;m_{2}&gt;\cdots&gt;m_{k},</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m86" tex="\mathcal{G}(n)=f_{{R_{2}^{\omega}(m_{1})}}(f_{{R_{2}^{\omega}(m_{2})}}(\cdots(%&#10;f_{{R_{2}^{\omega}(m_{k})}}(3))\cdots))-2" text="G * n = f _ ((R _ 2) ^ omega * m _ 1) * f _ ((R _ 2) ^ omega * m _ 2) * cdots * f _ ((R _ 2) ^ omega * m _ k) * 3 * cdots - 2" fragid="p1.m86">
+        <m:math alttext="\mathcal{G}(n)=f_{{R_{2}^{\omega}(m_{1})}}(f_{{R_{2}^{\omega}(m_{2})}}(\cdots(%&#10;f_{{R_{2}^{\omega}(m_{k})}}(3))\cdots))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>𝒢</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>f</m:mi>
+                    <m:mrow>
+                      <m:msubsup>
+                        <m:mi>R</m:mi>
+                        <m:mn>2</m:mn>
+                        <m:mi>ω</m:mi>
+                      </m:msubsup>
+                      <m:mo>⁢</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>m</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>f</m:mi>
+                        <m:mrow>
+                          <m:msubsup>
+                            <m:mi>R</m:mi>
+                            <m:mn>2</m:mn>
+                            <m:mi>ω</m:mi>
+                          </m:msubsup>
+                          <m:mo>⁢</m:mo>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:msub>
+                              <m:mi>m</m:mi>
+                              <m:mn>2</m:mn>
+                            </m:msub>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>⁢</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mi mathvariant="normal">⋯</m:mi>
+                          <m:mo>⁢</m:mo>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mrow>
+                              <m:msub>
+                                <m:mi>f</m:mi>
+                                <m:mrow>
+                                  <m:msubsup>
+                                    <m:mi>R</m:mi>
+                                    <m:mn>2</m:mn>
+                                    <m:mi>ω</m:mi>
+                                  </m:msubsup>
+                                  <m:mo>⁢</m:mo>
+                                  <m:mrow>
+                                    <m:mo>(</m:mo>
+                                    <m:msub>
+                                      <m:mi>m</m:mi>
+                                      <m:mi>k</m:mi>
+                                    </m:msub>
+                                    <m:mo>)</m:mo>
+                                  </m:mrow>
+                                </m:mrow>
+                              </m:msub>
+                              <m:mo>⁢</m:mo>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:mn>3</m:mn>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                            </m:mrow>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mo>⁢</m:mo>
+                          <m:mi mathvariant="normal">⋯</m:mi>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>2</m:mn>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}(n)=f_{{R_{2}^{\omega}(m_{1})}}(f_{{R_{2}^{\omega}(m_{2})}}(\cdots(%
+f_{{R_{2}^{\omega}(m_{k})}}(3))\cdots))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m87" tex="\mathcal{G}(n)" text="G * n" fragid="p1.m87">
+        <m:math alttext="\mathcal{G}(n)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>𝒢</m:mi>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathcal{G}(n)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m88" tex="2^{0}" text="2 ^ 0" fragid="p1.m88">
+        <m:math alttext="2^{0}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>0</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m89" tex="2-1" text="2 - 1" fragid="p1.m89">
+        <m:math alttext="2-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>2</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m90" tex="H_{\omega}(1)-1" text="H _ omega * 1 - 1" fragid="p1.m90">
+        <m:math alttext="H_{\omega}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{\omega}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m91" tex="f_{0}(3)-2" text="f _ 0 * 3 - 2" fragid="p1.m91">
+        <m:math alttext="f_{0}(3)-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mn>0</m:mn>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{0}(3)-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m92" tex="2^{1}" text="2 ^ 1" fragid="p1.m92">
+        <m:math alttext="2^{1}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>1</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m93" tex="2^{1}+1-1" text="(2 ^ 1 + 1) - 1" fragid="p1.m93">
+        <m:math alttext="2^{1}+1-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{1}+1-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m94" tex="H_{{\omega+1}}(1)-1" text="H _ (omega + 1) * 1 - 1" fragid="p1.m94">
+        <m:math alttext="H_{{\omega+1}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:mi>ω</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega+1}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m95" tex="f_{1}(3)-2" text="f _ 1 * 3 - 2" fragid="p1.m95">
+        <m:math alttext="f_{1}(3)-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{1}(3)-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m96" tex="2^{1}+2^{0}" text="2 ^ 1 + 2 ^ 0" fragid="p1.m96">
+        <m:math alttext="2^{1}+2^{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>0</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{1}+2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m97" tex="2^{2}-1" text="2 ^ 2 - 1" fragid="p1.m97">
+        <m:math alttext="2^{2}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m98" tex="H_{{\omega^{\omega}}}(1)-1" text="H _ (omega ^ omega) * 1 - 1" fragid="p1.m98">
+        <m:math alttext="H_{{\omega^{\omega}}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:msup>
+                    <m:mi>ω</m:mi>
+                    <m:mi>ω</m:mi>
+                  </m:msup>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{\omega}}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Goodsteins ̵theorem.tex ̵Line ̵100 ̵**** -->
+      <Math mode="inline" xml:id="p1.m99" tex="f_{1}(f_{0}(3))-2" text="f _ 1 * f _ 0 * 3 - 2" fragid="p1.m99">
+        <m:math alttext="f_{1}(f_{0}(3))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>3</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{1}(f_{0}(3))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m100" tex="2^{2}" text="2 ^ 2" fragid="p1.m100">
+        <m:math alttext="2^{2}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m101" tex="2^{2}+1-1" text="(2 ^ 2 + 1) - 1" fragid="p1.m101">
+        <m:math alttext="2^{2}+1-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+1-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m102" tex="H_{{\omega^{\omega}+1}}(1)-1" text="H _ (omega ^ omega + 1) * 1 - 1" fragid="p1.m102">
+        <m:math alttext="H_{{\omega^{\omega}+1}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{\omega}+1}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m103" tex="f_{\omega}(3)-2" text="f _ omega * 3 - 2" fragid="p1.m103">
+        <m:math alttext="f_{\omega}(3)-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{\omega}(3)-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m104" tex="2^{2}+2^{0}" text="2 ^ 2 + 2 ^ 0" fragid="p1.m104">
+        <m:math alttext="2^{2}+2^{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>0</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m105" tex="2^{2}+2-1" text="(2 ^ 2 + 2) - 1" fragid="p1.m105">
+        <m:math alttext="2^{2}+2-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+2-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m106" tex="H_{{\omega^{\omega}+\omega}}(1)-1" text="H _ (omega ^ omega + omega) * 1 - 1" fragid="p1.m106">
+        <m:math alttext="H_{{\omega^{\omega}+\omega}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mi>ω</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{\omega}+\omega}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m107" tex="f_{\omega}(f_{0}(3))-2" text="f _ omega * f _ 0 * 3 - 2" fragid="p1.m107">
+        <m:math alttext="f_{\omega}(f_{0}(3))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>3</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{\omega}(f_{0}(3))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m108" tex="2^{2}+2^{1}" text="2 ^ 2 + 2 ^ 1" fragid="p1.m108">
+        <m:math alttext="2^{2}+2^{1}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+2^{1}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m109" tex="2^{2}+2+1-1" text="(2 ^ 2 + 2 + 1) - 1" fragid="p1.m109">
+        <m:math alttext="2^{2}+2+1-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+2+1-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m110" tex="H_{{\omega^{\omega}+\omega+1}}(1)-1" text="H _ (omega ^ omega + omega + 1) * 1 - 1" fragid="p1.m110">
+        <m:math alttext="H_{{\omega^{\omega}+\omega+1}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mi>ω</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{\omega}+\omega+1}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m111" tex="f_{\omega}(f_{1}(3))-2" text="f _ omega * f _ 1 * 3 - 2" fragid="p1.m111">
+        <m:math alttext="f_{\omega}(f_{1}(3))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>3</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{\omega}(f_{1}(3))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m112" tex="2^{2}+2^{1}+2^{0}" text="2 ^ 2 + 2 ^ 1 + 2 ^ 0" fragid="p1.m112">
+        <m:math alttext="2^{2}+2^{1}+2^{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>0</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{2}+2^{1}+2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m113" tex="2^{{2+1}}-1" text="2 ^ (2 + 1) - 1" fragid="p1.m113">
+        <m:math alttext="2^{{2+1}}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2+1}}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m114" tex="H_{{\omega^{{\omega+1}}}}(1)-1" text="H _ (omega ^ (omega + 1)) * 1 - 1" fragid="p1.m114">
+        <m:math alttext="H_{{\omega^{{\omega+1}}}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:msup>
+                    <m:mi>ω</m:mi>
+                    <m:mrow>
+                      <m:mi>ω</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{{\omega+1}}}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m115" tex="f_{\omega}(f_{1}(f_{0}(3)))-2" text="f _ omega * f _ 1 * f _ 0 * 3 - 2" fragid="p1.m115">
+        <m:math alttext="f_{\omega}(f_{1}(f_{0}(3)))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>ω</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>f</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mo>⁢</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mn>3</m:mn>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{\omega}(f_{1}(f_{0}(3)))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m116" tex="2^{{2+1}}" text="2 ^ (2 + 1)" fragid="p1.m116">
+        <m:math alttext="2^{{2+1}}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{{2+1}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m117" tex="2^{{2+1}}+1-1" text="(2 ^ (2 + 1) + 1) - 1" fragid="p1.m117">
+        <m:math alttext="2^{{2+1}}+1-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2+1}}+1-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m118" tex="H_{{\omega^{{\omega+1}}+1}}(1)-1" text="H _ (omega ^ (omega + 1) + 1) * 1 - 1" fragid="p1.m118">
+        <m:math alttext="H_{{\omega^{{\omega+1}}+1}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mrow>
+                        <m:mi>ω</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{{\omega+1}}+1}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m119" tex="f_{{\omega+1}}(3)-2" text="f _ (omega + 1) * 3 - 2" fragid="p1.m119">
+        <m:math alttext="f_{{\omega+1}}(3)-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mi>ω</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{{\omega+1}}(3)-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m120" tex="\vdots" text="vdots" fragid="p1.m120">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m121" tex="2^{{2+1}}+2^{2}" text="2 ^ (2 + 1) + 2 ^ 2" fragid="p1.m121">
+        <m:math alttext="2^{{2+1}}+2^{2}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2+1}}+2^{2}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m122" tex="2^{{2+1}}+2^{2}+1-1" text="(2 ^ (2 + 1) + 2 ^ 2 + 1) - 1" fragid="p1.m122">
+        <m:math alttext="2^{{2+1}}+2^{2}+1-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2+1}}+2^{2}+1-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m123" tex="H_{{\omega^{{\omega+1}}+\omega^{\omega}+1}}(1)-1" text="H _ (omega ^ (omega + 1) + omega ^ omega + 1) * 1 - 1" fragid="p1.m123">
+        <m:math alttext="H_{{\omega^{{\omega+1}}+\omega^{\omega}+1}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mrow>
+                        <m:mi>ω</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{{\omega+1}}+\omega^{\omega}+1}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <!-- %**** ̵Goodsteins ̵theorem.tex ̵Line ̵125 ̵**** -->
+      <Math mode="inline" xml:id="p1.m124" tex="f_{{\omega+1}}(f_{\omega}(3))-2" text="f _ (omega + 1) * f _ omega * 3 - 2" fragid="p1.m124">
+        <m:math alttext="f_{{\omega+1}}(f_{\omega}(3))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mi>ω</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>3</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{{\omega+1}}(f_{\omega}(3))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m125" tex="\vdots" text="vdots" fragid="p1.m125">
+        <m:math alttext="\vdots" display="inline">
+          <m:semantics>
+            <m:mi mathvariant="normal">⋮</m:mi>
+            <m:annotation encoding="application/x-tex">\vdots</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m126" tex="2^{{2^{2}}}+2^{1}+2^{0}" text="2 ^ 2 ^ 2 + 2 ^ 1 + 2 ^ 0" fragid="p1.m126">
+        <m:math alttext="2^{{2^{2}}}+2^{1}+2^{0}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>1</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>0</m:mn>
+              </m:msup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2^{2}}}+2^{1}+2^{0}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m127" tex="2^{{2^{2}}}+2^{2}-1" text="(2 ^ 2 ^ 2 + 2 ^ 2) - 1" fragid="p1.m127">
+        <m:math alttext="2^{{2^{2}}}+2^{2}-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:msup>
+                  <m:mn>2</m:mn>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{2^{2}}}+2^{2}-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m128" tex="H_{{\omega^{{\omega^{\omega}}}+\omega^{\omega}}}(1)-1" text="H _ (omega ^ omega ^ omega + omega ^ omega) * 1 - 1" fragid="p1.m128">
+        <m:math alttext="H_{{\omega^{{\omega^{\omega}}}+\omega^{\omega}}}(1)-1" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>H</m:mi>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:msup>
+                        <m:mi>ω</m:mi>
+                        <m:mi>ω</m:mi>
+                      </m:msup>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>ω</m:mi>
+                      <m:mi>ω</m:mi>
+                    </m:msup>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">H_{{\omega^{{\omega^{\omega}}}+\omega^{\omega}}}(1)-1</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m129" tex="f_{{\omega^{\omega}}}(f_{1}(f_{0}(3)))-2" text="f _ (omega ^ omega) * f _ 1 * f _ 0 * 3 - 2" fragid="p1.m129">
+        <m:math alttext="f_{{\omega^{\omega}}}(f_{1}(f_{0}(3)))-2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:msup>
+                    <m:mi>ω</m:mi>
+                    <m:mi>ω</m:mi>
+                  </m:msup>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>f</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mo>⁢</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mn>3</m:mn>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">f_{{\omega^{\omega}}}(f_{1}(f_{0}(3)))-2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" text="2 ^ 5. * GL _ 5 * [\mathbb] * F _ 2" fragid="p1.m1">
+        <m:math alttext="2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>5 .</m:mn>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mn>5</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" text="GL _ 5 * [\mathbb] * F _ 2" fragid="p1.m2">
+        <m:math alttext="\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mn>5</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="2^{5}" text="2 ^ 5" fragid="p1.m3">
+        <m:math alttext="2^{5}" display="inline">
+          <m:semantics>
+            <m:msup>
+              <m:mn>2</m:mn>
+              <m:mn>5</m:mn>
+            </m:msup>
+            <m:annotation encoding="application/x-tex">2^{5}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="E_{{8}}" text="E _ 8" fragid="p1.m4">
+        <m:math alttext="E_{{8}}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>E</m:mi>
+              <m:mn>8</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">E_{{8}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="E_{{8}}" text="E _ 8" fragid="p1.m5">
+        <m:math alttext="E_{{8}}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>E</m:mi>
+              <m:mn>8</m:mn>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">E_{{8}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="\mathrm{GL}_{{n}}(\mathbb{F}_{{q}})" text="GL _ n * [\mathbb] * F _ q" fragid="p1.m6">
+        <m:math alttext="\mathrm{GL}_{{n}}(\mathbb{F}_{{q}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathrm{GL}_{{n}}(\mathbb{F}_{{q}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="\mathbb{F}_{{q}}^{{n}}" text="[\mathbb] * (F _ q) ^ n" fragid="p1.m7">
+        <m:math alttext="\mathbb{F}_{{q}}^{{n}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mtext mathvariant="italic">\mathbb</m:mtext>
+              <m:mo>⁢</m:mo>
+              <m:msubsup>
+                <m:mi>F</m:mi>
+                <m:mi>q</m:mi>
+                <m:mi>n</m:mi>
+              </m:msubsup>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\mathbb{F}_{{q}}^{{n}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="q&gt;2" text="q &gt; 2" fragid="p1.m8">
+        <m:math alttext="q&gt;2" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mo>&gt;</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">q&gt;2</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="n" text="n" fragid="p1.m9">
+        <m:math alttext="n" display="inline">
+          <m:semantics>
+            <m:mi>n</m:mi>
+            <m:annotation encoding="application/x-tex">n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="2^{{3\,.}}\mathrm{GL}_{{3}}(\mathbb{F}_{{2}})" text="2 ^ 3. * GL _ 3 * [\mathbb] * F _ 2" fragid="p1.m10">
+        <m:math alttext="2^{{3\,.}}\mathrm{GL}_{{3}}(\mathbb{F}_{{2}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>3 .</m:mn>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mn>3</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{3\,.}}\mathrm{GL}_{{3}}(\mathbb{F}_{{2}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="G_{{2}}(\mathbb{F}_{{3}})" text="G _ 2 * [\mathbb] * F _ 3" fragid="p1.m11">
+        <m:math alttext="G_{{2}}(\mathbb{F}_{{3}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">G_{{2}}(\mathbb{F}_{{3}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="2^{{4\,.}}\mathrm{GL}_{{4}}(\mathbb{F}_{{2}})" text="2 ^ 4. * GL _ 4 * [\mathbb] * F _ 2" fragid="p1.m12">
+        <m:math alttext="2^{{4\,.}}\mathrm{GL}_{{4}}(\mathbb{F}_{{2}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>4 .</m:mn>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mn>4</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{4\,.}}\mathrm{GL}_{{4}}(\mathbb{F}_{{2}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" text="2 ^ 5. * GL _ 5 * [\mathbb] * F _ 2" fragid="p1.m13">
+        <m:math alttext="2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mn>2</m:mn>
+                <m:mn>5 .</m:mn>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:msub>
+                <m:mi>GL</m:mi>
+                <m:mn>5</m:mn>
+              </m:msub>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mtext mathvariant="italic">\mathbb</m:mtext>
+                  <m:mo>⁢</m:mo>
+                  <m:msub>
+                    <m:mi>F</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">2^{{5\,.}}\mathrm{GL}_{{5}}(\mathbb{F}_{{2}})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>

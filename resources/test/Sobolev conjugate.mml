@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/mnt/raid/des1613/wikipedia_math/tex"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML" xmlns:m="http://www.w3.org/1998/Math/MathML" xml:id="Document">
+  <!-- %**** ̵String ̵Line ̵25 ̵**** 
+     %Some ̵control ̵structure ̵from ̵latex.ltx
+     %(amazing ̵that ̵it ̵actually ̵works!)
+     %How ̵much ̵of ̵this ̵control ̵struture ̵will ̵I ̵need?
+     %**** ̵String ̵Line ̵50 ̵****-->
+  <para xml:id="p1" fragid="p1">
+    <p>
+      <Math mode="inline" xml:id="p1.m1" tex="1\leq p&lt;n" text="1 less= p less n" fragid="p1.m1">
+        <m:math alttext="1\leq p&lt;n" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mn>1</m:mn>
+              <m:mo>≤</m:mo>
+              <m:mi>p</m:mi>
+              <m:mo>&lt;</m:mo>
+              <m:mi>n</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">1\leq p&lt;n</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m2" tex="p^{*}=\frac{pn}{n-p}&gt;p" text="p ^ * = (p * n) / (n - p) &gt; p" fragid="p1.m2">
+        <m:math alttext="p^{*}=\frac{pn}{n-p}&gt;p" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>p</m:mi>
+                <m:mo>*</m:mo>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>&gt;</m:mo>
+              <m:mi>p</m:mi>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">p^{*}=\frac{pn}{n-p}&gt;p</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m3" tex="W^{{1,p}}(R^{n})" text="W ^ (list@(1, p)) * R ^ n" fragid="p1.m3">
+        <m:math alttext="W^{{1,p}}(R^{n})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>W</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>,</m:mo>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>R</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">W^{{1,p}}(R^{n})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m4" tex="L^{q}(R^{n})" text="L ^ q * R ^ n" fragid="p1.m4">
+        <m:math alttext="L^{q}(R^{n})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msup>
+                <m:mi>L</m:mi>
+                <m:mi>q</m:mi>
+              </m:msup>
+              <m:mo>⁢</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>R</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">L^{q}(R^{n})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m5" tex="\|Du\|_{{L^{p}(R^{n})}}" text="(norm@(D * u)) _ (L ^ p * R ^ n)" fragid="p1.m5">
+        <m:math alttext="\|Du\|_{{L^{p}(R^{n})}}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mrow>
+                <m:mo fence="true">∥</m:mo>
+                <m:mrow>
+                  <m:mi>D</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>u</m:mi>
+                </m:mrow>
+                <m:mo fence="true">∥</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>L</m:mi>
+                  <m:mi>p</m:mi>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">\|Du\|_{{L^{p}(R^{n})}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m6" tex="\|u\|_{{L^{q}(R^{n})}}" text="(norm@(u)) _ (L ^ q * R ^ n)" fragid="p1.m6">
+        <m:math alttext="\|u\|_{{L^{q}(R^{n})}}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mrow>
+                <m:mo fence="true">∥</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo fence="true">∥</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>L</m:mi>
+                  <m:mi>q</m:mi>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">\|u\|_{{L^{q}(R^{n})}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m7" tex="\|u\|_{{L^{q}(R^{n})}}\leq C(p,q)\|Du\|_{{L^{p}(R^{n})}}" text="(norm@(u)) _ (L ^ q * R ^ n) less= C * open-interval@(p, q) * (norm@(D * u)) _ (L ^ p * R ^ n)" fragid="p1.m7">
+        <m:math alttext="\|u\|_{{L^{q}(R^{n})}}\leq C(p,q)\|Du\|_{{L^{p}(R^{n})}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mrow>
+                  <m:mo fence="true">∥</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo fence="true">∥</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>L</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msub>
+              <m:mo>≤</m:mo>
+              <m:mrow>
+                <m:mi>C</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>q</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                    <m:mrow>
+                      <m:mi>D</m:mi>
+                      <m:mo>⁢</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>L</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:msup>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\|u\|_{{L^{q}(R^{n})}}\leq C(p,q)\|Du\|_{{L^{p}(R^{n})}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m8" tex="u(x)\in C^{\infty}_{c}(R^{n})" text="u * x element-of (C ^ infinity) _ c * R ^ n" fragid="p1.m8">
+        <m:math alttext="u(x)\in C^{\infty}_{c}(R^{n})" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mi>u</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>∈</m:mo>
+              <m:mrow>
+                <m:msubsup>
+                  <m:mi>C</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi mathvariant="normal">∞</m:mi>
+                </m:msubsup>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">u(x)\in C^{\infty}_{c}(R^{n})</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m9" tex="u_{\lambda}(x):=u(\lambda x)" text="u _ lambda * x assign u * lambda * x" fragid="p1.m9">
+        <m:math alttext="u_{\lambda}(x):=u(\lambda x)" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>λ</m:mi>
+                </m:msub>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>:=</m:mo>
+              <m:mrow>
+                <m:mi>u</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>λ</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:mi>x</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">u_{\lambda}(x):=u(\lambda x)</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m10" tex="\|u_{\lambda}\|_{{L^{q}(R^{n})}}^{q}=\int_{{R^{n}}}|u(\lambda x)|^{q}dx=\frac{%&#10;1}{\lambda^{n}}\int_{{R^{n}}}|u(y)|^{q}dy=\lambda^{{-n}}\|u\|_{{L^{q}(R^{n})}}%&#10;^{q}" text="((norm@(u _ lambda)) _ (L ^ q * R ^ n)) ^ q = (integral _ (R ^ n))@((absolute-value@(u * lambda * x)) ^ q * d * x) = (1 / lambda ^ n) * (integral _ (R ^ n))@((absolute-value@(u * y)) ^ q * d * y) = lambda ^ (- n) * ((norm@(u)) _ (L ^ q * R ^ n)) ^ q" fragid="p1.m10">
+        <m:math alttext="\|u_{\lambda}\|_{{L^{q}(R^{n})}}^{q}=\int_{{R^{n}}}|u(\lambda x)|^{q}dx=\frac{%&#10;1}{\lambda^{n}}\int_{{R^{n}}}|u(y)|^{q}dy=\lambda^{{-n}}\|u\|_{{L^{q}(R^{n})}}%&#10;^{q}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msubsup>
+                <m:mrow>
+                  <m:mo fence="true">∥</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mi>λ</m:mi>
+                  </m:msub>
+                  <m:mo fence="true">∥</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>L</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mi>q</m:mi>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msub>
+                  <m:mo>∫</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo fence="true">|</m:mo>
+                      <m:mrow>
+                        <m:mi>u</m:mi>
+                        <m:mo>⁢</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mrow>
+                            <m:mi>λ</m:mi>
+                            <m:mo>⁢</m:mo>
+                            <m:mi>x</m:mi>
+                          </m:mrow>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mo fence="true">|</m:mo>
+                    </m:mrow>
+                    <m:mi>q</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>d</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mfrac>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mo>∫</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                  </m:msub>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo fence="true">|</m:mo>
+                        <m:mrow>
+                          <m:mi>u</m:mi>
+                          <m:mo>⁢</m:mo>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>y</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                        <m:mo fence="true">|</m:mo>
+                      </m:mrow>
+                      <m:mi>q</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mi>d</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:mi>y</m:mi>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>λ</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:msubsup>
+                  <m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                    <m:mi>u</m:mi>
+                    <m:mo fence="true">∥</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>L</m:mi>
+                      <m:mi>q</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:msup>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mi>q</m:mi>
+                </m:msubsup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\|u_{\lambda}\|_{{L^{q}(R^{n})}}^{q}=\int_{{R^{n}}}|u(\lambda x)|^{q}dx=\frac{%
+1}{\lambda^{n}}\int_{{R^{n}}}|u(y)|^{q}dy=\lambda^{{-n}}\|u\|_{{L^{q}(R^{n})}}%
+^{q}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m11" tex="\|Du_{\lambda}\|_{{L^{p}(R^{n})}}^{p}=\int_{{R^{n}}}|\lambda Du(\lambda x)|^{p%&#10;}dx=\frac{\lambda^{p}}{\lambda^{n}}\int_{{R^{n}}}|Du(y)|^{p}dy=\lambda^{{p-n}}%&#10;\|Du\|_{{L^{p}(R^{n})}}^{p}" text="((norm@(D * u _ lambda)) _ (L ^ p * R ^ n)) ^ p = (integral _ (R ^ n))@((absolute-value@(lambda * D * u * lambda * x)) ^ p * d * x) = (lambda ^ p / lambda ^ n) * (integral _ (R ^ n))@((absolute-value@(D * u * y)) ^ p * d * y) = lambda ^ (p - n) * ((norm@(D * u)) _ (L ^ p * R ^ n)) ^ p" fragid="p1.m11">
+        <m:math alttext="\|Du_{\lambda}\|_{{L^{p}(R^{n})}}^{p}=\int_{{R^{n}}}|\lambda Du(\lambda x)|^{p%&#10;}dx=\frac{\lambda^{p}}{\lambda^{n}}\int_{{R^{n}}}|Du(y)|^{p}dy=\lambda^{{p-n}}%&#10;\|Du\|_{{L^{p}(R^{n})}}^{p}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msubsup>
+                <m:mrow>
+                  <m:mo fence="true">∥</m:mo>
+                  <m:mrow>
+                    <m:mi>D</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>λ</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                  <m:mo fence="true">∥</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>L</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mi>p</m:mi>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msub>
+                  <m:mo>∫</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo fence="true">|</m:mo>
+                      <m:mrow>
+                        <m:mi>λ</m:mi>
+                        <m:mo>⁢</m:mo>
+                        <m:mi>D</m:mi>
+                        <m:mo>⁢</m:mo>
+                        <m:mi>u</m:mi>
+                        <m:mo>⁢</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mrow>
+                            <m:mi>λ</m:mi>
+                            <m:mo>⁢</m:mo>
+                            <m:mi>x</m:mi>
+                          </m:mrow>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mo fence="true">|</m:mo>
+                    </m:mrow>
+                    <m:mi>p</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>d</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mfrac>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:msup>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mfrac>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mo>∫</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                  </m:msub>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo fence="true">|</m:mo>
+                        <m:mrow>
+                          <m:mi>D</m:mi>
+                          <m:mo>⁢</m:mo>
+                          <m:mi>u</m:mi>
+                          <m:mo>⁢</m:mo>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>y</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                        <m:mo fence="true">|</m:mo>
+                      </m:mrow>
+                      <m:mi>p</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mi>d</m:mi>
+                    <m:mo>⁢</m:mo>
+                    <m:mi>y</m:mi>
+                  </m:mrow>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>λ</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:msubsup>
+                  <m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                    <m:mrow>
+                      <m:mi>D</m:mi>
+                      <m:mo>⁢</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>L</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:msup>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mi>p</m:mi>
+                </m:msubsup>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\|Du_{\lambda}\|_{{L^{p}(R^{n})}}^{p}=\int_{{R^{n}}}|\lambda Du(\lambda x)|^{p%
+}dx=\frac{\lambda^{p}}{\lambda^{n}}\int_{{R^{n}}}|Du(y)|^{p}dy=\lambda^{{p-n}}%
+\|Du\|_{{L^{p}(R^{n})}}^{p}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m12" tex="u_{\lambda}" text="u _ lambda" fragid="p1.m12">
+        <m:math alttext="u_{\lambda}" display="inline">
+          <m:semantics>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>λ</m:mi>
+            </m:msub>
+            <m:annotation encoding="application/x-tex">u_{\lambda}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m13" tex="u" text="u" fragid="p1.m13">
+        <m:math alttext="u" display="inline">
+          <m:semantics>
+            <m:mi>u</m:mi>
+            <m:annotation encoding="application/x-tex">u</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m14" tex="\|u\|_{{L^{q}(R^{n})}}\leq\lambda^{{1-n/p+n/q}}C(p,q)\|Du\|_{{L^{p}(R^{n})}}" text="(norm@(u)) _ (L ^ q * R ^ n) less= lambda ^ ((1 - n / p) + n / q) * C * open-interval@(p, q) * (norm@(D * u)) _ (L ^ p * R ^ n)" fragid="p1.m14">
+        <m:math alttext="\|u\|_{{L^{q}(R^{n})}}\leq\lambda^{{1-n/p+n/q}}C(p,q)\|Du\|_{{L^{p}(R^{n})}}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:msub>
+                <m:mrow>
+                  <m:mo fence="true">∥</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo fence="true">∥</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>L</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msup>
+                  <m:mo>⁢</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>R</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msub>
+              <m:mo>≤</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>λ</m:mi>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>/</m:mo>
+                      <m:mi>p</m:mi>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>/</m:mo>
+                      <m:mi>q</m:mi>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>⁢</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>⁢</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>q</m:mi>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>⁢</m:mo>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                    <m:mrow>
+                      <m:mi>D</m:mi>
+                      <m:mo>⁢</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:mrow>
+                    <m:mo fence="true">∥</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>L</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:msup>
+                    <m:mo>⁢</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:msup>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">\|u\|_{{L^{q}(R^{n})}}\leq\lambda^{{1-n/p+n/q}}C(p,q)\|Du\|_{{L^{p}(R^{n})}}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m15" tex="1-n/p+n/q\not=0" text="(1 - n / p) + n / q not-equals 0" fragid="p1.m15">
+        <m:math alttext="1-n/p+n/q\not=0" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>/</m:mo>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>/</m:mo>
+                  <m:mi>q</m:mi>
+                </m:mrow>
+              </m:mrow>
+              <m:mo>≠</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">1-n/p+n/q\not=0</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m16" tex="\lambda" text="lambda" fragid="p1.m16">
+        <m:math alttext="\lambda" display="inline">
+          <m:semantics>
+            <m:mi>λ</m:mi>
+            <m:annotation encoding="application/x-tex">\lambda</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+      <Math mode="inline" xml:id="p1.m17" tex="q=\frac{pn}{n-p}" text="q = (p * n) / (n - p)" fragid="p1.m17">
+        <m:math alttext="q=\frac{pn}{n-p}" display="inline">
+          <m:semantics>
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>⁢</m:mo>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+            <m:annotation encoding="application/x-tex">q=\frac{pn}{n-p}</m:annotation>
+          </m:semantics>
+        </m:math>
+      </Math>
+    </p>
+  </para>
+</document>
