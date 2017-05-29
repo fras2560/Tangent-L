@@ -80,7 +80,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    * @param stemExclusionSet a set of terms not to be stemmed
    */
   public MathAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet) {
-    super();
+    super(stopwords);
     this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(stemExclusionSet));
   }
 

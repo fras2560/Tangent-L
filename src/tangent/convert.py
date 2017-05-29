@@ -4,6 +4,7 @@ import argparse
 import logging
 import sys
 
+
 def convert_math_expression(mathml):
     """Returns the math tuples for a given math expression
 
@@ -16,9 +17,24 @@ def convert_math_expression(mathml):
     tokens = MathExtractor.math_tokens(mathml)
     pmml = MathExtractor.isolate_pmml(tokens[0])
     tree_root = MathExtractor.convert_to_mathsymbol(pmml)
-    node_list = [str(node).replace(" ", "")
+    for node in tree_root.get_pairs("", 1):
+        print("Node", node, format_node(node), type(node))
+    node_list = [format_node(node)
                  for node in tree_root.get_pairs("", 1)]
     return " ".join(node_list)
+
+
+def format_node(node):
+    return ("#" + (str(node)
+                   .replace(" ", "")
+                   .replace("&comma;", "comma")
+                   .replace("&lsqb;", "lsqb")
+                   .replace("&rsqb;", "rsqb")) + "#")
+
+
+def format_paragraph(paragraph):
+    return paragraph
+
 
 def parse_file(filename, file_id, output_file):
     """Parses a file and ouputs to a file with math tuples
@@ -40,8 +56,8 @@ def parse_file(filename, file_id, output_file):
                 print(content, file=out)
                 content = ""
             else:
-                print(content[0:start])
-                print(content[0:start], file=out)
+                print(format_paragraph(content[0:start]))
+                print(format_paragraph(content[0:start]), file=out)
                 print(convert_math_expression(content[start:end]))
                 print(convert_math_expression(content[start:end]), file=out)
                 # now move the content further along

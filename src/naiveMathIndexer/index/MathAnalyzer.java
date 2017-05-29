@@ -33,6 +33,8 @@ import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
 import org.apache.lucene.analysis.pattern.PatternTokenizer;
+import org.apache.lucene.analysis.standard.ClassicFilter;
+import org.apache.lucene.analysis.standard.ClassicTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
@@ -84,7 +86,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    * @param stemExclusionSet a set of terms not to be stemmed
    */
   public MathAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet) {
-    super();
+    super(stopwords);
     this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(stemExclusionSet));
   }
 
@@ -103,8 +105,9 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    */
   @Override
   protected TokenStreamComponents createComponents(String fieldName) {
-    final Tokenizer source = new PatternTokenizer(Pattern.compile("\\s(?!</Math>)"), -1);
+    final Tokenizer source = new MathTokenizer();
     TokenStream result = new MathFilter(source);
+    result = new ClassicFilter(result);
     result = new StandardFilter(result);
     result = new EnglishPossessiveFilter(result);
     result = new LowerCaseFilter(result);

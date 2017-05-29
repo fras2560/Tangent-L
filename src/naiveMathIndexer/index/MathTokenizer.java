@@ -29,11 +29,12 @@ import org.apache.lucene.util.AttributeFactory;
  * @see UnicodeWhitespaceTokenizer
  */
 public final class MathTokenizer extends CharTokenizer {
-  
+  private boolean mathToken;
   /**
    * Construct a new WhitespaceTokenizer.
    */
   public MathTokenizer() {
+      this.mathToken = false;
   }
 
   /**
@@ -44,13 +45,31 @@ public final class MathTokenizer extends CharTokenizer {
    *          the attribute factory to use for this {@link Tokenizer}
    */
   public MathTokenizer(AttributeFactory factory) {
-    super(factory);
+      super(factory);
+      this.mathToken = false;
   }
   
   /** Collects only characters which do not satisfy
    * {@link Character#isWhitespace(int)}.*/
   @Override
   protected boolean isTokenChar(int c) {
-    return !Character.isWhitespace(c);
+    String s = Character.getName(c);
+    if (s != null && s.equals("NUMBER SIGN")){
+        // reached a math start or end
+        this.mathToken = !this.mathToken;
+        // do not want it part of the token
+        return false;
+    }
+    if (this.mathToken){
+        // in math mode so want to break on next pound
+        // if somehow get to a white space then know it is not our math tuple
+        this.mathToken = !Character.isWhitespace(c);
+        return !Character.isWhitespace(c);
+    }else{
+        // want to break anything that not a characer ' or -
+        boolean special = (s!= null && (s.equals("APOSTROPHE") || s.equals("HYPHEN-MINUS"))
+                            || Character.isLetterOrDigit(c));
+        return !Character.isWhitespace(c) && special;
+    }
   }
 }

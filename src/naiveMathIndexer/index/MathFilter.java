@@ -20,8 +20,8 @@ public class MathFilter extends TokenFilter {
 	      }
 	    final char[] buffer = termAtt.buffer();
 	    final int bufferLength = termAtt.length();
-	    System.out.println(buffer);
-	    System.out.println("");
+	    final char[] sub = new char[bufferLength];
+	    System.arraycopy(buffer, 0, sub, 0, bufferLength);
 		return mathTag;
 	}
 }

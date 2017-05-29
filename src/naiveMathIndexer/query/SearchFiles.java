@@ -52,7 +52,6 @@ public class SearchFiles {
       System.out.println(usage);
       System.exit(0);
     }
-
     String index = "index";
     String field = "contents";
     String queries = null;
@@ -60,7 +59,7 @@ public class SearchFiles {
     boolean raw = false;
     String queryString = null;
     int hitsPerPage = 10;
-    
+    // parse arguments from command line
     for(int i = 0;i < args.length;i++) {
       if ("-index".equals(args[i])) {
         index = args[i+1];
@@ -88,11 +87,10 @@ public class SearchFiles {
         i++;
       }
     }
-    
+    // open index
     IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
     IndexSearcher searcher = new IndexSearcher(reader);
     Analyzer analyzer = new MathAnalyzer();
-
     BufferedReader in = null;
     if (queries != null) {
       in = Files.newBufferedReader(Paths.get(queries), StandardCharsets.UTF_8);
@@ -101,25 +99,24 @@ public class SearchFiles {
     }
     QueryParser parser = new QueryParser(field, analyzer);
     while (true) {
-      if (queries == null && queryString == null) {                        // prompt the user
+      if (queries == null && queryString == null) {
+        // prompt the user
         System.out.println("Enter query: ");
       }
-
       String line = queryString != null ? queryString : in.readLine();
-
+      // nothing was entered
       if (line == null || line.length() == -1) {
         break;
       }
-
+      // trim the whitespace
       line = line.trim();
       if (line.length() == 0) {
         break;
       }
-      
       Query query = parser.parse(line);
       System.out.println("Searching for: " + query.toString(field));
-            
-      if (repeat > 0) {                           // repeat & time as benchmark
+      if (repeat > 0) {
+        // repeat & time as benchmark
         Date start = new Date();
         for (int i = 0; i < repeat; i++) {
           searcher.search(query, 100);
@@ -127,9 +124,7 @@ public class SearchFiles {
         Date end = new Date();
         System.out.println("Time: "+(end.getTime()-start.getTime())+"ms");
       }
-
       doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
-
       if (queryString != null) {
         break;
       }
@@ -149,17 +144,13 @@ public class SearchFiles {
    */
   public static void doPagingSearch(BufferedReader in, IndexSearcher searcher, Query query, 
                                      int hitsPerPage, boolean raw, boolean interactive) throws IOException {
- 
     // Collect enough docs to show 5 pages
     TopDocs results = searcher.search(query, 5 * hitsPerPage);
     ScoreDoc[] hits = results.scoreDocs;
-    
     int numTotalHits = results.totalHits;
     System.out.println(numTotalHits + " total matching documents");
-
     int start = 0;
     int end = Math.min(numTotalHits, hitsPerPage);
-        
     while (true) {
       if (end > hits.length) {
         System.out.println("Only results 1 - " + hits.length +" of " + numTotalHits + " total matching documents collected.");
@@ -168,18 +159,15 @@ public class SearchFiles {
         if (line.length() == 0 || line.charAt(0) == 'n') {
           break;
         }
-
         hits = searcher.search(query, numTotalHits).scoreDocs;
       }
-      
       end = Math.min(hits.length, start + hitsPerPage);
-      
       for (int i = start; i < end; i++) {
-        if (raw) {                              // output raw format
+        if (raw) {
+          // output raw format
           System.out.println("doc="+hits[i].doc+" score="+hits[i].score);
           continue;
         }
-
         Document doc = searcher.doc(hits[i].doc);
         String path = doc.get("path");
         if (path != null) {
@@ -191,13 +179,10 @@ public class SearchFiles {
         } else {
           System.out.println((i+1) + ". " + "No path for this document");
         }
-                  
       }
-
       if (!interactive || end == 0) {
         break;
       }
-
       if (numTotalHits >= end) {
         boolean quit = false;
         while (true) {
@@ -209,7 +194,6 @@ public class SearchFiles {
             System.out.print("(n)ext page, ");
           }
           System.out.println("(q)uit or enter number to jump to a page.");
-          
           String line = in.readLine();
           if (line.length() == 0 || line.charAt(0)=='q') {
             quit = true;

@@ -10,5 +10,8 @@
 	<classpathentry kind="lib" path="/home/d6fraser/apache/lucene-6.4.2/queryparser/lucene-queryparser-6.4.2.jar"/>
 	<classpathentry kind="lib" path="/home/d6fraser/apache/lucene-6.4.2/core/lucene-core-6.4.2.jar"/>
 	<classpathentry kind="lib" path="/home/d6fraser/apache/lucene-6.4.2/analysis/common/lucene-analyzers-common-6.4.2.jar"/>
+	<classpathentry kind="lib" path="/home/d6fraser/apache/jsoup-1.10.2/jsoup-1.10.2.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/jython2.7/jython.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
