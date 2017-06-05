@@ -24,7 +24,7 @@ public class MathQuery {
             Node nNode = termList.item(j);
             if (nNode.getNodeType() == Node.ELEMENT_NODE){
                 Element e = (Element) nNode;
-                String term = e.getTextContent().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "");
+                String term = e.getTextContent().replaceAll("\n", "").replaceAll("\t", "").trim();
                 System.out.println("Text Content:" + term);
                 this.terms.add(term);
             }else{

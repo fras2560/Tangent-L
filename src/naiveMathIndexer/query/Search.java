@@ -17,13 +17,21 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.MultiPhraseQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.BooleanClause;
 import org.xml.sax.SAXException;
 import naiveMathIndexer.index.MathAnalyzer;
 import query.MathQuery;
@@ -41,22 +49,43 @@ public class Search {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         IndexSearcher searcher = new IndexSearcher(reader);
         Analyzer analyzer = new MathAnalyzer();
-        ArrayList<MathQuery> mathQueries = new ParseQueries(queries.toFile()).getQueries();
+        ParseQueries queryLoader = new ParseQueries(queries.toFile());
+        ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         QueryBuilder builder = new QueryBuilder(analyzer);
         Results answers = new Results(results.toFile());
+        TermQuery termQuery = null;
         for (MathQuery mq: mathQueries){
             System.out.println("Query:" + mq.getQuery().replaceAll("//", "//") +
                                " Query: name" + mq.getQueryName());
-            TopDocs searchResults = searcher.search(builder.createBooleanQuery(field, mq.getQuery()), 20);
-            this.checkResults(searcher, searchResults, mq, answers, queryWriter, resultsWriter);
+            Query realQuery = builder.createBooleanQuery(field, mq.getQuery());
+            BooleanQuery.Builder bq = new BooleanQuery.Builder();
+            Query buildQuery = this.buildQuery(realQuery.toString().split("contents:"), field, bq);
+            System.out.println("Boolean Query Size:" + bq.build().clauses().size());
+            System.out.println("BuildQuery:" + buildQuery);
+            System.out.println("RealQuery:" + realQuery);
+            TopDocs searchResults = searcher.search(realQuery, 20);
+            this.checkResults(searcher, searchResults, mq, answers, queryWriter, resultsWriter, buildQuery);
         }
+        queryLoader.deleteFile();
+    }
+    private Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
+        TermQuery tempQuery = null;
+        for (String term : terms){
+            term = term.trim();
+            if (!term.equals("")){
+                tempQuery = new TermQuery(new Term(field, term));
+                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+            }
+        }
+        return bq.build();
     }
     private void checkResults(IndexSearcher searcher,
                               TopDocs searchResults,
                               MathQuery query,
                               Results results,
                               BufferedWriter queryWriter,
-                              BufferedWriter resultsWriter) throws IOException{
+                              BufferedWriter resultsWriter,
+                              Query q) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
         Float rank;
         Float rLower = new Float(2.0);
@@ -76,6 +105,7 @@ public class Search {
             queryWriter.newLine();
             rank = results.findResult(query, this.parseTitle(doc.get("path")));
             System.out.println("Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
+            // System.out.println("Explanation:" + searcher.explain(q, hit.doc));
             if (rank > rLower){
                 if (index < 5){
                     rk5 += 1;
@@ -121,8 +151,8 @@ public class Search {
             System.out.println(usage);
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "odd-queries.xml");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "current");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "simple-queries.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "simple-results.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path queryOutput = Paths.get(System.getProperty("user.dir"), "resources", "output", date + "-queries.txt");

@@ -53,4 +53,8 @@ public class ParseQueries{
         }
         return this.queries;
     }
+
+    public void deleteFile(){
+        this.f.delete();
+    }
 }
