@@ -55,8 +55,9 @@ class MathSymbol:
         '''
         return re.sub(r'(\d+)(\D)', lambda m: m.group(2) * int(m.group(1)), text)                             #
     ###########################################################################################################
-            
-    def get_pairs(self, prefix, window):
+
+
+    def get_pairs(self, prefix, window, eol=False):
         """
         Return the pairs in the symbol tree
 
@@ -68,18 +69,13 @@ class MathSymbol:
         :return list of tuples
         :rtype list
         """
-
-
         def mk_helper(location):
-
- 
-
             def helper(tup):
                 right, rel_path = tup
                 if len(rel_path) > 5:
                     rel_path = self.rlencode(rel_path)
-                return (self.tag, right.tag, rel_path, location) # this is the tuple format for Version 0.3
-
+                # this is the tuple format for Version 0.3
+                return (self.tag, right.tag, rel_path, location)
             return helper
 
         if len(prefix) == 0:
@@ -87,14 +83,20 @@ class MathSymbol:
         elif len(prefix) > 5:
             loc = self.rlencode(prefix)
         else:
-            loc = prefix   
+            loc = prefix
         ret = []
-        for child, label in [(self.next, 'n'), (self.above, 'a'), (self.below, 'b'), (self.pre_above, 'c'),
-                             (self.over, 'o'), (self.under, 'u'),
-                             (self.pre_below, 'd'), (self.within, 'w'), (self.element, 'e')]:
+        children = [(self.next, 'n'), (self.above, 'a'),
+                    (self.below, 'b'), (self.pre_above, 'c'),
+                    (self.over, 'o'), (self.under, 'u'),
+                    (self.pre_below, 'd'), (self.within, 'w'),
+                    (self.element, 'e')]
+        for child, label in children:
             if child:
                 ret.extend(filter(lambda x: x is not None, map(mk_helper(loc), child.get_symbols(label,window))))
-                ret.extend(child.get_pairs(prefix+label,window))
+                ret.extend(child.get_pairs(prefix+label, window, eol=eol))
+        if eol and len(ret) == 0:
+            # then we have a small expression
+            ret.append((self.tag, "!0", "n", loc))
         return ret
     
     @classmethod

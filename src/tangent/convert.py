@@ -17,19 +17,27 @@ def convert_math_expression(mathml):
     tokens = MathExtractor.math_tokens(mathml)
     pmml = MathExtractor.isolate_pmml(tokens[0])
     tree_root = MathExtractor.convert_to_mathsymbol(pmml)
-    for node in tree_root.get_pairs("", 1):
+    pairs = tree_root.get_pairs("", 1)
+    if len(pairs) < 3:
+        # need to add eol symbols
+        pairs = tree_root.get_pairs("", 1, eol=True)
+    for node in pairs:
         print("Node", node, format_node(node), type(node))
-    node_list = [format_node(node)
-                 for node in tree_root.get_pairs("", 1)]
+        node_list = [format_node(node)
+                     for node in pairs]
     return " ".join(node_list)
 
 
 def format_node(node):
+    node = str(node)
+#     for letter in "zxcvbnmasdfghjklqwertyuiop":
+#         node = node.replace("?" + letter, "*")
     return ("#" + (str(node)
                    .replace(" ", "")
                    .replace("&comma;", "comma")
                    .replace("&lsqb;", "lsqb")
-                   .replace("&rsqb;", "rsqb")) + "#")
+                   .replace("&rsqb;", "rsqb")
+                   ) + "#")
 
 
 def format_paragraph(paragraph):
