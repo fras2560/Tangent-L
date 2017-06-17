@@ -31,8 +31,8 @@ class MathSymbol:
         self.element = element # FWT
         self.mathml = mathml  #KMD
 
-    def get_symbols(self, label, window):
-        return MathSymbolIterator(self, label, window)
+    def get_symbols(self, label, window, unbounded=False):
+        return MathSymbolIterator(self, label, window, unbounded=unbounded)
 
     ###########################################################################################################
     # Run length encoding and decoding -- adapted from http://rosettacode.org/wiki/Run-length_encoding#Python #
@@ -57,7 +57,22 @@ class MathSymbol:
     ###########################################################################################################
 
 
-    def get_pairs(self, prefix, window, eol=False):
+    def get_height(self, height=0):
+        children = [(self.next, 'n'), (self.above, 'a'),
+                    (self.below, 'b'), (self.pre_above, 'c'),
+                    (self.over, 'o'), (self.under, 'u'),
+                    (self.pre_below, 'd'), (self.within, 'w'),
+                    (self.element, 'e')]
+        max_height = height
+        for child, __ in children:
+            if child:
+                temp = child.get_height(height=height+1)
+                if temp + height > max_height:
+                    max_height = temp + height
+        return max_height
+
+
+    def get_pairs(self, prefix, window, eol=False, unbounded=False):
         """
         Return the pairs in the symbol tree
 
@@ -74,8 +89,14 @@ class MathSymbol:
                 right, rel_path = tup
                 if len(rel_path) > 5:
                     rel_path = self.rlencode(rel_path)
-                # this is the tuple format for Version 0.3
-                return (self.tag, right.tag, rel_path, location)
+                if unbounded and len(rel_path) > window:
+                    # little less liberal for now
+                    path = rel_path[0] + rel_path[-1]
+                    return (self.tag, right.tag, path)
+                else:
+                    # this is the tuple format for Version 0.3
+                    # removed due to discussion on June 7
+                    return (self.tag, right.tag, rel_path)
             return helper
 
         if len(prefix) == 0:
@@ -92,11 +113,11 @@ class MathSymbol:
                     (self.element, 'e')]
         for child, label in children:
             if child:
-                ret.extend(filter(lambda x: x is not None, map(mk_helper(loc), child.get_symbols(label,window))))
+                ret.extend(filter(lambda x: x is not None, map(mk_helper(loc), child.get_symbols(label,window,unbounded=unbounded))))
                 ret.extend(child.get_pairs(prefix+label, window, eol=eol))
         if eol and len(ret) == 0:
             # then we have a small expression
-            ret.append((self.tag, "!0", "n", loc))
+            ret.append((self.tag, "!0", "n"))
         return ret
     
     @classmethod
@@ -1053,10 +1074,11 @@ class MathSymbolIterator(object):
     Iterator over a symbol tree
     """
 
-    def __init__(self, node, prefix, window):
+    def __init__(self, node, prefix, window, unbounded=False):
         self.stack = [(node, '')] if node else []
         self.prefix = prefix
         self.window = window
+        self.unbounded = unbounded
 
     def __iter__(self): # required in Python
         return self
@@ -1065,7 +1087,14 @@ class MathSymbolIterator(object):
         if len(self.stack) < 1:
             raise StopIteration
         (elem, path) = self.stack.pop()
+        bound = True
         if not self.window or len(self.prefix)+len(path) < self.window:
+            bound = True
+            for child, label in [(elem.next, 'n'), (elem.above, 'a'), (elem.below, 'b'), (elem.over, 'o'), (elem.under, 'u'),
+                                 (elem.pre_above, 'c'), (elem.pre_below, 'd'), (elem.within, 'w'), (elem.element, 'e')]:
+                if child:
+                    self.stack.append((child, path+label))
+        elif len(self.prefix)+len(path) >= self.window and self.unbounded:
             for child, label in [(elem.next, 'n'), (elem.above, 'a'), (elem.below, 'b'), (elem.over, 'o'), (elem.under, 'u'),
                                  (elem.pre_above, 'c'), (elem.pre_below, 'd'), (elem.within, 'w'), (elem.element, 'e')]:
                 if child:

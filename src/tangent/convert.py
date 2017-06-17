@@ -13,25 +13,26 @@ def convert_math_expression(mathml):
     Returns:
         : a string of the math tuples
     """
-    print(mathml)
     tokens = MathExtractor.math_tokens(mathml)
     pmml = MathExtractor.isolate_pmml(tokens[0])
+    depth = MathExtractor
     tree_root = MathExtractor.convert_to_mathsymbol(pmml)
-    pairs = tree_root.get_pairs("", 1)
-    if len(pairs) < 3:
-        # need to add eol symbols
-        pairs = tree_root.get_pairs("", 1, eol=True)
-    for node in pairs:
-        print("Node", node, format_node(node), type(node))
-        node_list = [format_node(node)
-                     for node in pairs]
+    height = tree_root.get_height()
+    eol = False
+    if height <= 2:
+        eol = True
+    pairs = tree_root.get_pairs("", 1, eol=eol, unbounded=False)
+#     for node in pairs:
+#         print("Node", node, format_node(node), type(node))
+    node_list = [format_node(node)
+                 for node in pairs]
     return " ".join(node_list)
 
 
 def format_node(node):
     node = str(node)
-#     for letter in "zxcvbnmasdfghjklqwertyuiop":
-#         node = node.replace("?" + letter, "*")
+    for letter in "zxcvbnmasdfghjklqwertyuiop":
+        node = node.replace("?" + letter, "*")
     return ("#" + (str(node)
                    .replace(" ", "")
                    .replace("&comma;", "comma")

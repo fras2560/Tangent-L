@@ -38,7 +38,9 @@ import query.MathQuery;
 import results.Results;
 
 public class Search {
-    public Search(Path index, Path queries, Path results, BufferedWriter queryWriter, BufferedWriter resultsWriter)
+    private final String WILDCARD = "'*'";
+    public Search(Path index, Path queries, Path results, BufferedWriter queryWriter, BufferedWriter resultsWriter,
+                  BufferedWriter scoreWriter)
             throws  IOException,
                     XPathExpressionException,
                     ParserConfigurationException,
@@ -53,30 +55,115 @@ public class Search {
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         QueryBuilder builder = new QueryBuilder(analyzer);
         Results answers = new Results(results.toFile());
-        TermQuery termQuery = null;
         for (MathQuery mq: mathQueries){
-            System.out.println("Query:" + mq.getQuery().replaceAll("//", "//") +
-                               " Query: name" + mq.getQueryName());
+            System.out.println("Query: " + mq.getQuery().replaceAll("//", "//") +
+                               " Query: name: " + mq.getQueryName());
             Query realQuery = builder.createBooleanQuery(field, mq.getQuery());
-            BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = this.buildQuery(realQuery.toString().split("contents:"), field, bq);
-            System.out.println("Boolean Query Size:" + bq.build().clauses().size());
-            System.out.println("BuildQuery:" + buildQuery);
-            System.out.println("RealQuery:" + realQuery);
-            TopDocs searchResults = searcher.search(realQuery, 20);
-            this.checkResults(searcher, searchResults, mq, answers, queryWriter, resultsWriter, buildQuery);
+            if (realQuery == null){
+                System.out.println("Query has no elements");
+                resultsWriter.write(mq.getQueryName() + ",0,0,0,0,0,0,0,0");
+                resultsWriter.newLine();
+            }else{
+                System.out.println(realQuery);
+                System.out.println(realQuery.toString());
+                
+                BooleanQuery.Builder bq = new BooleanQuery.Builder();
+                Query buildQuery = this.buildQuery(realQuery.toString().split("contents:"), field, bq);
+                System.out.println("Boolean Query Size:" + bq.build().clauses().size());
+                System.out.println("BuildQuery:" + buildQuery);
+                System.out.println("RealQuery:" + realQuery);
+                TopDocs searchResultsWild = searcher.search(buildQuery, 20);
+                TopDocs searchResultsTerm = searcher.search(realQuery, 20);
+                this.checkResults(searcher, searchResultsWild, mq, answers, queryWriter, resultsWriter, buildQuery);
+                this.differentResults(searchResultsWild, searcher.search(buildQuery, 20));
+                searchResultsWild = searcher.search(buildQuery, 100);
+                this.scoreDeviations(searcher, searchResultsWild, mq, answers, scoreWriter, buildQuery);
+            }
         }
         queryLoader.deleteFile();
     }
+    private void differentResults(TopDocs tp1, TopDocs tp2){
+        ScoreDoc[] sd1 = tp1.scoreDocs;
+        ScoreDoc[] sd2 = tp2.scoreDocs;
+        boolean same = true;
+        if (sd1.length == sd2.length){
+            for (int i = 0; i < sd1.length;i++){
+                if (sd1[i].doc != sd2[i].doc){
+                    same = false;
+                }
+            }
+        }else{
+            same = false;
+        }
+        System.out.println("Both queries are the same:" + same);
+    }
+    private float getMean(ScoreDoc[] hits){
+        float total = 0;
+        for (ScoreDoc hit : hits){
+            total += hit.score;
+        }
+        return total / hits.length;
+    }
+    private float getStandardDeviation(ScoreDoc[] hits, float mean){
+        float std = 0;
+        for (ScoreDoc hit: hits){
+            std += (hit.score - mean) * (hit.score - mean);
+        }
+        return std / hits.length;
+    }
+    private void scoreDeviations(IndexSearcher searcher, TopDocs searchResults, MathQuery query, Results results,
+                                 BufferedWriter scoreWriter, Query q
+                                ) throws IOException{
+        ScoreDoc[] hits = searchResults.scoreDocs;
+        float mean = this.getMean(hits);
+        float std = this.getStandardDeviation(hits, mean);
+        Float rank;
+        Float score = (float) 0;
+        for (ScoreDoc hit : hits){
+            Document doc = searcher.doc(hit.doc);
+            rank = results.findResult(query, this.parseTitle(doc.get("path")));
+            if (rank >= 0){
+                if (rank == 0){
+                    score += (-4 * (std / (hit.score - mean)));
+                }else{
+                    score += (rank * (std / (hit.score - mean)));
+                }
+            }
+        }
+        System.out.println("Query:" + query.getQueryName() + " Score:" + score);
+        scoreWriter.write(query.getQueryName() + "," + score);
+        scoreWriter.newLine();
+    }
+    private boolean checkTerm(String term){
+        boolean valid = true;
+        String[] parts = term.replaceAll("[()]", "").split(",");
+        if (parts.length > 0){
+            if (parts.length == 2){
+                System.out.println(parts[0] + " " + parts[1]);
+                if (parts[0].equals(this.WILDCARD)){
+                    valid = false;
+                }else if (parts[1].equals(this.WILDCARD)){
+                    valid = false;
+                }
+            }
+            
+        }
+        System.out.println(term + ":" + valid);
+        return valid;
+    }
     private Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
-        TermQuery tempQuery = null;
+        WildcardQuery tempQuery = null;
         for (String term : terms){
             term = term.trim();
-            if (!term.equals("")){
-                tempQuery = new TermQuery(new Term(field, term));
+            if (!term.equals("") && this.checkTerm(term) == true){
+                tempQuery = new WildcardQuery(new Term(field, term));
                 bq.add(tempQuery, BooleanClause.Occur.SHOULD);
             }
         }
+        if (tempQuery == null){
+            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+        }
+        System.out.println(tempQuery);
         return bq.build();
     }
     private void checkResults(IndexSearcher searcher,
@@ -101,7 +188,7 @@ public class Search {
         int index = 0;
         for (ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            queryWriter.write(query.getQueryName() + "," + doc.get("path") + "," + hit.score);
+            queryWriter.write(query.getQueryName() + " 1 " + doc.get("path") + " " + (index+1) + " " + hit.score + " RITUW");
             queryWriter.newLine();
             rank = results.findResult(query, this.parseTitle(doc.get("path")));
             System.out.println("Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
@@ -148,15 +235,16 @@ public class Search {
     public static void main(String[] args) throws Exception {
         String usage = "Usage:\tjava org.apache.lucene.demo.SearchFiles [-index dir] [-queries file] [-results file]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
-            System.out.println(usage);
+            System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "current");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "simple-queries.xml");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "no-location", "eol-ws-1");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "odd-queries.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "simple-results.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path queryOutput = Paths.get(System.getProperty("user.dir"), "resources", "output", date + "-queries.txt");
         Path resultOutput = Paths.get(System.getProperty("user.dir"), "resources", "output", date + "-results.txt");
+        Path scoreOutput = Paths.get(System.getProperty("user.dir"), "resources", "output", date + "-score.txt");
         for(int i = 0;i < args.length;i++) {
           if ("-index".equals(args[i])) {
             index = Paths.get(args[i+1]);
@@ -171,6 +259,7 @@ public class Search {
         }
         BufferedWriter queryWriter = null;
         BufferedWriter resultsWriter = null;
+        BufferedWriter scoreWriter = null;
         try {
             // write out the queries
             File queryText = queryOutput.toFile();
@@ -184,11 +273,18 @@ public class Search {
             FileOutputStream ris = new FileOutputStream(resultsText);
             OutputStreamWriter rosw = new OutputStreamWriter(ris);
             resultsWriter = new BufferedWriter(rosw);
-            // do the actuall searching
-            new Search(index, queries, results, queryWriter, resultsWriter);
+            // write out the score results for each query
+            File scoreText = scoreOutput.toFile();
+            scoreText.createNewFile();
+            FileOutputStream sis = new FileOutputStream(scoreText);
+            OutputStreamWriter sosw = new OutputStreamWriter(sis);
+            scoreWriter = new BufferedWriter(sosw);
+            // do the actual searching
+            new Search(index, queries, results, queryWriter, resultsWriter, scoreWriter);
             // close the files
             resultsWriter.close();
             queryWriter.close();
+            scoreWriter.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
             e.printStackTrace();
@@ -198,7 +294,9 @@ public class Search {
             if (resultsWriter != null){
                 resultsWriter.close();
             }
+            if(scoreWriter != null){
+                scoreWriter.close();
+            }
         }
-        
     }
 }
