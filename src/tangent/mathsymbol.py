@@ -5,6 +5,8 @@ import string
 import sys
 import re
 from html.parser import HTMLParser #RZ
+import symbol
+from java.lang import Short
 
 __author__ = 'Nidhin, FWTompa'
 
@@ -72,7 +74,16 @@ class MathSymbol:
         return max_height
 
 
-    def get_pairs(self, prefix, window, eol=False, unbounded=False):
+    def get_pairs(self,
+                  prefix,
+                  window,
+                  compound_symbols=False,
+                  terminal_symbols=False,
+                  edge_pairs=False,
+                  eol=False,
+                  unbounded=False,
+                  shortened=False,
+                  location=False):
         """
         Return the pairs in the symbol tree
 
@@ -80,6 +91,18 @@ class MathSymbol:
         :type  prefix: string
         :param window: representing the max distance between symbol pairs to include
         :type  window: int
+        :param compound_pairs: If True will include compout pairs (N, {e})
+        :type compound_pairs: boolean
+        :param terminal_symbols: If True will include terminal symbols (N)
+        :type terminal_symbols: boolean
+        :param edge_pairs: If True will include edge pairs (e, e, N)
+        :type edge_pairs: boolean
+        :param unbounded: If True will include all pairs of nodes (N, N)
+        :type unbounded: boolean
+        :param shortened: If True will shorten the path for various pairs
+        :type shortened: boolean
+        :param location: If True symbol_pairs will include location
+        :type location: boolean
 
         :return list of tuples
         :rtype list
@@ -90,13 +113,20 @@ class MathSymbol:
                 if len(rel_path) > 5:
                     rel_path = self.rlencode(rel_path)
                 if unbounded and len(rel_path) > window:
-                    # little less liberal for now
-                    path = rel_path[0] + rel_path[-1]
-                    return (self.tag, right.tag, path)
+                    if shortened:
+                        # super liberal for now
+                        return (self.tag, right.tag)
+                    else:
+                        # little less liberal for now
+                        path = rel_path[0] + rel_path[-1]
+                        return (self.tag, right.tag, path)
                 else:
-                    # this is the tuple format for Version 0.3
-                    # removed due to discussion on June 7
-                    return (self.tag, right.tag, rel_path)
+                    if location:
+                        # this is the tuple format for Version 0.3
+                        # removed due to discussion on June 7
+                        return (self.tag, right.tag, rel_path, location)
+                    else:
+                        return (self.tag, right.tag, rel_path)
             return helper
 
         if len(prefix) == 0:
@@ -111,15 +141,39 @@ class MathSymbol:
                     (self.over, 'o'), (self.under, 'u'),
                     (self.pre_below, 'd'), (self.within, 'w'),
                     (self.element, 'e')]
+        if compound_symbols:
+            # add the compound feature tuple - (N, {e1,e2, ...})
+            ret.append((self.tag, str([label for child, label in children
+                                       if child is not None])))
         for child, label in children:
             if child:
-                ret.extend(filter(lambda x: x is not None, map(mk_helper(loc), child.get_symbols(label,window,unbounded=unbounded))))
-                ret.extend(child.get_pairs(prefix+label, window, eol=eol))
+                ret.extend(filter(lambda x: x is not None,
+                                  map(mk_helper(loc),
+                                      child.get_symbols(label,
+                                                        window,
+                                                        unbounded=unbounded))))
+                ret.extend(child.get_pairs(prefix+label,
+                                           window,
+                                           eol=eol,
+                                           compound_symbols=compound_symbols,
+                                           terminal_symbols=terminal_symbols,
+                                           edge_pairs=edge_pairs,
+                                           unbounded=unbounded,
+                                           shortened=shortened,
+                                           location=location))
+        if edge_pairs and len(prefix) > 0:
+            # add the pairs of edges on this node
+            ret.extend([(prefix[-1], label, self.tag)
+                        for child, label in children
+                        if child])
+        if terminal_symbols and len(ret):
+            # add the terminal symbols
+            ret.append(self.tag)
         if eol and len(ret) == 0:
-            # then we have a small expression
+            # then we have a small expression and adding eol
             ret.append((self.tag, "!0", "n"))
         return ret
-    
+
     @classmethod
     def list2matrix(cls, children, separators, parent_element):
         """

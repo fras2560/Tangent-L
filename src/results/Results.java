@@ -8,10 +8,71 @@ import query.MathQuery;
 
 public class Results {
     private ArrayList<Result> resultsList;
+    private static final Float rLower = new Float(2.0);
+    private static final Float pLower = new Float(0.0);
+    private boolean showResults;
+    private boolean debugResults;
     public Results(File f){
         this.resultsList = this.parseFile(f);
-        
+        this.showResults = false;
+        this.debugResults = false;
     }
+    public Results(File f, boolean showResults, boolean debugResults){
+        this.resultsList = this.parseFile(f);
+        this.showResults = showResults;
+        this.debugResults = debugResults;
+    }
+    public void output(String s){
+        if (this.showResults){
+            System.out.println(s);
+        }
+    }
+    public void debug(String s){
+        if(this.debugResults){
+            System.out.println(s);
+        }
+    }
+    public int[] recallResult(MathQuery query, ArrayList<String> files){
+        int r_docs = 0;
+        int pr_docs = 0;
+        int r_found = 0;
+        int pr_found = 0;
+        for(Result entry: this.resultsList){
+            if (entry.equals(query)){
+                if(entry.getRank() > this.rLower){
+                    r_docs += 1;
+                    if (this.containsResults(entry, files)){
+                        r_found += 1;
+                    }else{
+                        this.debug(entry.toString());
+                    }
+                }
+                if (entry.getRank() > this.pLower){
+                    pr_docs += 1;
+                    if (this.containsResults(entry, files)){
+                        pr_found += 1;
+                    }else{
+                        this.debug(entry.toString());
+                    }
+                }
+            }
+        }
+//        this.output("Query Name: " + query.getQueryName() +
+//                    " Relevant: " +r_docs + " Relevant Found: " +
+//                    r_found + " PR:" + pr_docs + " PR Found:" + pr_found);
+//        this.output(((float) r_found / (float) r_docs) + " " + ((float) pr_found / (float) pr_docs));
+        return new int[]{r_docs,r_found, pr_docs, pr_found};
+    }
+    public boolean containsResults(Result result, ArrayList<String> files){
+        boolean contained = false;
+        for (String file: files){
+            if (result.equals(file)){
+                contained = true;
+            }
+        }
+        return contained;
+    }
+
     public Float findResult(MathQuery query, String file){
         Float result = new Float(-1.0);
         for (Result entry : this.resultsList){
@@ -63,6 +124,9 @@ public class Results {
         }
         public boolean equals(String f){
             return this.fileName.equals(f);
+        }
+        public String toString(){
+            return "Query Name: " + this.queryName + " Filename:" + this.fileName;
         }
     }
     private class ResultException extends Exception{

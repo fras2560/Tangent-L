@@ -27,6 +27,9 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
+import org.apache.lucene.search.similarities.ClassicSimilarity;
+import org.apache.lucene.search.similarities.Similarity;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
 import org.apache.lucene.search.BooleanQuery;
@@ -39,6 +42,10 @@ import results.Results;
 
 public class Search {
     private final String WILDCARD = "'*'";
+    private final String WILDCHARACTER = "'???'";
+    public Search(){
+        
+    }
     public Search(Path index, Path queries, Path results, BufferedWriter queryWriter, BufferedWriter resultsWriter,
                   BufferedWriter scoreWriter)
             throws  IOException,
@@ -50,6 +57,8 @@ public class Search {
         String field = "contents";
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         IndexSearcher searcher = new IndexSearcher(reader);
+        Similarity similarity = new BM25Similarity();
+        searcher.setSimilarity(similarity);
         Analyzer analyzer = new MathAnalyzer();
         ParseQueries queryLoader = new ParseQueries(queries.toFile());
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
@@ -82,7 +91,7 @@ public class Search {
         }
         queryLoader.deleteFile();
     }
-    private void differentResults(TopDocs tp1, TopDocs tp2){
+    public void differentResults(TopDocs tp1, TopDocs tp2){
         ScoreDoc[] sd1 = tp1.scoreDocs;
         ScoreDoc[] sd2 = tp2.scoreDocs;
         boolean same = true;
@@ -97,21 +106,21 @@ public class Search {
         }
         System.out.println("Both queries are the same:" + same);
     }
-    private float getMean(ScoreDoc[] hits){
+    public float getMean(ScoreDoc[] hits){
         float total = 0;
         for (ScoreDoc hit : hits){
             total += hit.score;
         }
         return total / hits.length;
     }
-    private float getStandardDeviation(ScoreDoc[] hits, float mean){
+    public float getStandardDeviation(ScoreDoc[] hits, float mean){
         float std = 0;
         for (ScoreDoc hit: hits){
             std += (hit.score - mean) * (hit.score - mean);
         }
         return std / hits.length;
     }
-    private void scoreDeviations(IndexSearcher searcher, TopDocs searchResults, MathQuery query, Results results,
+    public void scoreDeviations(IndexSearcher searcher, TopDocs searchResults, MathQuery query, Results results,
                                  BufferedWriter scoreWriter, Query q
                                 ) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
@@ -134,27 +143,27 @@ public class Search {
         scoreWriter.write(query.getQueryName() + "," + score);
         scoreWriter.newLine();
     }
-    private boolean checkTerm(String term){
+    public boolean checkTerm(String term){
         boolean valid = true;
         String[] parts = term.replaceAll("[()]", "").split(",");
         if (parts.length > 0){
             if (parts.length == 2){
-                System.out.println(parts[0] + " " + parts[1]);
-                if (parts[0].equals(this.WILDCARD)){
+//                System.out.println(parts[0] + " " + parts[1]);
+                if (parts[0].equals(this.WILDCARD) || parts[0].equals(this.WILDCHARACTER)){
                     valid = false;
-                }else if (parts[1].equals(this.WILDCARD)){
+                }else if (parts[1].equals(this.WILDCARD) || parts[1].equals(this.WILDCHARACTER)){
                     valid = false;
                 }
             }
             
         }
-        System.out.println(term + ":" + valid);
+//        System.out.println(term + ":" + valid);
         return valid;
     }
-    private Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
+    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
         WildcardQuery tempQuery = null;
         for (String term : terms){
-            term = term.trim();
+            term = term.trim(); 
             if (!term.equals("") && this.checkTerm(term) == true){
                 tempQuery = new WildcardQuery(new Term(field, term));
                 bq.add(tempQuery, BooleanClause.Occur.SHOULD);
@@ -163,10 +172,10 @@ public class Search {
         if (tempQuery == null){
             bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
         }
-        System.out.println(tempQuery);
+
         return bq.build();
     }
-    private void checkResults(IndexSearcher searcher,
+    public void checkResults(IndexSearcher searcher,
                               TopDocs searchResults,
                               MathQuery query,
                               Results results,
@@ -191,8 +200,8 @@ public class Search {
             queryWriter.write(query.getQueryName() + " 1 " + doc.get("path") + " " + (index+1) + " " + hit.score + " RITUW");
             queryWriter.newLine();
             rank = results.findResult(query, this.parseTitle(doc.get("path")));
-            System.out.println("Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
-            // System.out.println("Explanation:" + searcher.explain(q, hit.doc));
+//            System.out.println("Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
+//            System.out.println("Explanation:" + searcher.explain(q, hit.doc));
             if (rank > rLower){
                 if (index < 5){
                     rk5 += 1;
@@ -225,7 +234,7 @@ public class Search {
         System.out.println(query.getQueryName() + "," + rk5 + "," + rk10 + ","+ rk15 + ","+ rk20
                            + "," + pk5 + "," + pk10 + ","+ pk15 + ","+ pk20);
     }
-    private String parseTitle(String title){
+    public String parseTitle(String title){
         String[] parts = title.split("/");
         String filename = parts[parts.length -1];
         String[] temp = filename.split("\\.");
@@ -238,8 +247,8 @@ public class Search {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "no-location", "eol-ws-1");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "odd-queries.xml");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "all-pairs", "eol-ws-1-no-path");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "simple-queries.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "simple-results.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path queryOutput = Paths.get(System.getProperty("user.dir"), "resources", "output", date + "-queries.txt");
