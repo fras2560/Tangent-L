@@ -36,7 +36,7 @@ def convert_math_expression(mathml,
                                 edge_pairs=edge_pairs,
                                 unbounded=unbounded,
                                 shortened=shortened,
-                                location=location)
+                                include_location=location)
 #     for node in pairs:
 #         print("Node", node, format_node(node), type(node))
     node_list = [format_node(node)
@@ -88,7 +88,7 @@ def parse_file(filename,
             if start == -1:
                 # can just print the rest
                 print(content)
-                print(content, file=out)
+                print(content, end="", file=out)
                 content = ""
             else:
                 paragraph = format_paragraph(content[0:start])

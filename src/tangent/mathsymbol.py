@@ -6,7 +6,6 @@ import sys
 import re
 from html.parser import HTMLParser #RZ
 import symbol
-from java.lang import Short
 
 __author__ = 'Nidhin, FWTompa'
 
@@ -58,7 +57,6 @@ class MathSymbol:
         return re.sub(r'(\d+)(\D)', lambda m: m.group(2) * int(m.group(1)), text)                             #
     ###########################################################################################################
 
-
     def get_height(self, height=0):
         children = [(self.next, 'n'), (self.above, 'a'),
                     (self.below, 'b'), (self.pre_above, 'c'),
@@ -73,7 +71,6 @@ class MathSymbol:
                     max_height = temp + height
         return max_height
 
-
     def get_pairs(self,
                   prefix,
                   window,
@@ -83,7 +80,7 @@ class MathSymbol:
                   eol=False,
                   unbounded=False,
                   shortened=False,
-                  location=False):
+                  include_location=False):
         """
         Return the pairs in the symbol tree
 
@@ -101,8 +98,8 @@ class MathSymbol:
         :type unbounded: boolean
         :param shortened: If True will shorten the path for various pairs
         :type shortened: boolean
-        :param location: If True symbol_pairs will include location
-        :type location: boolean
+        :param include_location: If True symbol_pairs will include location
+        :type include_location: boolean
 
         :return list of tuples
         :rtype list
@@ -121,7 +118,7 @@ class MathSymbol:
                         path = rel_path[0] + rel_path[-1]
                         return (self.tag, right.tag, path)
                 else:
-                    if location:
+                    if include_location:
                         # this is the tuple format for Version 0.3
                         # removed due to discussion on June 7
                         return (self.tag, right.tag, rel_path, location)
@@ -143,8 +140,10 @@ class MathSymbol:
                     (self.element, 'e')]
         if compound_symbols:
             # add the compound feature tuple - (N, {e1,e2, ...})
-            ret.append((self.tag, str([label for child, label in children
-                                       if child is not None])))
+            available_edges = [label for child, label in children
+                               if child is not None]
+            if len(available_edges) > 0:
+                ret.append((self.tag, str(available_edges)))
         for child, label in children:
             if child:
                 ret.extend(filter(lambda x: x is not None,
@@ -160,18 +159,18 @@ class MathSymbol:
                                            edge_pairs=edge_pairs,
                                            unbounded=unbounded,
                                            shortened=shortened,
-                                           location=location))
+                                           include_location=include_location))
+        if terminal_symbols and len(ret) == 0:
+            # add the terminal symbols
+            ret.append((self.tag, "!0"))
+        if eol and len(ret) == 0:
+            # then we have a small expression and adding eol
+            ret.append((self.tag, "!0", "n"))
         if edge_pairs and len(prefix) > 0:
             # add the pairs of edges on this node
             ret.extend([(prefix[-1], label, self.tag)
                         for child, label in children
                         if child])
-        if terminal_symbols and len(ret):
-            # add the terminal symbols
-            ret.append(self.tag)
-        if eol and len(ret) == 0:
-            # then we have a small expression and adding eol
-            ret.append((self.tag, "!0", "n"))
         return ret
 
     @classmethod
