@@ -92,19 +92,19 @@ def parse_file(filename,
                 content = ""
             else:
                 paragraph = format_paragraph(content[0:start])
-                expression = convert_math_expression(content[start:end],
-                                                     window_size=1,
-                                                     eol=False,
-                                                     compound_symbols=False,
-                                                     terminal_symbols=False,
-                                                     edge_pairs=False,
-                                                     unbounded=False,
-                                                     shortened=True,
-                                                     location=False)
+                ex = convert_math_expression(content[start:end],
+                                             window_size=1,
+                                             eol=eol,
+                                             compound_symbols=compound_symbols,
+                                             terminal_symbols=compound_symbols,
+                                             edge_pairs=edge_pairs,
+                                             unbounded=unbounded,
+                                             shortened=shortened,
+                                             location=location)
                 print(paragraph)
                 print(paragraph, file=out)
-                print(expression)
-                print(expression, file=out)
+                print(ex)
+                print(ex, file=out)
                 # now move the content further along
                 content = content[end:]
 
@@ -124,6 +124,11 @@ if __name__ == "__main__":
     parser.add_argument('-outfile',
                         '--outfile',
                         help='The file to output to', required=True)
+    parser.add_argument('-eol',
+                        dest="eol",
+                        action="store_true",
+                        help="Use EOL tuples",
+                        default=False)
     parser.add_argument('-compound_symbols',
                         dest="compound_symbols",
                         action="store_true",
@@ -155,7 +160,7 @@ if __name__ == "__main__":
                         action="store_true",
                         help=prompt,
                         default=False)
-    parser.add_argument('window_size',
+    parser.add_argument('-window_size',
                         dest="window_size",
                         default=1,
                         type=int,
