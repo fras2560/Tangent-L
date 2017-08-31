@@ -7,7 +7,7 @@ Purpose: To test the convert of mathml to Tangent Tuples
 '''
 import unittest
 import os
-from tangent.convert import convert_math_expression
+from tangent.convert import convert_math_expression, check_node, check_wildcard
 
 
 class TestBase(unittest.TestCase):
@@ -21,6 +21,44 @@ class TestBase(unittest.TestCase):
     def log(self, out):
         if self.debug:
             print(out)
+
+
+class TestWildcardReductionAndCheck(TestBase):
+    def setUp(self):
+        self.debug = True
+
+    def tearDown(self):
+        pass
+
+    def testCheckNode(self):
+        valid_nodes = [('?w', 'm!()1x1', 'n'),
+                       ('m!()1x1', '?w', 'n'),
+                       ('=', 'v!y', 'n'),
+                       ('v!y', 'n!0', 'b'),
+                       ('m!()1x1', 'v!x', 'w'),
+                       ('v!x', 'n!0', 'b'),
+                       ('v!Î±', 'n!0', 'b'),
+                       ('v!Î±', "['n','b']"),
+                       ('m!()1x1', "['n','w']"),
+                       ('n!0', '!0'),
+                       ('n', 'b', '?w'),
+                       ('n', 'n', '='),
+                       ('w', 'b', 'v!x'),
+                       ('n', 'n', 'm!()1x1'),
+                       ('n', 'w', 'm!()1x1')]
+        invalid_nodes = [('?v', '!0'),
+                         ('?w', '?w', 'b'),
+                         ("?w", "?w", "b", "nn"),
+                         ("?w", "!0", "n")]
+        for node in valid_nodes:
+            self.assertEqual(check_node(node), True)
+        for node in invalid_nodes:
+            self.assertEqual(check_node(node), False)
+
+    def testCheckWildcard(self):
+        self.assertEqual(check_wildcard("?v"), True)
+        self.assertEqual(check_wildcard("n!6"), False)
+        self.assertEqual(check_wildcard("v!x"), False)
 
 
 class TestArxivQuery(TestBase):

@@ -40,11 +40,66 @@ def convert_math_expression(mathml,
 #     for node in pairs:
 #         print("Node", node, format_node(node), type(node))
     node_list = [format_node(node)
-                 for node in pairs]
+                 for node in pairs
+                 if check_node(node)]
     return " ".join(node_list)
 
 
+def check_node(node):
+    """Returns False if the node is not needed
+    """
+    length = len(node)
+    check = True
+    edges = ['n', 'a', 'b', 'c', 'o', 'u', 'd', 'w', 'e']
+    if length == 2:
+        # check if terminal
+        if (node[1] == "!0"):
+            # terminal tuple
+            # don't keep if it has a wildcard
+            check = not check_wildcard(node[0])
+        elif isinstance(node[1], list):
+            # have a compound tuple
+            # keep regardless
+            pass
+        else:
+            # unbounded pair
+            # don't keep if both are a wildcard
+            check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
+    elif length == 3:
+        if (node[1] == "!0"):
+            # eol tuple
+            check = not check_wildcard(node[0])
+        elif node[0].lower() in edges and node[1].lower() in edges:
+            # edge pair
+            # keep either way
+            pass
+        else:
+            # symbol pair
+            # don't keep if both are a wildcard
+            check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
+    elif length == 4:
+        # has to be a symbol pair
+        # don't keep if both are a wildcard
+        check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
+    return check
+
+
+def check_wildcard(term):
+    """Returns True if term is a wildcard term"""
+    wildcard = True
+    letters = "zxcvbnmasdfghjklqwertyuiop"
+    letter = 0
+    while letter < len(letters) and term.lower() != "?" + letters[letter]:
+        letter += 1
+    if letter == len(letters):
+        # got to the end so not a wild card
+        wildcard = False
+    return wildcard
+
+
 def format_node(node):
+    """Returns the formatted node
+    """
     node = str(node).lower()
     node = node.replace("*", "\*")
     for letter in "zxcvbnmasdfghjklqwertyuiop":
@@ -123,7 +178,8 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument('-outfile',
                         '--outfile',
-                        help='The file to output to', required=True)
+                        help='The file to output to',
+                        required=True)
     parser.add_argument('-eol',
                         dest="eol",
                         action="store_true",
