@@ -66,10 +66,8 @@ class TestArxivQuery(TestBase):
         results = convert_math_expression(self.mathml, compound_symbols=True)
         expect = ['''#('*',"['n','b']")#''',
                   '''#('*','=','n')#''',
-                  '''#('=',"['n']")#''',
                   '''#('=','n!1','n')#''',
                   '''#('*','*','b')#''',
-                  '''#('*',"['n']")#''',
                   '''#('*','*','n')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -174,12 +172,9 @@ class TestRandomEquation(TestBase):
                   '''#('v!α','m!()1x1','n')#''',
                   '''#('m!()1x1',"['n','w']")#''',
                   '''#('m!()1x1','=','n')#''',
-                  '''#('=',"['n']")#''',
                   '''#('=','v!y','n')#''',
-                  '''#('v!y',"['b']")#''',
                   '''#('v!y','n!0','b')#''',
                   '''#('m!()1x1','v!x','w')#''',
-                  '''#('v!x',"['b']")#''',
                   '''#('v!x','n!0','b')#''',
                   '''#('v!α','n!0','b')#''']
         self.log(results)
@@ -212,7 +207,6 @@ class TestRandomEquation(TestBase):
                   '''#('v!x','n!0','b')#''',
                   '''#('w','b','v!x')#''',
                   '''#('n','n','m!()1x1')#''',
-                  '''#('n','w','m!()1x1')#''',
                   '''#('v!α','n!0','b')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)

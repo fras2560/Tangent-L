@@ -142,7 +142,9 @@ class MathSymbol:
             # add the compound feature tuple - (N, {e1,e2, ...})
             available_edges = [label for child, label in children
                                if child is not None]
-            if len(available_edges) > 0:
+            if len(available_edges) > 1:
+                # if less than one then information captured
+                # by symbol pairs
                 ret.append((self.tag, str(available_edges)))
         for child, label in children:
             if child:
@@ -170,7 +172,7 @@ class MathSymbol:
             # add the pairs of edges on this node
             ret.extend([(prefix[-1], label, self.tag)
                         for child, label in children
-                        if child])
+                        if child and label != "w"])
         return ret
 
     @classmethod
