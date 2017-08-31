@@ -36,6 +36,8 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.xml.sax.SAXException;
+
+import naiveMathIndexer.index.ConvertConfig;
 import naiveMathIndexer.index.MathAnalyzer;
 import query.MathQuery;
 import results.Results;
@@ -46,7 +48,11 @@ public class Search {
     public Search(){
         
     }
-    public Search(Path index, Path queries, Path results, BufferedWriter queryWriter, BufferedWriter resultsWriter,
+    public Search(Path index,
+                  Path queries,
+                  Path results,
+                  BufferedWriter queryWriter,
+                  BufferedWriter resultsWriter,
                   BufferedWriter scoreWriter)
             throws  IOException,
                     XPathExpressionException,
@@ -77,16 +83,29 @@ public class Search {
                 System.out.println(realQuery.toString());
                 
                 BooleanQuery.Builder bq = new BooleanQuery.Builder();
-                Query buildQuery = this.buildQuery(realQuery.toString().split("contents:"), field, bq);
+                Query buildQuery = mq.buildQuery(realQuery.toString().split("contents:"),
+                                                 field,
+                                                 bq);
                 System.out.println("Boolean Query Size:" + bq.build().clauses().size());
                 System.out.println("BuildQuery:" + buildQuery);
                 System.out.println("RealQuery:" + realQuery);
                 TopDocs searchResultsWild = searcher.search(buildQuery, 20);
                 TopDocs searchResultsTerm = searcher.search(realQuery, 20);
-                this.checkResults(searcher, searchResultsWild, mq, answers, queryWriter, resultsWriter, buildQuery);
+                this.checkResults(searcher,
+                                  searchResultsWild,
+                                  mq,
+                                  answers,
+                                  queryWriter,
+                                  resultsWriter,
+                                  buildQuery);
                 this.differentResults(searchResultsWild, searcher.search(buildQuery, 20));
                 searchResultsWild = searcher.search(buildQuery, 100);
-                this.scoreDeviations(searcher, searchResultsWild, mq, answers, scoreWriter, buildQuery);
+                this.scoreDeviations(searcher,
+                                     searchResultsWild,
+                                     mq,
+                                     answers,
+                                     scoreWriter,
+                                     buildQuery);
             }
         }
         queryLoader.deleteFile();
@@ -120,8 +139,12 @@ public class Search {
         }
         return std / hits.length;
     }
-    public void scoreDeviations(IndexSearcher searcher, TopDocs searchResults, MathQuery query, Results results,
-                                 BufferedWriter scoreWriter, Query q
+    public void scoreDeviations(IndexSearcher searcher,
+                                TopDocs searchResults,
+                                MathQuery query,
+                                Results results,
+                                BufferedWriter scoreWriter,
+                                Query q
                                 ) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
         float mean = this.getMean(hits);
@@ -143,38 +166,7 @@ public class Search {
         scoreWriter.write(query.getQueryName() + "," + score);
         scoreWriter.newLine();
     }
-    public boolean checkTerm(String term){
-        boolean valid = true;
-        String[] parts = term.replaceAll("[()]", "").split(",");
-        if (parts.length > 0){
-            if (parts.length == 2){
-//                System.out.println(parts[0] + " " + parts[1]);
-                if (parts[0].equals(this.WILDCARD) || parts[0].equals(this.WILDCHARACTER)){
-                    valid = false;
-                }else if (parts[1].equals(this.WILDCARD) || parts[1].equals(this.WILDCHARACTER)){
-                    valid = false;
-                }
-            }
-            
-        }
-//        System.out.println(term + ":" + valid);
-        return valid;
-    }
-    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
-        WildcardQuery tempQuery = null;
-        for (String term : terms){
-            term = term.trim(); 
-            if (!term.equals("") && this.checkTerm(term) == true){
-                tempQuery = new WildcardQuery(new Term(field, term));
-                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
-            }
-        }
-        if (tempQuery == null){
-            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
-        }
 
-        return bq.build();
-    }
     public void checkResults(IndexSearcher searcher,
                               TopDocs searchResults,
                               MathQuery query,
@@ -197,7 +189,14 @@ public class Search {
         int index = 0;
         for (ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            queryWriter.write(query.getQueryName() + " 1 " + doc.get("path") + " " + (index+1) + " " + hit.score + " RITUW");
+            queryWriter.write(query.getQueryName() +
+                              " 1 " +
+                              doc.get("path") +
+                              " " +
+                              (index+1) +
+                              " " +
+                              hit.score +
+                              " RITUW");
             queryWriter.newLine();
             rank = results.findResult(query, this.parseTitle(doc.get("path")));
 //            System.out.println("Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));

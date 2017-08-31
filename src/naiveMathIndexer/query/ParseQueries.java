@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import naiveMathIndexer.index.ConvertConfig;
 import naiveMathIndexer.index.ConvertMathML;
 import query.MathQuery;
 
@@ -25,13 +26,25 @@ public class ParseQueries{
     private File f;
     private ArrayList<MathQuery> queries;
     public ParseQueries(File f) throws IOException, InterruptedException{
+        // always uses the optimal config file
         Path new_file = new ConvertMathML(f.toPath()).convert();
         this.f = new File(new_file.toString());
         this.queries = new ArrayList<MathQuery>();
     }
 
+    public ParseQueries(File f, ConvertConfig config) throws IOException, InterruptedException{
+        // always uses the optimal config file
+        Path new_file = new ConvertMathML(f.toPath()).convert(config);
+        this.f = new File(new_file.toString());
+        this.queries = new ArrayList<MathQuery>();
+    }
+
+    
     public ArrayList<MathQuery> getQueries()
-            throws ParserConfigurationException, SAXException, IOException, XPathExpressionException{
+            throws ParserConfigurationException,
+                   SAXException,
+                   IOException,
+                   XPathExpressionException{
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         dBuilder = dbFactory.newDocumentBuilder();
@@ -39,7 +52,8 @@ public class ParseQueries{
         doc.getDocumentElement().normalize();
         XPath xpath = XPathFactory.newInstance().newXPath();
         String expression = "topics/topic";
-        NodeList nodeList = (NodeList) xpath.compile(expression).evaluate(doc, XPathConstants.NODESET);
+        NodeList nodeList = (NodeList) xpath.compile(expression).evaluate(doc,
+                                                                          XPathConstants.NODESET);
         System.out.println("NodeList");
         System.out.println(nodeList);
         System.out.println("Length: " + nodeList.getLength());

@@ -3,6 +3,12 @@ package query;
 import java.util.ArrayList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.WildcardQuery;
 import org.w3c.dom.Element;
 
 public class MathQuery {
@@ -43,5 +49,20 @@ public class MathQuery {
     }
     public String toString(){
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
+    }
+
+    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
+        WildcardQuery tempQuery = null;
+        for (String term : terms){
+            term = term.trim(); 
+            if (!term.equals("")){
+                tempQuery = new WildcardQuery(new Term(field, term));
+                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+            }
+        }
+        if (tempQuery == null){
+            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+        }
+        return bq.build();
     }
 }

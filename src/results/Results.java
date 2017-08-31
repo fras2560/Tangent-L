@@ -32,6 +32,19 @@ public class Results {
             System.out.println(s);
         }
     }
+    public float resultsContainAnswers(MathQuery query, ArrayList<String> files){
+        int count = 0;
+        int total = 0;
+        for (Result entry: this.resultsList){
+            if (entry.equals(query)){
+                total += 1;
+                if (entry.getRank() > Results.pLower){
+                    count += 1;
+                }
+            }
+        }
+        return (float) count / (float) total;
+    }
     public int[] recallResult(MathQuery query, ArrayList<String> files){
         int r_docs = 0;
         int pr_docs = 0;
@@ -39,7 +52,7 @@ public class Results {
         int pr_found = 0;
         for(Result entry: this.resultsList){
             if (entry.equals(query)){
-                if(entry.getRank() > this.rLower){
+                if(entry.getRank() > Results.rLower){
                     r_docs += 1;
                     if (this.containsResults(entry, files)){
                         r_found += 1;
@@ -47,7 +60,7 @@ public class Results {
                         this.debug(entry.toString());
                     }
                 }
-                if (entry.getRank() > this.pLower){
+                if (entry.getRank() > Results.pLower){
                     pr_docs += 1;
                     if (this.containsResults(entry, files)){
                         pr_found += 1;

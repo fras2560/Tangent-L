@@ -51,9 +51,54 @@ import org.apache.lucene.store.FSDirectory;
  * Run it with no command-line arguments for usage information.
  */
 public class IndexFiles {
+  public IndexFiles(){}
   
-  private IndexFiles() {}
-
+  public void indexDirectory(String indexPath,
+                             String docsPath,
+                             boolean create,
+                             ConvertConfig config) throws IOException{
+      final Path docDir = Paths.get(docsPath);
+      if (!Files.isReadable(docDir)) {
+          throw new IOException("File does not exist");
+      }
+      Date start = new Date();
+      try {
+        System.out.println("Indexing to directory '" + indexPath + "'...");
+        Directory dir = FSDirectory.open(Paths.get(indexPath));
+        Analyzer analyzer = new MathAnalyzer();
+        IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        if (create) {
+          // Create a new index in the directory, removing any
+          // previously indexed documents:
+          iwc.setOpenMode(OpenMode.CREATE);
+        } else {
+          // Add new documents to an existing index:
+          iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+        }
+        // Optional: for better indexing performance, if you
+        // are indexing many documents, increase the RAM
+        // buffer.  But if you do this, increase the max heap
+        // size to the JVM (eg add -Xmx512m or -Xmx1g):
+        //
+        // iwc.setRAMBufferSizeMB(256.0);
+        IndexWriter writer = new IndexWriter(dir, iwc);
+        indexDocs(writer, docDir, config);
+        // NOTE: if you want to maximize search performance,
+        // you can optionally call forceMerge here.  This can be
+        // a terribly costly operation, so generally it's only
+        // worth it when your index is relatively static (ie
+        // you're done adding documents to it):
+        //
+        // writer.forceMerge(1);
+        writer.close();
+        Date end = new Date();
+        System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+      } catch (IOException e) {
+        System.out.println(" caught a " + e.getClass() +
+         "\n with message: " + e.getMessage());
+      }
+        
+  }
   /** Index all text files under a directory. */
   public static void main(String[] args) {
     String usage = "java org.apache.lucene.demo.IndexFiles"
@@ -63,6 +108,9 @@ public class IndexFiles {
     String indexPath = "index";
     String docsPath = null;
     boolean create = true;
+    ConvertConfig config = new ConvertConfig();
+    // use the best known configuration
+    config.optimalConfig();
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {
         indexPath = args[i+1];
@@ -83,41 +131,14 @@ public class IndexFiles {
       System.out.println("Document directory '" +docDir.toAbsolutePath()+ "' does not exist or is not readable, please check the path");
       System.exit(1);
     }
-    Date start = new Date();
+    IndexFiles idf = new IndexFiles();
     try {
-      System.out.println("Indexing to directory '" + indexPath + "'...");
-      Directory dir = FSDirectory.open(Paths.get(indexPath));
-      Analyzer analyzer = new MathAnalyzer();
-      IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-      if (create) {
-        // Create a new index in the directory, removing any
-        // previously indexed documents:
-        iwc.setOpenMode(OpenMode.CREATE);
-      } else {
-        // Add new documents to an existing index:
-        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-      }
-      // Optional: for better indexing performance, if you
-      // are indexing many documents, increase the RAM
-      // buffer.  But if you do this, increase the max heap
-      // size to the JVM (eg add -Xmx512m or -Xmx1g):
-      //
-      // iwc.setRAMBufferSizeMB(256.0);
-      IndexWriter writer = new IndexWriter(dir, iwc);
-      indexDocs(writer, docDir);
-      // NOTE: if you want to maximize search performance,
-      // you can optionally call forceMerge here.  This can be
-      // a terribly costly operation, so generally it's only
-      // worth it when your index is relatively static (ie
-      // you're done adding documents to it):
-      //
-      // writer.forceMerge(1);
-      writer.close();
-      Date end = new Date();
-      System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+        idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {
-      System.out.println(" caught a " + e.getClass() +
-       "\n with message: " + e.getMessage());
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        System.out.println("Document directory does not exist");
+        System.exit(1);
     }
   }
 
@@ -136,14 +157,14 @@ public class IndexFiles {
    * @param path The file to index, or the directory to recurse into to find files to index
    * @throws IOException If there is a low-level I/O error
    */
-  static void indexDocs(final IndexWriter writer, Path path) throws IOException {
+  static void indexDocs(final IndexWriter writer, Path path, ConvertConfig config) throws IOException {
     if (Files.isDirectory(path)) {
       Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             try {
                 System.out.println(file);
-                indexDoc(writer, file, attrs.lastModifiedTime().toMillis());
+                indexDoc(writer, file, attrs.lastModifiedTime().toMillis(), config);
             } catch (IOException ignore) {
                 ignore.printStackTrace();
                 System.out.println("Unable to index file");
@@ -158,7 +179,7 @@ public class IndexFiles {
       });
     } else {
         try {
-            indexDoc(writer, path, Files.getLastModifiedTime(path).toMillis());
+            indexDoc(writer, path, Files.getLastModifiedTime(path).toMillis(), config);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             System.out.println("Unable to index file");
@@ -169,8 +190,11 @@ public class IndexFiles {
 
   /** Indexes a single document 
  * @throws InterruptedException */
-  static void indexDoc(IndexWriter writer, Path file, long lastModified) throws IOException, InterruptedException {
-    Path new_file = new ConvertMathML(file).convert();
+  static void indexDoc(IndexWriter writer,
+                       Path file,
+                       long lastModified,
+                       ConvertConfig config) throws IOException, InterruptedException {
+    Path new_file = new ConvertMathML(file).convert(config);
     try (InputStream stream = Files.newInputStream(new_file)) {
         System.out.println(new_file);
         // make a new, empty document

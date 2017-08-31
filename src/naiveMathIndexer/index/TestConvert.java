@@ -11,12 +11,12 @@ public class TestConvert {
 
     @Test
     public void test() {
-        Path p = Paths.get(System.getProperty("user.dir"), "resources", "test", "32 (number).mml");
+        Path p = Paths.get(System.getProperty("user.dir"), "resources", "temp", "32 (number).mml");
         System.out.println(p.toString());
         ConvertMathML math =  new ConvertMathML(p);
         try {
             Path result = math.convert();
-            Path expect = Paths.get(System.getProperty("user.dir"), "resources", "test", "32 (number)_temp.mml");
+            Path expect = Paths.get(System.getProperty("user.dir"), "resources", "temp", "32 (number)_temp.mml");
             System.out.println("Result: " + result.toString());
             System.out.println("Expect: " + expect.toString());
             assertEquals(result, expect);
