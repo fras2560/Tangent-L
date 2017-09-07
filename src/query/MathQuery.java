@@ -1,8 +1,28 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package query;
-
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import utilities.ProjectLogger;
+
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -11,30 +31,34 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
 import org.w3c.dom.Element;
 
+
 public class MathQuery {
     private String queryName;
     private ArrayList<String> terms;
+    private Logger logger;
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
+        this.logger = ProjectLogger.getLogger();
     }
     public MathQuery(Node node){
+        this.logger = ProjectLogger.getLogger();
         this.terms = new ArrayList<String>();
-        System.out.println("Node Type:" + node.getNodeType());
+        this.logger.log(Level.FINEST, "Node Type:" + node.getNodeType());
         Element element = (Element) node;
         this.queryName = element.getElementsByTagName("num").item(0).getTextContent();
         NodeList termList =  element.getElementsByTagName("query").item(0).getChildNodes();
-        System.out.println("Term List: " + termList.getLength());
+        this.logger.log(Level.FINEST, "Term List: " + termList.getLength());
         for (int j = 0; j < termList.getLength(); j++){
-            System.out.println("Term List Element: " + j);
+            this.logger.log(Level.FINEST, "Term List Element: " + j);
             Node nNode = termList.item(j);
             if (nNode.getNodeType() == Node.ELEMENT_NODE){
                 Element e = (Element) nNode;
                 String term = e.getTextContent().replaceAll("\n", "").replaceAll("\t", "").trim();
-                System.out.println("Text Content:" + term);
+                this.logger.log(Level.FINEST, "Text Content:" + term);
                 this.terms.add(term);
             }else{
-                System.out.println("Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
+                this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
         }
     }

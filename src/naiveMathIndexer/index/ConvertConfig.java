@@ -1,8 +1,33 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package naiveMathIndexer.index;
-
 import java.util.LinkedList;
 
+
+/*
+ * This class contains a configuration that Tangent can use when
+ * when converting MathML into tuples
+ * @author Dallas Fraser
+ * @see ConvertMathML
+ * @since 2017-09-06
+ */
 public class ConvertConfig {
+    /*
+     * The configuration parameters that are set for Tangent
+     */
     private boolean shortened;
     private boolean eol;
     private boolean compound_symbols;
@@ -11,6 +36,9 @@ public class ConvertConfig {
     private boolean unbounded;
     private boolean location;
     private int window_size;
+    /*
+     * The possible features that Tangent can use
+     */
     public static String SHORTENED = "SHORTENED";
     public static String EOL = "EOL";
     public static String COMPOUND = "COMPOUND_SYMBOLS";
@@ -18,6 +46,9 @@ public class ConvertConfig {
     public static String EDGE = "EDGE_PAIRS";
     public static String UNBOUNDED = "UNBOUNDED";
     public static String LOCATION = "LOCATION";
+    /*
+     * Class constructor
+     */
     public ConvertConfig(){
         this.window_size = 1;
         this.shortened = true;
@@ -29,24 +60,25 @@ public class ConvertConfig {
         this.location = false;
     }
     @Override
+    /*
+     * Returns True if the two objects are equal False otherwise
+     * @param o the object to check if it equal with
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     public boolean equals(Object o) {
- 
         // If the object is compared with itself then return true  
         if (o == this) {
             return true;
         }
- 
         /* Check if o is an instance of Complex or not
           "null instanceof [type]" also returns false */
         if (!(o instanceof ConvertConfig)) {
             return false;
         }
-         
         // typecast o to Complex so that we can compare data members 
         ConvertConfig c = (ConvertConfig) o;
-         
         // Compare the data members and return accordingly
-        
         return this.location == c.location
                 && this.unbounded == c.unbounded
                 && this.edge_pairs == c.edge_pairs
@@ -56,6 +88,12 @@ public class ConvertConfig {
                 && this.shortened == c.shortened
                 && this.window_size == c.window_size;
     }
+    /*
+     * Flips the current attributes setting.
+     * Parameter attribute is one of the static String of ConvertConfig
+     * (e.g. <code> ConvertConfig.UNBOUNDED </code>)
+     * @param attribute The attribute to flip
+     */
     public void flipBit(String attribute){
         if (attribute.equals(ConvertConfig.SHORTENED)){
             this.shortened = !this.shortened;
@@ -73,13 +111,20 @@ public class ConvertConfig {
             this.location = !this.location;
         }
     }
-
+    /*
+     * Updates the window size that Tangent will use
+     * @param n the size of the new window
+     */
     public void setWindowSize(int n){
         if (n > 0){
             this.window_size = n;
         }
     }
-
+    /*
+     * Sets the attribute to some new value
+     * @param attribute The attribute to change
+     * @param settting The boolean value to change it to
+     */
     public void setBooleanAttribute(String attribute, boolean setting){
         if (attribute.equals(ConvertConfig.SHORTENED)){
             this.shortened = setting;
@@ -97,11 +142,16 @@ public class ConvertConfig {
             this.location = setting;
         }
     }
-
+    /*
+     * Updates the config to the optimal configuration
+     */
     public void optimalConfig(){
         return;
     }
-
+    /*
+     * Returns the an Array of Commands that can be used to pass parameters to Tangent
+     * @return a list of commands
+     */
     public String[] toCommands(){
         LinkedList <String> commands = new LinkedList <String>();
         if (!this.shortened){
@@ -135,7 +185,10 @@ public class ConvertConfig {
         }
         return result;
     }
-
+    /*
+     * Returns a copy of the ConvertConfig
+     * @return a copy of the ConvertConfig
+     */
     public ConvertConfig copy(){
         ConvertConfig config =  new ConvertConfig();
         config.setBooleanAttribute(ConvertConfig.COMPOUND, this.compound_symbols);
@@ -148,7 +201,12 @@ public class ConvertConfig {
         config.setWindowSize(this.window_size);
         return config;
     }
-
+    /*
+     * Returns a String representation of the object
+     * @return a String representation
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString(){
         String result = "";
         if (!this.shortened){
@@ -174,6 +232,9 @@ public class ConvertConfig {
         }
         if (this.window_size > 1){
             result = result + " -window_size " + Integer.toString(this.window_size);
+        }
+        if (result.equals("")){
+            result = "base";
         }
         return result;
     }

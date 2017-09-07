@@ -109,6 +109,9 @@ def format_node(node):
                    .replace("&comma;", "comma")
                    .replace("&lsqb;", "lsqb")
                    .replace("&rsqb;", "rsqb")
+                   .replace("&quest;", "quest")
+                   .replace("'>'", "grt")
+                   .replace("'<'", "lst")
                    ) + "#")
 
 
@@ -139,10 +142,8 @@ def parse_file(filename,
     with open(output_file, "w+") as out:
         while len(content) != 0:
             (start, end) = MathExtractor.next_math_token(content)
-            print(start, end)
             if start == -1:
                 # can just print the rest
-                print(content)
                 print(content, end="", file=out)
                 content = ""
             else:
@@ -156,9 +157,7 @@ def parse_file(filename,
                                              unbounded=unbounded,
                                              shortened=shortened,
                                              location=location)
-                print(paragraph)
                 print(paragraph, file=out)
-                print(ex)
                 print(ex, file=out)
                 # now move the content further along
                 content = content[end:]
@@ -169,7 +168,6 @@ if __name__ == "__main__":
                         level=logging.INFO,
                         format='%(asctime)s %(message)s')
     logger = logging.getLogger(__name__)
-    print(sys.argv)
     descp = "Convert - MathML file to file with Tangent Tuples"
     parser = argparse.ArgumentParser(description=descp)
     parser.add_argument('-infile',

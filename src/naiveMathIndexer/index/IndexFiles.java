@@ -1,12 +1,11 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Copyright 2017 Dallas Fraser
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +14,6 @@
  * limitations under the License.
  */
 package naiveMathIndexer.index;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,7 +27,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
 import org.apache.lucene.document.Document;
@@ -44,6 +43,8 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import utilities.ProjectLogger;
+
 
 /** Index all text files under a directory.
  * <p>
@@ -51,19 +52,25 @@ import org.apache.lucene.store.FSDirectory;
  * Run it with no command-line arguments for usage information.
  */
 public class IndexFiles {
-  public IndexFiles(){}
-  
+  private Logger logger;
+  public IndexFiles(){
+      this.logger = ProjectLogger.getLogger();
+  }
+  public IndexFiles(Logger logger){
+      this.logger = logger;
+  }
   public void indexDirectory(String indexPath,
                              String docsPath,
                              boolean create,
                              ConvertConfig config) throws IOException{
       final Path docDir = Paths.get(docsPath);
       if (!Files.isReadable(docDir)) {
+          this.logger.log(Level.SEVERE, docDir + ": File does not exist");
           throw new IOException("File does not exist");
       }
       Date start = new Date();
       try {
-        System.out.println("Indexing to directory '" + indexPath + "'...");
+        this.logger.log(Level.FINE, "Indexing to directory: '" + indexPath + "'...");
         Directory dir = FSDirectory.open(Paths.get(indexPath));
         Analyzer analyzer = new MathAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
@@ -92,10 +99,9 @@ public class IndexFiles {
         // writer.forceMerge(1);
         writer.close();
         Date end = new Date();
-        System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+        this.logger.log(Level.INFO, end.getTime() - start.getTime() + " total milliseconds");
       } catch (IOException e) {
-        System.out.println(" caught a " + e.getClass() +
-         "\n with message: " + e.getMessage());
+        this.logger.log(Level.WARNING, " caught a " + e.getClass() + "\n with message: " + e.getMessage());
       }
         
   }
@@ -122,13 +128,16 @@ public class IndexFiles {
         create = false;
       }
     }
+    Logger logger = ProjectLogger.getLogger();
     if (docsPath == null) {
-      System.err.println("Usage: " + usage);
+      logger.log(Level.SEVERE, "Usage: " + usage);
       System.exit(1);
     }
     final Path docDir = Paths.get(docsPath);
     if (!Files.isReadable(docDir)) {
-      System.out.println("Document directory '" +docDir.toAbsolutePath()+ "' does not exist or is not readable, please check the path");
+        logger.log(Level.SEVERE, "Document directory '" +
+                                          docDir.toAbsolutePath() +
+                                          "' does not exist or is not readable, please check the path");
       System.exit(1);
     }
     IndexFiles idf = new IndexFiles();
@@ -137,7 +146,7 @@ public class IndexFiles {
     } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-        System.out.println("Document directory does not exist");
+        logger.log(Level.SEVERE, "Document directory does not exist");
         System.exit(1);
     }
   }
@@ -158,20 +167,21 @@ public class IndexFiles {
    * @throws IOException If there is a low-level I/O error
    */
   static void indexDocs(final IndexWriter writer, Path path, ConvertConfig config) throws IOException {
-    if (Files.isDirectory(path)) {
+      Logger logger = ProjectLogger.getLogger();
+      if (Files.isDirectory(path)) {
       Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             try {
-                System.out.println(file);
+                logger.log(Level.FINE, "Indexing file:" + file.toString());
                 indexDoc(writer, file, attrs.lastModifiedTime().toMillis(), config);
             } catch (IOException ignore) {
                 ignore.printStackTrace();
-                System.out.println("Unable to index file");
+                logger.log(Level.WARNING, "Unable to index file");
                 // don't index files that can't be read.
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
-                System.out.println("Unable to index file");
+                logger.log(Level.WARNING, "Unable to index file");
                 e.printStackTrace();
             }
           return FileVisitResult.CONTINUE;
@@ -182,7 +192,7 @@ public class IndexFiles {
             indexDoc(writer, path, Files.getLastModifiedTime(path).toMillis(), config);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
-            System.out.println("Unable to index file");
+            logger.log(Level.WARNING, "Unable to index file");
             e.printStackTrace();
         }
     }
@@ -194,6 +204,7 @@ public class IndexFiles {
                        Path file,
                        long lastModified,
                        ConvertConfig config) throws IOException, InterruptedException {
+    Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
     try (InputStream stream = Files.newInputStream(new_file)) {
         System.out.println(new_file);
@@ -217,23 +228,23 @@ public class IndexFiles {
         // so that the text of the file is tokenized and indexed, but not stored.
         // Note that FileReader expects the file to be in UTF-8 encoding.
         // If that's not the case searching for special characters will fail.
-        Set<String> bannedTags = new HashSet();
+        Set<String> bannedTags = new HashSet<String>();
         // Set<String> bannedTags = new HashSet();
         // bannedTags.add("Math");
         doc.add(new TextField("contents", new HTMLStripCharFilter(new InputStreamReader(stream,
                                                                                         StandardCharsets.UTF_8),
                                                                   bannedTags)));
-      if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
-        // New index, so we just add the document (no old document can be there):
-        System.out.println("adding " + file);
-        writer.addDocument(doc);
-      } else {
-        // Existing index (an old copy of this document may have been indexed) so 
-        // we use updateDocument instead to replace the old one matching the exact 
-        // path, if present:
-        System.out.println("updating " + file);
-        writer.updateDocument(new Term("path", file.toString()), doc);
-      }
+        if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
+            // New index, so we just add the document (no old document can be there):
+            logger.log(Level.FINE, "Adding file: " + file.toString());
+            writer.addDocument(doc);
+        } else {
+            // Existing index (an old copy of this document may have been indexed) so 
+            // we use updateDocument instead to replace the old one matching the exact 
+            // path, if present:
+            logger.log(Level.FINE, "Updating file: " + file.toString());
+            writer.updateDocument(new Term("path", file.toString()), doc);
+        }
     }
     // remove the file
     new_file.toFile().delete();

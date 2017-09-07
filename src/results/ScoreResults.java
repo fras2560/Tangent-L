@@ -1,8 +1,23 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package results;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,7 +25,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import java.util.Map.Entry;
 import query.MathQuery;
 
 
@@ -21,9 +36,11 @@ public class ScoreResults {
         this.answers = new Results(answers.toFile());
         this.results = new HashMap<String, ArrayList<Result>>();
     }
-    public void loadResults(Path results){
+    @SuppressWarnings("resource")
+    public void loadResults(Path results) throws IOException{
+        BufferedReader reader = null;
         try {
-          BufferedReader reader = new BufferedReader(new FileReader(results.toFile()));
+          reader = new BufferedReader(new FileReader(results.toFile()));
           String line;
           String queryName;
           MathQuery query;
@@ -41,8 +58,12 @@ public class ScoreResults {
               rank = this.answers.findResult(query, filename);
               this.addResult(queryName, new Result(filename, rank));
           }
+          reader.close();
         }
         catch (Exception e){
+          if (reader != null){
+              reader.close();
+          }
           System.err.format("Exception occurred trying to read '%s'.", results.toString());
           e.printStackTrace();
         }
@@ -67,7 +88,7 @@ public class ScoreResults {
         Float n = (float) 0.0;
         Float R = (float) 0.0;
         Float N = (float) 0.0;
-        Iterator it = this.results.entrySet().iterator();
+        Iterator<Entry<String, ArrayList<Result>>> it = this.results.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             n = (float) 0.0;
@@ -115,7 +136,7 @@ public class ScoreResults {
         Float count = (float) 0.0;
         Float precision = (float) 0.0;
         Float r = (float) 0.0;
-        Iterator it = this.results.entrySet().iterator();
+        Iterator<Entry<String, ArrayList<Result>>> it = this.results.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             precision = (float) 0.0;
@@ -144,6 +165,7 @@ public class ScoreResults {
             this.setFilename(filename);
             this.setRank(rank);
         }
+        @SuppressWarnings("unused")
         public String getFilename() {
             return filename;
         }
@@ -163,7 +185,7 @@ public class ScoreResults {
             super(string);
         }
     }
-    private void crunchNumbers(File[] files, Float lower){
+    private void crunchNumbers(File[] files, Float lower) throws IOException{
         for (File file : files) {
             if (file.isDirectory()) {
                 System.out.println("----------------------------------------------------------------");
