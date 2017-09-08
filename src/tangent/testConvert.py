@@ -23,6 +23,33 @@ class TestBase(unittest.TestCase):
             print(out)
 
 
+class TestDifferentWildcardReplacements(TestBase):
+    def setUp(self):
+        self.debug = True
+        self.file = os.path.join(os.getcwd(), "testFiles", "test_wildcard.xml")
+        self.mathml = self.loadFile(self.file)
+
+    def tearDown(self):
+        pass
+
+    def testConvertEOL(self):
+        results = convert_math_expression(self.mathml, eol=True)
+        expect = ["""#('v!t','*','b')#""",
+                  """#('*','!0','n')#"""]
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
+
+    def testConvertAll(self):
+        results = convert_math_expression(self.mathml,
+                                          terminal_symbols=True,
+                                          compound_symbols=True,
+                                          edge_pairs=True)
+        expect = ["""#('v!t','*','b')#""",
+                  """#('*','!0')#"""]
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
+
+
 class TestWildcardReductionAndCheck(TestBase):
     def setUp(self):
         self.debug = True
@@ -73,9 +100,7 @@ class TestArxivQuery(TestBase):
     def testBase(self):
         results = convert_math_expression(self.mathml)
         expect = ["#('*','=','n')#",
-                  "#('=','n!1','n')#",
-                  "#('*','*','b')#",
-                  "#('*','*','n')#"]
+                  "#('=','n!1','n')#"]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
@@ -83,10 +108,7 @@ class TestArxivQuery(TestBase):
         results = convert_math_expression(self.mathml, window_size=2)
         expect = ["#('*','=','n')#",
                   "#('*','n!1','nn')#",
-                  "#('=','n!1','n')#",
-                  "#('*','*','b')#",
-                  "#('*','*','bn')#",
-                  "#('*','*','n')#"]
+                  "#('=','n!1','n')#"]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
@@ -94,9 +116,7 @@ class TestArxivQuery(TestBase):
         # height too big
         results = convert_math_expression(self.mathml, eol=True)
         expect = ["#('*','=','n')#",
-                  "#('=','n!1','n')#",
-                  "#('*','*','b')#",
-                  "#('*','*','n')#"]
+                  "#('=','n!1','n')#"]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
@@ -104,9 +124,7 @@ class TestArxivQuery(TestBase):
         results = convert_math_expression(self.mathml, compound_symbols=True)
         expect = ['''#('*',"['n','b']")#''',
                   '''#('*','=','n')#''',
-                  '''#('=','n!1','n')#''',
-                  '''#('*','*','b')#''',
-                  '''#('*','*','n')#''']
+                  '''#('=','n!1','n')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
@@ -114,10 +132,7 @@ class TestArxivQuery(TestBase):
         results = convert_math_expression(self.mathml, terminal_symbols=True)
         expect = ['''#('*','=','n')#''',
                   '''#('=','n!1','n')#''',
-                  '''#('n!1','!0')#''',
-                  '''#('*','*','b')#''',
-                  '''#('*','*','n')#''',
-                  '''#('*','!0')#''']
+                  '''#('n!1','!0')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
@@ -126,8 +141,6 @@ class TestArxivQuery(TestBase):
         expect = ['''#('*','=','n')#''',
                   '''#('=','n!1','n')#''',
                   '''#('n','n','=')#''',
-                  '''#('*','*','b')#''',
-                  '''#('*','*','n')#''',
                   '''#('b','n','*')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -136,19 +149,14 @@ class TestArxivQuery(TestBase):
         results = convert_math_expression(self.mathml, unbounded=True)
         expect = ['''#('*','=','n')#''',
                   '''#('*','n!1')#''',
-                  '''#('=','n!1','n')#''',
-                  '''#('*','*','b')#''',
-                  '''#('*','*')#''',
-                  '''#('*','*','n')#''']
+                  '''#('=','n!1','n')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 
     def testLocation(self):
         results = convert_math_expression(self.mathml, location=True)
         expect = ['''#('*','=','n','-')#''',
-                  '''#('=','n!1','n','n')#''',
-                  '''#('*','*','b','-')#''',
-                  '''#('*','*','n','b')#''']
+                  '''#('=','n!1','n','n')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 

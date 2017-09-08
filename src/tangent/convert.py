@@ -100,10 +100,15 @@ def check_wildcard(term):
 def format_node(node):
     """Returns the formatted node
     """
+    new_node = []
+    for part in node:
+        new_node.append(part)
+        if "*" in part:
+            new_node[-1] = "/*"
+        if "?" in part:
+            new_node[-1] = "*"
+    node = tuple(new_node)
     node = str(node).lower()
-    node = node.replace("*", "\*")
-    for letter in "zxcvbnmasdfghjklqwertyuiop":
-        node = node.replace("?" + letter, "*")
     return ("#" + (str(node)
                    .replace(" ", "")
                    .replace("&comma;", "comma")
