@@ -23,11 +23,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.lucene.analysis.Analyzer;
@@ -67,7 +64,6 @@ public class FindOptimal {
     private QueryBuilder builder;
     private Path queries;
     private Logger logger;
-    private boolean recall;
     /*
      * Class Constructor
      * @param documents path to the directory of documents
@@ -90,36 +86,11 @@ public class FindOptimal {
                                             XPathExpressionException,
                                             ParserConfigurationException,
                                             SAXException{
-        this(documents, index, output, queries, results, ProjectLogger.getLogger(), false);
+        this(documents, index, output, queries, results, ProjectLogger.getLogger());
     }
+
     /*
-     * Class Constructor
-     * @param documents path to the directory of documents
-     * @param index path to the directory which will hold all the created indexes
-     * @param output file where findings of the program will be printed to
-     * @param queries path to where the queries
-     * @param results path to the ground truth of the queries
-     * @exception IOException
-     * @exception InterruptedException
-     * @exception XPathExpressionException
-     * @exception ParserConfigurationException
-     * @exception SAXException
-     */
-    public FindOptimal(Path documents,
-                       Path index,
-                       BufferedWriter output,
-                       Path queries,
-                       Path results,
-                       boolean recall) throws IOException,
-                                            InterruptedException,
-                                            XPathExpressionException,
-                                            ParserConfigurationException,
-                                            SAXException{
-        this(documents, index, output, queries, results, ProjectLogger.getLogger(), recall);
-    }
-    
-    /*
-     * Class Constructor
+     * Class Constructor with both logger and recall setting
      * @param documents path to the directory of documents
      * @param index path to the directory which will hold all the created indexes
      * @param output file where findings of the program will be printed to
@@ -138,8 +109,7 @@ public class FindOptimal {
                        BufferedWriter output,
                        Path queries,
                        Path results,
-                       Logger logger,
-                       boolean recall) throws IOException,
+                       Logger logger) throws IOException,
                                               InterruptedException,
                                               XPathExpressionException,
                                               ParserConfigurationException,
@@ -152,7 +122,6 @@ public class FindOptimal {
         Analyzer analyzer = new MathAnalyzer();
         this.builder = new QueryBuilder(analyzer);
         this.queries = queries;
-        this.recall = recall;
     }
     /*
      * Updates the queries based uopon configuration
@@ -170,6 +139,7 @@ public class FindOptimal {
                                                            InterruptedException{
         ParseQueries queryLoader = new ParseQueries(this.queries.toFile(), config);
         this.mathQueries = queryLoader.getQueries();
+        queryLoader.deleteFile();
     }
     /*
      * finds the optimal features to be used *recursive) and outputs the results to a file
@@ -188,26 +158,37 @@ public class FindOptimal {
                                                                                  SAXException{
         Path indexPath;
         this.updateQueries(config);
-        float baseline = this.scoreIndex(this.createIndex(config));
-        this.output.write("Config: " + config + " Baseline:" + baseline);
+        double[] baseLine = this.scoreIndex(this.createIndex(config));
+        double[] results;
+        this.output.write("---------------------------------------------");
         this.output.newLine();
-        float check;
-        float bestFeatureScore = (float) 0.0;
+        this.output.write("Baseline");
+        this.output.newLine();
+        this.output.write(config + "," + baseLine[0] + "," + baseLine[1]);
+        this.output.newLine();
+        this.output.write("---------------------------------------------");
+        this.output.newLine();
+        double[] bestFeatureScore = {0.0, 0.0};
         String bestFeature = "";
         ArrayList<String> keepFeatures = new ArrayList<String>();
         for(String feature : features){
             config.flipBit(feature);
             this.updateQueries(config);
-            indexPath = this.createIndex(config);
-            config.flipBit(feature);
-            check = this.scoreIndex(indexPath);
-            this.output.write("Config: " + config + " Score:" + check);
             this.output.newLine();
-            if (check > baseline){
+            indexPath = this.createIndex(config);
+            results = this.scoreIndex(indexPath);
+            this.output.write(config + "," + results[0] + "," + results[1]);
+            this.output.newLine();
+            config.flipBit(feature);
+            if (results[0] > baseLine[0] || results[1] > baseLine[1]){
                 keepFeatures.add(feature);
-                if (check > bestFeatureScore){
+                if (results[0] > bestFeatureScore[0]){
+                    bestFeatureScore[0] = results[0];
                     bestFeature = feature;
-                    bestFeatureScore = check;
+                }
+                if (results[1] > bestFeatureScore[1]){
+                    bestFeatureScore[1] = results[1];
+                    bestFeature = feature;
                 }
             }
         }
@@ -243,19 +224,19 @@ public class FindOptimal {
      * @exception IOException
      * @return a the reciprocal rank (<1.0)
      */
-    public float reciprocal_rank(IndexSearcher searcher,
+    public double reciprocal_rank(IndexSearcher searcher,
                                  TopDocs searchDocs,
                                  MathQuery query) throws IOException{
         ScoreDoc[] hits = searchDocs.scoreDocs;
-        float rank = (float) 0.0;
-        float reciprocal = (float) 0.0;
+        double rank = (double) 0.0;
+        double reciprocal = (double) 0.0;
         int count = 1;
         for (ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             rank = this.answers.findResult(query, this.parseTitle(doc.get("path")));
             if (rank > FindOptimal.RELEVANT_LOWER){
-                this.logger.log(Level.FINEST, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
-                reciprocal = (float) 1 / (float) count;
+                this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
+                reciprocal = (double) 1 / (double) count;
                 break;
             }
             count += 1;
@@ -271,7 +252,7 @@ public class FindOptimal {
      * @exception IOException
      * @return 1 if answer is found
      */
-    public float found_answer(IndexSearcher searcher, TopDocs searchDocs, MathQuery query) throws IOException{
+    public double found_answer(IndexSearcher searcher, TopDocs searchDocs, MathQuery query) throws IOException{
         ScoreDoc[] hits = searchDocs.scoreDocs;
         ArrayList<String> filenames = new ArrayList<String>();
         for (ScoreDoc hit : hits){
@@ -279,7 +260,13 @@ public class FindOptimal {
             Document doc = searcher.doc(hit.doc);
             filenames.add(this.parseTitle(doc.get("path")));
         }
-        float found = this.answers.resultsContainAnswers(query, filenames);
+        int[] results = this.answers.recallResult(query, filenames);
+        double found;
+        if(results[3] > 0){
+            found = (double) 1.0;
+        }else{
+            found = (double) 0.0;
+        }
         this.logger.log(Level.FINEST, "Answer found: " + found);
         return found;
     }
@@ -294,48 +281,53 @@ public class FindOptimal {
      * @exception SAXException
      * @return score of the index
      */
-    public float scoreIndex(Path index) throws IOException,
-                                                               InterruptedException,
-                                                               XPathExpressionException,
-                                                               ParserConfigurationException,
-                                                               SAXException{
+    public double[] scoreIndex(Path index) throws IOException,
+                                               InterruptedException,
+                                               XPathExpressionException,
+                                               ParserConfigurationException,
+                                               SAXException{
 
-        float mean = (float) 0.0;
+        double found_mean = (double) 0.0;
+        double reciprocal_mean = (double) 0.0;
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         IndexSearcher searcher = new IndexSearcher(reader);
         int count = 0;
-        float reciprocal;
-        float found;
+        double reciprocal;
+        double found;
         for (MathQuery mq: this.mathQueries){
             Query realQuery = this.builder.createBooleanQuery(FindOptimal.FIELD, mq.getQuery());
             if (realQuery == null){
                 this.logger.log(Level.WARNING, "Query has no elements  " + mq);
+                this.logger.log(Level.FINER, mq.getQueryName() + " found:" + 0 + " reciprocal:" + 0);
+                this.output.write(mq.getQueryName() + "," + 0 + "," + 0);
+                this.output.newLine();
             }else{
                 BooleanQuery.Builder bq = new BooleanQuery.Builder();
                 Query buildQuery = mq.buildQuery(realQuery.toString().split("contents:"),
                                                  FindOptimal.FIELD,
                                                  bq);
                 TopDocs searchResults = searcher.search(buildQuery, FindOptimal.TOP_K);
-                if (this.recall == true){
-                    found = this.found_answer(searcher, searchResults, mq);
-                    this.logger.log(Level.FINER, mq + " - found:" + found);
-                    mean += found;
-                }else{
-                    
-                    reciprocal = this.reciprocal_rank(searcher, searchResults, mq); 
-                    this.logger.log(Level.FINER, mq + " - reciprocal:" + reciprocal);
-                    mean += reciprocal;
-                    
-                }
-                
+                found = this.found_answer(searcher, searchResults, mq);
+                reciprocal = this.reciprocal_rank(searcher, searchResults, mq); 
+                this.logger.log(Level.FINER,
+                                mq.getQueryName() +
+                                " found:" +
+                                found +
+                                " reciprocal:" +
+                                reciprocal +
+                                "Total Results:" +
+                                searchResults.totalHits);
+                this.output.write(mq.getQueryName() + "," + found + "," + reciprocal);
+                this.output.newLine();
+                found_mean += found;
+                reciprocal_mean += reciprocal;
             }
             count += 1;
         }
-        this.logger.log(Level.INFO, "Mean:" + mean + " Count:" + count);
-        this.output.write("Mean:" + mean + " Count:" + count);
-        this.output.newLine();
-        mean = mean / (float) count;
-        return mean;
+        this.logger.log(Level.INFO,
+                        "Scores: "+ (found_mean / (double) count) + "," + (reciprocal_mean / (double) count));
+        double[] results = {found_mean / (double) count, reciprocal_mean / (double) count};
+        return results;
     }
     /*
      * Returns a path to the index that is created using the config features
@@ -405,8 +397,6 @@ public class FindOptimal {
         ArrayList<String> features = new ArrayList<String>();
         features.add(ConvertConfig.COMPOUND);
         features.add(ConvertConfig.EDGE);
-        features.add(ConvertConfig.EOL);
-        features.add(ConvertConfig.LOCATION);
         features.add(ConvertConfig.TERMINAL);
         features.add(ConvertConfig.UNBOUNDED);
         features.add(ConvertConfig.SHORTENED);
@@ -423,8 +413,7 @@ public class FindOptimal {
                                              indexDirectory,
                                              outputWriter,
                                              queries,
-                                             results,
-                                             true);
+                                             results);
             fo.optimize(config, features);
             outputWriter.close();
         } catch (IOException e) {

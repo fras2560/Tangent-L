@@ -115,8 +115,8 @@ def format_node(node):
                    .replace("&lsqb;", "lsqb")
                    .replace("&rsqb;", "rsqb")
                    .replace("&quest;", "quest")
-                   .replace("'>'", "grt")
-                   .replace("'<'", "lst")
+                   .replace("'>'", "'gt'")
+                   .replace("'<'", "'lt'")
                    ) + "#")
 
 

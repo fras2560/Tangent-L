@@ -34,9 +34,9 @@ public class TestResults {
     @Test
     public void testQuery(){
         Path p = Paths.get(System.getProperty("user.dir"),
-                "resources",
-                "results",
-                "simple-results.dat");
+                           "resources",
+                           "results",
+                           "simple-results.dat");
         Results r = new Results(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         Float rank = r.findResult(q, "0808.1204_1_258");
@@ -45,5 +45,14 @@ public class TestResults {
         assertEquals(rank, new Float(1.0));
         rank = r.findResult(q, "NOTFINDINGTHIS");
         assertEquals(rank, new Float(-1.0));
+    }
+    @Test
+    public void testContainsResults(){
+        Path p = Paths.get(System.getProperty("user.dir"),
+                           "resources",
+                           "results",
+                           "simple-results.dat");
+        
+
     }
 }

@@ -34,21 +34,6 @@ public class Results {
         this.logger = ProjectLogger.getLogger();
         this.resultsList = this.parseFile(f);
     }
-    public float resultsContainAnswers(MathQuery query, ArrayList<String> files){
-        int count = 0;
-        int total = 0;
-        for (Result entry: this.resultsList){
-            if (entry.equals(query)){
-                total += 1;
-                if (entry.getRank() > Results.pLower){
-                    count += 1;
-                }
-            }
-        }
-        float result = (float) count / (float) total;
-        this.logger.log(Level.FINE, "Total number of results found:" + result);
-        return result;
-    }
     public int[] recallResult(MathQuery query, ArrayList<String> files){
         int r_docs = 0;
         int pr_docs = 0;

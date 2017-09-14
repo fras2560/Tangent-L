@@ -8,6 +8,7 @@ Purpose: To test the convert of mathml to Tangent Tuples
 import unittest
 import os
 from tangent.convert import convert_math_expression, check_node, check_wildcard
+from lib2to3.pytree import convert
 
 
 class TestBase(unittest.TestCase):
@@ -86,6 +87,31 @@ class TestWildcardReductionAndCheck(TestBase):
         self.assertEqual(check_wildcard("?v"), True)
         self.assertEqual(check_wildcard("n!6"), False)
         self.assertEqual(check_wildcard("v!x"), False)
+
+
+class TestTerminalQuery(TestBase):
+    def setUp(self):
+        self.debug = True
+        self.f1 = os.path.join(os.getcwd(),
+                               "testFiles",
+                               "test_terminal_small_1.xml")
+        self.f2 = os.path.join(os.getcwd(),
+                               "testFiles",
+                               "test_terminal_small_2.xml")
+
+    def testF1(self):
+        self.mathml = self.loadFile(self.f1)
+        results = convert_math_expression(self.mathml, terminal_symbols=True)
+        self.log(results)
+        expect = ["#('v!𝖿𝗏','!0')#"]
+        self.assertEqual(results, " ".join(expect))
+
+    def testF2(self):
+        self.mathml = self.loadFile(self.f2)
+        results = convert_math_expression(self.mathml, terminal_symbols=True)
+        self.log(results)
+        expect = ["#('v!𝒔','!0')#"]
+        self.assertEqual(results, " ".join(expect))
 
 
 class TestArxivQuery(TestBase):
