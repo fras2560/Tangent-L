@@ -17,6 +17,8 @@ package results;
 import static org.junit.Assert.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+
 import org.junit.Test;
 import query.MathQuery;
 
@@ -27,7 +29,7 @@ public class TestResults {
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
                            "results",
-                           "simple-results.dat");
+                           "NTCIR12-ArXiv-Math.dat");
         Results r = new Results(p.toFile());
         assertEquals(r.length(), 4251);
     }
@@ -36,7 +38,7 @@ public class TestResults {
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
                            "results",
-                           "simple-results.dat");
+                           "NTCIR12-ArXiv-Math.dat");
         Results r = new Results(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         Float rank = r.findResult(q, "0808.1204_1_258");
@@ -47,12 +49,25 @@ public class TestResults {
         assertEquals(rank, new Float(-1.0));
     }
     @Test
-    public void testContainsResults(){
+    public void testRecallCheck(){
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
                            "results",
-                           "simple-results.dat");
-        
-
+                           "NTCIR12-ArXiv-Math.dat");
+        Results r = new Results(p.toFile());
+        MathQuery q = new MathQuery("NTCIR12-MathIR-1");
+        ArrayList<String> results = new ArrayList<String>(); 
+        int[] result = r.recallResult(q, results);
+        assertEquals(result[0], 19);
+        assertEquals(result[1], 0);
+        assertEquals(result[2], 41);
+        assertEquals(result[3], 0);
+        results.add("0809.2335_1_151");
+        results.add("0901.4232_1_15");
+        result = r.recallResult(q, results);
+        assertEquals(result[0], 19);
+        assertEquals(result[1], 1);
+        assertEquals(result[2], 41);
+        assertEquals(result[3], 2);
     }
 }

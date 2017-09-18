@@ -207,7 +207,6 @@ public class IndexFiles {
     Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
     try (InputStream stream = Files.newInputStream(new_file)) {
-        System.out.println(new_file);
         // make a new, empty document
         Document doc = new Document();
         // Add the path of the file as a field named "path".  Use a

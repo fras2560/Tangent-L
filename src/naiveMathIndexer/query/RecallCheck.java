@@ -37,6 +37,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
 import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
+
+import naiveMathIndexer.index.ConvertConfig;
 import naiveMathIndexer.index.MathAnalyzer;
 import query.MathQuery;
 import results.Results;
@@ -47,15 +49,23 @@ import naiveMathIndexer.query.Search;
 public class RecallCheck  extends Search{
     private Logger logger;
     public RecallCheck(Path index, Path queries, Path results) throws IOException,
+                                                                                            XPathExpressionException,
+                                                                                            ParserConfigurationException,
+                                                                                            SAXException,
+                                                                                            InterruptedException,
+                                                                                            ParseException{
+        this(index, queries, results, new ConvertConfig(), ProjectLogger.getLogger());
+    }
+    public RecallCheck(Path index, Path queries, Path results, ConvertConfig config) throws IOException,
                                                                       XPathExpressionException,
                                                                       ParserConfigurationException,
                                                                       SAXException,
                                                                       InterruptedException,
                                                                       ParseException{
-        this(index, queries, results, ProjectLogger.getLogger());
+        this(index, queries, results, config, ProjectLogger.getLogger());
     }
 
-    public RecallCheck(Path index, Path queries, Path results, Logger logger) throws IOException,
+    public RecallCheck(Path index, Path queries, Path results, ConvertConfig config, Logger logger) throws IOException,
                                                                                      XPathExpressionException,
                                                                                      ParserConfigurationException,
                                                                                      SAXException,
@@ -68,7 +78,7 @@ public class RecallCheck  extends Search{
         Similarity similarity = new ClassicSimilarity();
         searcher.setSimilarity(similarity);
         Analyzer analyzer = new MathAnalyzer();
-        ParseQueries queryLoader = new ParseQueries(queries.toFile());
+        ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         QueryBuilder builder = new QueryBuilder(analyzer);
         Results answers = new Results(results.toFile());
@@ -107,7 +117,7 @@ public class RecallCheck  extends Search{
                     pr_found += recalls[3];
                 }
             }
-            this.logger.log(Level.FINE, ((float) r_found / (float) r_docs) +
+            this.logger.log(Level.INFO, ((float) r_found / (float) r_docs) +
                                                 " " +
                                                ((float) pr_found / (float)pr_docs));
             size += stepSize;
@@ -121,14 +131,18 @@ public class RecallCheck  extends Search{
     }
 
     public static void main(String[] args) throws Exception {
-        String usage = "Usage:\tjava org.apache.lucene.demo.SearchFiles [-index dir] [-queries file] [-results file]";
+        String usage = "Usage:\tjava naiveMathIndexer..RecallCheck [-index dir] [-queries file] [-results file] [-log logFile]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "all-pairs", "eol-ws-1-no-path");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "simple-queries.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "simple-results.dat");
+        ConvertConfig config = new ConvertConfig();
+        config.optimalConfig();
+        // default values
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "config", "compound-unbounded-edge_pairs");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
+        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
+        Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "recallChceck.log");
         for(int i = 0;i < args.length;i++) {
           if ("-index".equals(args[i])) {
             index = Paths.get(args[i+1]);
@@ -139,12 +153,18 @@ public class RecallCheck  extends Search{
           } else if ("-queries".equals(args[i])) {
             queries = Paths.get(args[i+1]);
             i++;
+          }else if ("-log".equals(args[i])){
+            logFile = Paths.get(args[i+1]);
+            i++;
           }
         }
+        // setup the logger
+        ProjectLogger.setLevel(Level.INFO);
+        ProjectLogger.setLogFile(logFile);
         try {
             // write out the queries
             // do the actual searching
-            new RecallCheck(index, queries, results);
+            new RecallCheck(index, queries, results, config);
             // close the files
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");

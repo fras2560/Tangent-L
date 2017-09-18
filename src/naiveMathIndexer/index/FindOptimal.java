@@ -152,10 +152,10 @@ public class FindOptimal {
      * @exception SAXException
      */
     public void optimize(ConvertConfig config, ArrayList<String>features) throws IOException,
-                                                                                 XPathExpressionException,
-                                                                                 InterruptedException,
-                                                                                 ParserConfigurationException,
-                                                                                 SAXException{
+                                                                                          XPathExpressionException,
+                                                                                          InterruptedException,
+                                                                                          ParserConfigurationException,
+                                                                                          SAXException{
         Path indexPath;
         this.updateQueries(config);
         double[] baseLine = this.scoreIndex(this.createIndex(config));
@@ -194,12 +194,25 @@ public class FindOptimal {
         }
         if (!bestFeature.equals("")){
             // then information to gain by a feature
-            ConvertConfig new_config = config.copy();
-            new_config.flipBit(bestFeature);
-            this.optimize(new_config, keepFeatures);
+            ConvertConfig new_config;
+            for (String feature : keepFeatures){
+                // setup the new conversion configuration
+                new_config = config.copy();
+                new_config.flipBit(feature);
+                // remove the feature from the list to try
+                features.remove(feature);
+                this.optimize(new_config, features);
+                // add it back it
+                features.add(feature);
+            }
+            
         }else{
             // then no information gain from any of the features
-            this.output.write("Best Features" + config.toString());
+            this.output.write("Best Features: " +
+                              config.toString() +
+                              " Score:" +
+                              bestFeatureScore[0] + "," +
+                              bestFeatureScore[1]);
             this.output.newLine();
         }
         return;
@@ -270,7 +283,6 @@ public class FindOptimal {
         this.logger.log(Level.FINEST, "Answer found: " + found);
         return found;
     }
-
     /*
      * Scores the index
      * @param index the path to the created index
@@ -388,11 +400,10 @@ public class FindOptimal {
           }
         }
         // setup the logger
-        ProjectLogger.setLevel(Level.FINER);
+        ProjectLogger.setLevel(Level.INFO);
         ProjectLogger.setLogFile(logFile);
         // set the config file
         ConvertConfig config = new ConvertConfig();
-        config.optimalConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         features.add(ConvertConfig.COMPOUND);
@@ -400,6 +411,9 @@ public class FindOptimal {
         features.add(ConvertConfig.TERMINAL);
         features.add(ConvertConfig.UNBOUNDED);
         features.add(ConvertConfig.SHORTENED);
+        // features.add(ConvertConfig.EOL);
+        // features.add(ConvertConfig.LOCATION);
+        
         BufferedWriter outputWriter = null;
         try {
             // write out the queries

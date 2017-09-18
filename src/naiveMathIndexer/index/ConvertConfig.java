@@ -146,6 +146,9 @@ public class ConvertConfig {
      * Updates the config to the optimal configuration
      */
     public void optimalConfig(){
+        this.compound_symbols = true;
+        this.edge_pairs = true;
+        this.unbounded = true;
         return;
     }
     /*
