@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package naiveMathIndexer.query;
+package programs;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,12 +38,13 @@ import org.apache.lucene.util.QueryBuilder;
 import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
 
-import naiveMathIndexer.index.ConvertConfig;
-import naiveMathIndexer.index.MathAnalyzer;
+import index.ConvertConfig;
+import index.MathAnalyzer;
+import query.ParseQueries;
+import search.Judgements;
+import search.Search;
 import query.MathQuery;
-import results.Results;
 import utilities.ProjectLogger;
-import naiveMathIndexer.query.Search;
 
 
 public class RecallCheck  extends Search{
@@ -81,7 +82,7 @@ public class RecallCheck  extends Search{
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         QueryBuilder builder = new QueryBuilder(analyzer);
-        Results answers = new Results(results.toFile());
+        Judgements answers = new Judgements(results.toFile());
         boolean increasing = true;
         float previous = (float) 0.0;
         int stepSize = 100;

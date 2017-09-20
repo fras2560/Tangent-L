@@ -1,4 +1,4 @@
-package naiveMathIndexer.query;
+package programs;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,14 +21,16 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
 import org.xml.sax.SAXException;
-import naiveMathIndexer.index.ConvertConfig;
-import naiveMathIndexer.index.MathAnalyzer;
+import index.ConvertConfig;
+import index.MathAnalyzer;
+import query.ParseQueries;
+import search.Search;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
-public class TimeQueries extends Search{
+public class TimeSearch extends Search{
     private Logger logger;
-    public TimeQueries(Path index, Path queries, int size) throws IOException,
+    public TimeSearch(Path index, Path queries, int size) throws IOException,
                                                                   XPathExpressionException,
                                                                   ParserConfigurationException,
                                                                   SAXException,
@@ -36,7 +38,7 @@ public class TimeQueries extends Search{
                                                                   ParseException{
         this(index, queries, new ConvertConfig(), size, ProjectLogger.getLogger());
     }
-    public TimeQueries(Path index,
+    public TimeSearch(Path index,
                        Path queries,
                        ConvertConfig config,
                        int size) throws IOException,
@@ -47,7 +49,7 @@ public class TimeQueries extends Search{
                                         ParseException{
         this(index, queries, config, size, ProjectLogger.getLogger());
     }
-    public TimeQueries(Path index,
+    public TimeSearch(Path index,
                        Path queries,
                        ConvertConfig config,
                        int size,
@@ -144,11 +146,12 @@ public class TimeQueries extends Search{
           }
         }
         // setup the logger
+
         ProjectLogger.setLevel(Level.INFO);
         ProjectLogger.setLogFile(logFile);
         try {
             // time all the different queries
-            new TimeQueries(index, queries, config, precision);
+            new TimeSearch(index, queries, config, precision);
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
             e.printStackTrace();

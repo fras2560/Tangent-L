@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package results;
+package testing.search;
 import static org.junit.Assert.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,16 +21,17 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import query.MathQuery;
+import search.Judgements;
 
 
-public class TestResults {
+public class TestJudgements {
     @Test
     public void test() {
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
                            "results",
                            "NTCIR12-ArXiv-Math.dat");
-        Results r = new Results(p.toFile());
+        Judgements r = new Judgements(p.toFile());
         assertEquals(r.length(), 4251);
     }
     @Test
@@ -39,7 +40,7 @@ public class TestResults {
                            "resources",
                            "results",
                            "NTCIR12-ArXiv-Math.dat");
-        Results r = new Results(p.toFile());
+        Judgements r = new Judgements(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         Float rank = r.findResult(q, "0808.1204_1_258");
         assertEquals(rank, new Float(0.0));
@@ -54,7 +55,7 @@ public class TestResults {
                            "resources",
                            "results",
                            "NTCIR12-ArXiv-Math.dat");
-        Results r = new Results(p.toFile());
+        Judgements r = new Judgements(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         ArrayList<String> results = new ArrayList<String>(); 
         int[] result = r.recallResult(q, results);

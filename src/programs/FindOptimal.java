@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package naiveMathIndexer.index;
+package programs;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,9 +39,14 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
 import org.xml.sax.SAXException;
-import naiveMathIndexer.query.ParseQueries;
+
+import index.ConvertConfig;
+import index.IndexFiles;
+import index.MathAnalyzer;
+import query.ParseQueries;
+import search.Judgements;
 import query.MathQuery;
-import results.Results;
+import query.MathSimilarity;
 import utilities.ProjectLogger;
 
 /*
@@ -57,7 +62,7 @@ public class FindOptimal {
     private Path index;
     private BufferedWriter output;
     private ArrayList<MathQuery> mathQueries;
-    private Results answers;
+    private Judgements answers;
     private static String FIELD = "contents";
     private static Float RELEVANT_LOWER = new Float(0.0);
     private static int TOP_K = 10000;
@@ -117,7 +122,7 @@ public class FindOptimal {
         this.documents = documents;
         this.index = index;
         this.output = output;
-        this.answers = new Results(results.toFile());
+        this.answers = new Judgements(results.toFile());
         this.logger = logger;
         Analyzer analyzer = new MathAnalyzer();
         this.builder = new QueryBuilder(analyzer);
@@ -303,6 +308,7 @@ public class FindOptimal {
         double reciprocal_mean = (double) 0.0;
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         IndexSearcher searcher = new IndexSearcher(reader);
+        searcher.setSimilarity(MathSimilarity.getSimilarity());
         int count = 0;
         double reciprocal;
         double found;
@@ -368,7 +374,7 @@ public class FindOptimal {
         return directoryPath;
     }
     public static void main(String[] args) throws Exception {
-        String usage = "Usage:\tjava nativeMathIndexer.index.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents documents] [logFile file";
+        String usage = "Usage:\tjava nativeMathIndexer.index.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents dir] [-logFile file]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
             System.exit(0);

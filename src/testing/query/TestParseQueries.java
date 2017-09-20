@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package naiveMathIndexer.query;
+package testing.query;
 import static org.junit.Assert.*;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -24,6 +24,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import query.MathQuery;
+import query.ParseQueries;
 
 
 public class TestParseQueries {

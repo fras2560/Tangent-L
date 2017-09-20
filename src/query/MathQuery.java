@@ -36,12 +36,15 @@ public class MathQuery {
     private String queryName;
     private ArrayList<String> terms;
     private Logger logger;
+    private String fieldName;
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
         this.logger = ProjectLogger.getLogger();
+        this.fieldName = "contents";
     }
     public MathQuery(Node node){
+        this.fieldName = "contents";
         this.logger = ProjectLogger.getLogger();
         this.terms = new ArrayList<String>();
         this.logger.log(Level.FINEST, "Node Type:" + node.getNodeType());
@@ -61,6 +64,9 @@ public class MathQuery {
                 this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
         }
+    }
+    public String getFieldName(){
+        return this.fieldName;
     }
     public ArrayList<String> getTerms(){
         return this.terms;

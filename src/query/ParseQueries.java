@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package naiveMathIndexer.query;
+package query;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,8 +32,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import naiveMathIndexer.index.ConvertConfig;
-import naiveMathIndexer.index.ConvertMathML;
+import index.ConvertConfig;
+import index.ConvertMathML;
 import query.MathQuery;
 import utilities.ProjectLogger;
 

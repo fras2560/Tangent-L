@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package results;
+package search;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,10 +30,10 @@ import query.MathQuery;
 
 
 public class ScoreResults {
-    Results answers;
+    Judgements answers;
     HashMap<String, ArrayList<Result>> results;
     public ScoreResults(Path answers){
-        this.answers = new Results(answers.toFile());
+        this.answers = new Judgements(answers.toFile());
         this.results = new HashMap<String, ArrayList<Result>>();
     }
     @SuppressWarnings("resource")

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package naiveMathIndexer.index;
+package testing.index;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -21,6 +21,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.Test;
+
+import index.ConvertMathML;
 
 
 public class TestConvert {
