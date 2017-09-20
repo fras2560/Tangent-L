@@ -15,21 +15,14 @@
  */
 package search;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -39,9 +32,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.similarities.Similarity;
-import org.apache.lucene.search.similarities.TFIDFSimilarity;
-import org.apache.lucene.search.similarities.BM25Similarity;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
 import org.apache.lucene.search.BooleanQuery;
@@ -83,29 +73,61 @@ public class Search {
         this.config = config;
     }
 
-    public SearchResult searchQuery(MathQuery mathQuery) throws IOException{
-        return this.searchQuery(mathQuery, Search.DEFAULT_K);
+    public ArrayList<String> searchQueryFiles(MathQuery mathQuery) throws IOException{
+        return this.searchQueryFiles(mathQuery, Search.DEFAULT_K);
     }
 
-    public SearchResult searchQuery(MathQuery mq, int k) throws IOException{
-        this.logger.log(Level.FINER, "Query: " + mq.getQuery().replaceAll("//", "//") +
-                "Query: name: " + mq.getQueryName());
-        Query realQuery = this.builder.createBooleanQuery(mq.getFieldName(), mq.getQuery());
-        SearchResult result = null;
-        if (realQuery == null){
-            this.logger.log(Level.WARNING, "Query has no elements: " + mq.getQueryName());
-            result = new SearchResult(null, mq, k, null);
-        }else{
+    public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
+        this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
+                "Query: name: " + mathQuery.getQueryName());
+        Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
+        ArrayList<String> files = new ArrayList<String>();
+        if (realQuery != null){
             this.logger.log(Level.FINEST, realQuery.toString());
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mq.buildQuery(realQuery.toString().split(mq.getFieldName() + ":"),
-                                             this.field,
-                                             bq);
+            Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
+                                                    this.field,
+                                                    bq);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
-            result = new SearchResult(searchResultsWild, mq, k, buildQuery);
+            ScoreDoc[] hits = searchResultsWild.scoreDocs;
+            for (ScoreDoc hit: hits){
+                Document doc = searcher.doc(hit.doc);
+                files.add(this.parseTitle(doc.get("path")));
+                this.logger.log(Level.FINER, "Query name:" +
+                                             mathQuery.getQueryName() +
+                                             " " +
+                                             this.searcher.explain(buildQuery, hit.doc));
+            }
+        }
+        return files;
+    }
+
+    public SearchResult searchQuery(MathQuery mathQuery) throws IOException{
+        return this.searchQuery(mathQuery, Search.DEFAULT_K);
+    }
+
+    public SearchResult searchQuery(MathQuery mathQuery, int k) throws IOException{
+        this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
+                "Query: name: " + mathQuery.getQueryName());
+        Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
+        SearchResult result = null;
+        if (realQuery == null){
+            this.logger.log(Level.WARNING, "Query has no elements: " + mathQuery.getQueryName());
+            result = new SearchResult(null, mathQuery, k, null);
+        }else{
+            this.logger.log(Level.FINEST, realQuery.toString());
+            BooleanQuery.Builder bq = new BooleanQuery.Builder();
+            Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
+                                                    this.field,
+                                                    bq);
+            this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
+            this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
+            this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
+            TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
+            result = new SearchResult(searchResultsWild, mathQuery, k, buildQuery);
         }
         return result;
     }

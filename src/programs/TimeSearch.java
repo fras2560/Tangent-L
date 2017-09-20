@@ -9,27 +9,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
-import org.apache.lucene.search.similarities.Similarity;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.QueryBuilder;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
-import index.MathAnalyzer;
 import query.ParseQueries;
 import search.Search;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
-public class TimeSearch extends Search{
-    private Logger logger;
+public class TimeSearch{
     public TimeSearch(Path index, Path queries, int size) throws IOException,
                                                                   XPathExpressionException,
                                                                   ParserConfigurationException,
@@ -50,39 +38,26 @@ public class TimeSearch extends Search{
         this(index, queries, config, size, ProjectLogger.getLogger());
     }
     public TimeSearch(Path index,
-                       Path queries,
-                       ConvertConfig config,
-                       int size,
-                       Logger logger) throws IOException,
+                      Path queries,
+                      ConvertConfig config,
+                      int size,
+                      Logger logger) throws IOException,
                                              XPathExpressionException,
                                              ParserConfigurationException,
                                              SAXException,
                                              InterruptedException,
                                              ParseException{
-        this.logger = logger;
-        String field = "contents";
-        IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
-        IndexSearcher searcher = new IndexSearcher(reader);
-        Similarity similarity = new ClassicSimilarity();
-        searcher.setSimilarity(similarity);
-        Analyzer analyzer = new MathAnalyzer();
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
-        QueryBuilder builder = new QueryBuilder(analyzer);
+        queryLoader.deleteFile();
         Date start, end;
         ArrayList<Double> times = new ArrayList<Double>();
+        Search searcher = new Search(index);
         for (MathQuery mq: mathQueries){
-            Query realQuery = builder.createBooleanQuery(field, mq.getQuery());
-            if (realQuery == null){
-                this.logger.log(Level.WARNING, "Query has no elements: " + mq);
-            }else{
-                BooleanQuery.Builder bq = new BooleanQuery.Builder();
-                Query buildQuery = mq.buildQuery(realQuery.toString().split("contents:"), field, bq);
-                start = new Date();
-                searcher.search(buildQuery, size);
-                end = new Date();
-                times.add(new Double(end.getTime() - start.getTime()));
-            }
+            start = new Date();
+            searcher.searchQuery(mq, size);
+            end = new Date();
+            times.add(new Double(end.getTime() - start.getTime()));
         }
         Double min = new Double(0);
         Double max = new Double(0);
@@ -108,15 +83,14 @@ public class TimeSearch extends Search{
             }
             std = Math.sqrt((variance / times.size()));
         }
-        
         System.out.println(" Total time:" + total  +
                            " Mean:" + mean +
                            " Min:" + min + 
                            " Max:" + max +
                            " Std:" + std
                            );
-        queryLoader.deleteFile();
     }
+
     public static void main(String[] args) throws Exception {
         String usage = "Usage:\tjava naiveMathIndexer.TimeQueries [-index dir] [-queries file] [-precision precision] [-log logFile]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
@@ -146,7 +120,6 @@ public class TimeSearch extends Search{
           }
         }
         // setup the logger
-
         ProjectLogger.setLevel(Level.INFO);
         ProjectLogger.setLogFile(logFile);
         try {

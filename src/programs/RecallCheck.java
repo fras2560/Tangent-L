@@ -22,24 +22,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
-import org.apache.lucene.search.similarities.Similarity;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.QueryBuilder;
-import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
-
 import index.ConvertConfig;
-import index.MathAnalyzer;
 import query.ParseQueries;
 import search.Judgements;
 import search.Search;
@@ -47,8 +32,9 @@ import query.MathQuery;
 import utilities.ProjectLogger;
 
 
-public class RecallCheck  extends Search{
+public class RecallCheck {
     private Logger logger;
+
     public RecallCheck(Path index, Path queries, Path results) throws IOException,
                                                                                             XPathExpressionException,
                                                                                             ParserConfigurationException,
@@ -57,6 +43,7 @@ public class RecallCheck  extends Search{
                                                                                             ParseException{
         this(index, queries, results, new ConvertConfig(), ProjectLogger.getLogger());
     }
+
     public RecallCheck(Path index, Path queries, Path results, ConvertConfig config) throws IOException,
                                                                       XPathExpressionException,
                                                                       ParserConfigurationException,
@@ -72,55 +59,35 @@ public class RecallCheck  extends Search{
                                                                                      SAXException,
                                                                                      InterruptedException,
                                                                                      ParseException{
-        this.logger = logger;
-        String field = "contents";
-        IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
-        IndexSearcher searcher = new IndexSearcher(reader);
-        Similarity similarity = new ClassicSimilarity();
-        searcher.setSimilarity(similarity);
-        Analyzer analyzer = new MathAnalyzer();
-        ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
-        ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
-        QueryBuilder builder = new QueryBuilder(analyzer);
-        Judgements answers = new Judgements(results.toFile());
+        Search searcher = new Search(index, logger, config);
         boolean increasing = true;
         float previous = (float) 0.0;
         int stepSize = 100;
         int size = 100;
         int maxSize = 2000;
+        ArrayList<String> files;
+        ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
+        ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
+        queryLoader.deleteFile();
+        int r_docs, pr_docs, r_found, pr_found;
+        int[] recalls;
+        Judgements answers = new Judgements(results.toFile());
         while (increasing && size <= maxSize){
-            int r_docs = 0;
-            int pr_docs = 0;
-            int r_found = 0;
-            int pr_found = 0;
+            r_docs = 0;
+            pr_docs = 0;
+            r_found = 0;
+            pr_found = 0;
             for (MathQuery mq: mathQueries){
-                Query realQuery = builder.createBooleanQuery(field, mq.getQuery());
-                if (realQuery == null){
-                    this.logger.log(Level.WARNING, "Query has no elements: " + mq);
-                }else{
-                    BooleanQuery.Builder bq = new BooleanQuery.Builder();
-                    Query buildQuery = mq.buildQuery(realQuery.toString().split("contents:"), field, bq);
-                    TopDocs searchResultsWild = searcher.search(buildQuery, size);
-                    ArrayList<String> files = new ArrayList<String>();
-                    ScoreDoc[] hits = searchResultsWild.scoreDocs;
-                    for (ScoreDoc hit: hits){
-                        Document doc = searcher.doc(hit.doc);
-                        files.add(this.parseTitle(doc.get("path")));
-                        this.logger.log(Level.FINER, "Query name:" +
-                                                            mq.getQueryName() +
-                                                            " " +
-                                                            searcher.explain(buildQuery, hit.doc));
-                    }
-                    int[] recalls = answers.recallResult(mq, files);
-                    r_docs += recalls[0];
-                    r_found += recalls[1];
-                    pr_docs += recalls[2];
-                    pr_found += recalls[3];
-                }
+                files = searcher.searchQueryFiles(mq, size);
+                recalls = answers.recallResult(mq, files);
+                r_docs += recalls[0];
+                r_found += recalls[1];
+                pr_docs += recalls[2];
+                pr_found += recalls[3];
             }
             this.logger.log(Level.INFO, ((float) r_found / (float) r_docs) +
-                                                " " +
-                                               ((float) pr_found / (float)pr_docs));
+                            " " +
+                            ((float) pr_found / (float)pr_docs));
             size += stepSize;
             increasing = false;
             if (((float) pr_found / (float) pr_docs) > previous){
@@ -128,7 +95,6 @@ public class RecallCheck  extends Search{
                 previous = ((float) pr_found / (float) pr_docs);
             }
         }
-        queryLoader.deleteFile();
     }
 
     public static void main(String[] args) throws Exception {
