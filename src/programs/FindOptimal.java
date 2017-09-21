@@ -369,7 +369,7 @@ public class FindOptimal {
         // now create directory just like normal
         IndexFiles idf = new IndexFiles();
         this.logger.log(Level.INFO, "Creating Index: " + name);
-        idf.indexDirectory(directoryPath.toString(), this.documents.toString(), true, config);
+        idf.indexDirectory(directoryPath, this.documents, true, config);
         this.logger.log(Level.INFO, "Directory: " + directoryPath);
         return directoryPath;
     }

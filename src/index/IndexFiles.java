@@ -59,19 +59,18 @@ public class IndexFiles {
   public IndexFiles(Logger logger){
       this.logger = logger;
   }
-  public void indexDirectory(String indexPath,
-                             String docsPath,
+  public void indexDirectory(Path indexPath,
+                             Path docsPath,
                              boolean create,
                              ConvertConfig config) throws IOException{
-      final Path docDir = Paths.get(docsPath);
-      if (!Files.isReadable(docDir)) {
-          this.logger.log(Level.SEVERE, docDir + ": File does not exist");
+      if (!Files.isReadable(docsPath)) {
+          this.logger.log(Level.SEVERE, docsPath + ": File does not exist");
           throw new IOException("File does not exist");
       }
       Date start = new Date();
       try {
-        this.logger.log(Level.FINE, "Indexing to directory: '" + indexPath + "'...");
-        Directory dir = FSDirectory.open(Paths.get(indexPath));
+        this.logger.log(Level.FINE, "Indexing to directory: '" + indexPath.toString() + "'...");
+        Directory dir = FSDirectory.open(indexPath);
         Analyzer analyzer = new MathAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         if (create) {
@@ -89,7 +88,7 @@ public class IndexFiles {
         //
         // iwc.setRAMBufferSizeMB(256.0);
         IndexWriter writer = new IndexWriter(dir, iwc);
-        indexDocs(writer, docDir, config);
+        indexDocs(writer, docsPath, config);
         // NOTE: if you want to maximize search performance,
         // you can optionally call forceMerge here.  This can be
         // a terribly costly operation, so generally it's only
@@ -104,51 +103,6 @@ public class IndexFiles {
         this.logger.log(Level.WARNING, " caught a " + e.getClass() + "\n with message: " + e.getMessage());
       }
         
-  }
-  /** Index all text files under a directory. */
-  public static void main(String[] args) {
-    String usage = "java org.apache.lucene.demo.IndexFiles"
-                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
-                 + "This indexes the documents in DOCS_PATH, creating a Lucene index"
-                 + "in INDEX_PATH that can be searched with SearchFiles";
-    String indexPath = "index";
-    String docsPath = null;
-    boolean create = true;
-    ConvertConfig config = new ConvertConfig();
-    // use the best known configuration
-    config.optimalConfig();
-    for(int i=0;i<args.length;i++) {
-      if ("-index".equals(args[i])) {
-        indexPath = args[i+1];
-        i++;
-      } else if ("-docs".equals(args[i])) {
-        docsPath = args[i+1];
-        i++;
-      } else if ("-update".equals(args[i])) {
-        create = false;
-      }
-    }
-    Logger logger = ProjectLogger.getLogger();
-    if (docsPath == null) {
-      logger.log(Level.SEVERE, "Usage: " + usage);
-      System.exit(1);
-    }
-    final Path docDir = Paths.get(docsPath);
-    if (!Files.isReadable(docDir)) {
-        logger.log(Level.SEVERE, "Document directory '" +
-                                          docDir.toAbsolutePath() +
-                                          "' does not exist or is not readable, please check the path");
-      System.exit(1);
-    }
-    IndexFiles idf = new IndexFiles();
-    try {
-        idf.indexDirectory(indexPath, docsPath, create, config);
-    } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-        logger.log(Level.SEVERE, "Document directory does not exist");
-        System.exit(1);
-    }
   }
 
   /**
@@ -247,5 +201,50 @@ public class IndexFiles {
     }
     // remove the file
     new_file.toFile().delete();
+  }
+
+  /** Index all text files under a directory. */
+  public static void main(String[] args) {
+    String usage = "java index.IndexFiles"
+                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
+                 + "This indexes the documents in DOCS_PATH, creating a Lucene index"
+                 + "in INDEX_PATH that can be searched with SearchFiles";
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
+    Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "document", "arXiv");
+    boolean create = true;
+    ConvertConfig config = new ConvertConfig();
+    // use the best known configuration
+    config.optimalConfig();
+    for(int i=0;i<args.length;i++) {
+      if ("-index".equals(args[i])) {
+        indexPath = Paths.get(args[i+1]);
+        i++;
+      } else if ("-docs".equals(args[i])) {
+        docsPath = Paths.get(args[i+1]);
+        i++;
+      } else if ("-update".equals(args[i])) {
+        create = false;
+      }
+    }
+    Logger logger = ProjectLogger.getLogger();
+    if (docsPath == null) {
+      logger.log(Level.SEVERE, "Usage: " + usage);
+      System.exit(1);
+    }
+    if (!Files.isReadable(docsPath)) {
+        logger.log(Level.SEVERE, "Document directory '" +
+                                          docsPath.toAbsolutePath() +
+                                          "' does not exist or is not readable, please check the path");
+      System.exit(1);
+    }
+    IndexFiles idf = new IndexFiles();
+    try {
+        idf.indexDirectory(indexPath, docsPath, create, config);
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        logger.log(Level.SEVERE, "Document directory does not exist");
+        System.exit(1);
+    }
   }
 }

@@ -47,7 +47,6 @@ import utilities.ProjectLogger;
 public class Search {
     private Logger logger ;
     private IndexSearcher searcher;
-    private String field;
     private QueryBuilder builder;
     private ConvertConfig config;
     private static final int DEFAULT_K = 100;
@@ -71,6 +70,7 @@ public class Search {
         this.searcher.setSimilarity(similarity);
         this.builder = new QueryBuilder(new MathAnalyzer());
         this.config = config;
+        this.logger = logger;
     }
 
     public ArrayList<String> searchQueryFiles(MathQuery mathQuery) throws IOException{
@@ -86,7 +86,7 @@ public class Search {
             this.logger.log(Level.FINEST, realQuery.toString());
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
-                                                    this.field,
+                                                    mathQuery.getFieldName(),
                                                     bq);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
@@ -110,8 +110,12 @@ public class Search {
     }
 
     public SearchResult searchQuery(MathQuery mathQuery, int k) throws IOException{
-        this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
-                "Query: name: " + mathQuery.getQueryName());
+        System.out.println(mathQuery + ":" + mathQuery.getQuery() + ":" + mathQuery.getQueryName() );
+        this.logger.log(Level.FINER,
+                        "Query: " +
+                        mathQuery.getQuery().replaceAll("//", "//") +
+                        " Query: name: " +
+                        mathQuery.getQueryName());
         Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
         SearchResult result = null;
         if (realQuery == null){
@@ -121,7 +125,7 @@ public class Search {
             this.logger.log(Level.FINEST, realQuery.toString());
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
-                                                    this.field,
+                                                    mathQuery.getFieldName(),
                                                     bq);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
@@ -205,7 +209,7 @@ public class Search {
                 resultsWriter.newLine();
             }else{
                 scores = this.arxivScore(this.searcher, queryResult.getResults(), queryResult.getMathQuery(), answers);
-                resultsWriter.write(queryResult.getMathQuery().getQueryName() +
+                resultsWriter.write(queryResult.getMathQuery().getQueryName() + "," + 
                                     scores.get(0).get(0) + "," +
                                     scores.get(0).get(1) +  "," +
                                     scores.get(0).get(2) +  "," +
