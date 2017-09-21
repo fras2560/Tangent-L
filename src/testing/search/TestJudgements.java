@@ -34,6 +34,21 @@ public class TestJudgements {
         Judgements r = new Judgements(p.toFile());
         assertEquals(r.length(), 4251);
     }
+
+    @Test
+    public void testGetResult(){
+        Path p = Paths.get(System.getProperty("user.dir"),
+                           "resources",
+                           "test",
+                           "index_test_1" ,
+                           "judgements",
+                           "judgements.txt");
+        Judgements r = new Judgements(p.toFile());
+        MathQuery query = new MathQuery("NTCIR12-MathIR-1");
+        assertEquals(r.findResult(query, "1301.6848_1_17"), new Float(3.0));
+        assertEquals(r.findResult(query, "math-ph0607065_1_57"), new Float(0.0));
+    }
+
     @Test
     public void testQuery(){
         Path p = Paths.get(System.getProperty("user.dir"),
@@ -49,6 +64,7 @@ public class TestJudgements {
         rank = r.findResult(q, "NOTFINDINGTHIS");
         assertEquals(rank, new Float(-1.0));
     }
+
     @Test
     public void testRecallCheck(){
         Path p = Paths.get(System.getProperty("user.dir"),

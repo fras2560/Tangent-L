@@ -49,6 +49,7 @@ public class Search {
     private IndexSearcher searcher;
     private QueryBuilder builder;
     private ConvertConfig config;
+
     private static final int DEFAULT_K = 100;
 
     public Search(Path index) throws IOException{
@@ -110,7 +111,6 @@ public class Search {
     }
 
     public SearchResult searchQuery(MathQuery mathQuery, int k) throws IOException{
-        System.out.println(mathQuery + ":" + mathQuery.getQuery() + ":" + mathQuery.getQueryName() );
         this.logger.log(Level.FINER,
                         "Query: " +
                         mathQuery.getQuery().replaceAll("//", "//") +
@@ -208,7 +208,7 @@ public class Search {
                 resultsWriter.write(queryResult.getMathQuery().getQueryName() + ",0,0,0,0,0,0,0,0");
                 resultsWriter.newLine();
             }else{
-                scores = this.arxivScore(this.searcher, queryResult.getResults(), queryResult.getMathQuery(), answers);
+                scores = this.arxivScore(queryResult.getResults(), queryResult.getMathQuery(), answers);
                 resultsWriter.write(queryResult.getMathQuery().getQueryName() + "," + 
                                     scores.get(0).get(0) + "," +
                                     scores.get(0).get(1) +  "," +
@@ -256,10 +256,9 @@ public class Search {
         return std / hits.length;
     }
 
-    public void scoreDeviations(IndexSearcher searcher,
-                                TopDocs searchResults,
+    public void scoreDeviations(TopDocs searchResults,
                                 MathQuery query,
-                                Judgements results,
+                                Judgements judgements,
                                 BufferedWriter scoreWriter
                                 ) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
@@ -268,8 +267,8 @@ public class Search {
         Float rank;
         Float score = (float) 0;
         for (ScoreDoc hit : hits){
-            Document doc = searcher.doc(hit.doc);
-            rank = results.findResult(query, this.parseTitle(doc.get("path")));
+            Document doc = this.searcher.doc(hit.doc);
+            rank = judgements.findResult(query, this.parseTitle(doc.get("path")));
             if (rank >= 0){
                 if (rank == 0){
                     score += (-4 * (std / (hit.score - mean)));
@@ -283,10 +282,9 @@ public class Search {
         scoreWriter.newLine();
     }
 
-    public ArrayList<ArrayList<Double>> arxivScore(IndexSearcher searcher,
-                                        TopDocs searchResults,
-                                        MathQuery query,
-                                        Judgements results) throws IOException{
+    public ArrayList<ArrayList<Double>> arxivScore(TopDocs searchResults,
+                                                   MathQuery query,
+                                                   Judgements judgements) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
         Float rank;
         ArrayList<Double>relevantScores = new ArrayList<Double>();
@@ -302,40 +300,36 @@ public class Search {
         Double temp;
         int index = 0;
         for (ScoreDoc hit : hits){
-            Document doc = searcher.doc(hit.doc);
-            rank = results.findResult(query, this.parseTitle(doc.get("path")));
+            Document doc = this.searcher.doc(hit.doc);
+            rank = judgements.findResult(query, this.parseTitle(doc.get("path")));
             this.logger.log(Level.FINEST, "Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
             if (rank > Judgements.rLower){
                 if (index < 5){
-                    temp = relevantScores.get(0);
-                    temp = relevantScores.get(0) + new Double(1);
+                    relevantScores.set(0, relevantScores.get(0) + new Double(1));
                 }
                 if (index < 10){
-                    temp = relevantScores.get(1);
-                    temp = relevantScores.get(1) + new Double(1);
+                    relevantScores.set(1, relevantScores.get(1) + new Double(1));
                 }
                 if (index < 15){
-                    temp = relevantScores.get(2);
-                    temp = relevantScores.get(2) + new Double(1);
+                    relevantScores.set(2, relevantScores.get(2) + new Double(1));
                 }
-                temp = relevantScores.get(3);
-                temp = relevantScores.get(3) + new Double(1);
+                if (index < 20){
+                    relevantScores.set(3, relevantScores.get(3) + new Double(1));
+                }
             }
             if (rank > Judgements.pLower){
                 if (index < 5){
-                    temp = partialScores.get(0);
-                    temp = partialScores.get(0) + new Double(1);
+                    partialScores.set(0, partialScores.get(0) + new Double(1));
                 }
                 if (index < 10){
-                    temp = partialScores.get(1);
-                    temp = partialScores.get(1) + new Double(1);
+                    partialScores.set(1, partialScores.get(1) + new Double(1));
                 }
                 if (index < 15){
-                    temp = partialScores.get(2);
-                    temp = partialScores.get(2) + new Double(1);
+                    partialScores.set(2, partialScores.get(2) + new Double(1));
                 }
-                temp = partialScores.get(3);
-                temp = partialScores.get(3) + new Double(1);
+                if (index < 20){
+                    partialScores.set(3, partialScores.get(3) + new Double(1));
+                }
             }
             index += 1;
         }
@@ -353,5 +347,11 @@ public class Search {
         return String.join(".", nameparts);
     }
 
+    public ConvertConfig getConfig(){
+        return this.config;
+    }
 
+    public IndexSearcher getSearcher(){
+        return this.searcher;
+    }
 }

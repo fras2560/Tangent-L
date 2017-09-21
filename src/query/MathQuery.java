@@ -65,18 +65,23 @@ public class MathQuery {
             }
         }
     }
+
     public String getFieldName(){
         return this.fieldName;
     }
+
     public ArrayList<String> getTerms(){
         return this.terms;
     }
+
     public String getQueryName(){
         return this.queryName;
     }
+
     public String getQuery(){
         return String.join(" ", this.terms);
     }
+
     public String toString(){
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
