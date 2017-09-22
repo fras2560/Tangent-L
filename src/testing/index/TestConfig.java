@@ -37,7 +37,8 @@ public class TestConfig {
     @Test
     public void testToString() {
         ConvertConfig config = new ConvertConfig();
-        assertEquals(config.toString(), "");
+        
+        assertEquals(config.toString(), "base");
         config.flipBit(ConvertConfig.COMPOUND);
         assertEquals(config.toString(), " -compound_symbols");
         config.flipBit(ConvertConfig.COMPOUND);

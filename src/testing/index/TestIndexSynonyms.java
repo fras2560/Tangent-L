@@ -70,29 +70,10 @@ public class TestIndexSynonyms extends BaseTest{
             // try opening the index if no errors are raised should be fine
             IndexReader reader = DirectoryReader.open(FSDirectory.open(this.index));
             new IndexSearcher(reader);
-            Search searcher = new Search(this.index, config);
-            MathQuery mq = new MathQuery("test-1");
-            mq.addTerm("#('+','*','n')#");
-            SearchResult result = searcher.searchQuery(mq);
-            System.out.println(result);
-            searcher.explainQueries(this.queries);
-            System.out.println("Done");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             fail("IOException raised");
-        }catch(InterruptedException e){
-            e.printStackTrace();
-            fail("Interruped exception");
-        } catch(XPathExpressionException e){
-            e.printStackTrace();
-            fail("XPath Expression exception");
-        } catch(ParserConfigurationException e){
-            e.printStackTrace();
-            fail("Parser Configuration exception");
-        } catch(SAXException e){
-            e.printStackTrace();
-            fail("SAX exception");
         }
     }
 

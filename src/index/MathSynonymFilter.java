@@ -32,10 +32,7 @@ public class MathSynonymFilter extends TokenFilter {
         String stoken = Arrays.toString(token);
         if (stoken.contains(Constants.WILDCARD) && !stoken.contains(Constants.ESCAPED_WILDCARD)){
             posIncrAtt.setPositionIncrement(0);
-            System.out.println("WILDCARD");
         }
-        System.out.println("Sub:" + stoken);
-        System.out.println(posIncrAtt.getPositionIncrement());
         return mathTag;
     }
 }
