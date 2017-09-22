@@ -3,6 +3,14 @@ from mathdocument import MathDocument
 import argparse
 import logging
 import sys
+TERMINAL_NODE = "terminal_node"
+COMPOUND_NODE = "compound_node"
+EDGE_PAIR_NODE = "edge_pair"
+EOL_NODE = "eol_node"
+SYMBOL_PAIR_NODE = "symbol_pair"
+EDGES = ['n', 'a', 'b', 'c', 'o', 'u', 'd', 'w', 'e']
+WILDCARD_MOCK = "?x"
+WILDCARD = "*"
 
 
 def convert_math_expression(mathml,
@@ -13,11 +21,21 @@ def convert_math_expression(mathml,
                             edge_pairs=False,
                             unbounded=False,
                             shortened=True,
-                            location=False):
+                            location=False,
+                            synonyms=False):
     """Returns the math tuples for a given math expression
 
     Parameters:
         mathml: the math expression (string)
+        (window_size): The size of the path between nodes for symbols pairs
+        (eol): True will included eol nodes
+        (compound_symbols): True to include compound symbols nodes
+        (terminal_symbols): True to include terminal symbols nodes
+        (edge_pairs): True to include edge pairs nodes
+        (unbounded): True - unbounded window size
+        (shortened): True - shorten symbol pair paths
+        (location): True to include location for symbol pairs along with path
+        (synonyms): True to expand nodes to include wildcard expansion
     Returns:
         : a string of the math tuples
     """
@@ -39,48 +57,33 @@ def convert_math_expression(mathml,
                                 include_location=location)
 #     for node in pairs:
 #         print("Node", node, format_node(node), type(node))
-    node_list = [format_node(node)
-                 for node in pairs
-                 if check_node(node)]
+    if not synonyms:
+        node_list = [format_node(node)
+                     for node in pairs
+                     if check_node(node)]
+    else:
+        # loop through all kept nodes and their expanded nodes
+        node_list = [format_node(expanded_node)
+                     for node in pairs
+                     if check_node(node)
+                     for expanded_node in expand_node_with_wildcards(node)
+                     ]
     return " ".join(node_list)
 
 
 def check_node(node):
     """Returns False if the node is not needed
     """
-    length = len(node)
+    node_type = determine_node(node)
     check = True
-    edges = ['n', 'a', 'b', 'c', 'o', 'u', 'd', 'w', 'e']
-    if length == 2:
-        # check if terminal
-        if (node[1] == "!0"):
-            # terminal tuple
-            # don't keep if it has a wildcard
-            check = not check_wildcard(node[0])
-        elif isinstance(node[1], list):
-            # have a compound tuple
-            # keep regardless
-            pass
-        else:
-            # unbounded pair
-            # don't keep if both are a wildcard
-            check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
-    elif length == 3:
-        if (node[1] == "!0"):
-            # eol tuple
-            check = not check_wildcard(node[0])
-        elif node[0].lower() in edges and node[1].lower() in edges:
-            # edge pair
-            # keep either way
-            pass
-        else:
-            # symbol pair
-            # don't keep if both are a wildcard
-            check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
-    elif length == 4:
-        # has to be a symbol pair
-        # don't keep if both are a wildcard
+    if node_type == EOL_NODE or node_type == TERMINAL_NODE:
+        # only need to look at first part
+        check = not check_wildcard(node[0])
+    elif node_type == SYMBOL_PAIR_NODE:
         check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
+    elif node_type == EDGE_PAIR_NODE or node_type == COMPOUND_NODE:
+        # keep them regardless at this point
+        pass
     return check
 
 
@@ -106,7 +109,7 @@ def format_node(node):
         if "*" in part:
             new_node[-1] = "/*"
         if "?" in part:
-            new_node[-1] = "*"
+            new_node[-1] = WILDCARD
     node = tuple(new_node)
     node = str(node).lower()
     return ("#" + (str(node)
@@ -120,7 +123,58 @@ def format_node(node):
                    ) + "#")
 
 
+def determine_node(node):
+    """Returns the type of node"""
+    node_type = SYMBOL_PAIR_NODE
+    if node[1] == "!0":
+        if len(node) == 2:
+            node_type = TERMINAL_NODE
+        else:
+            node_type = EOL_NODE
+    elif ("[" in node[1] and "]" in node[1]) or isinstance(node[1], list):
+        node_type = COMPOUND_NODE
+    elif node[0] in EDGES:
+        node_type = EDGE_PAIR_NODE
+    return node_type
+
+
+def expand_node_with_wildcards(node):
+    """Returns a list of nodes that includes the expanded nodes"""
+    results = [node]
+    node_type = determine_node(node)
+    if node_type == SYMBOL_PAIR_NODE:
+        # expands to two nodes, one with first tag as wc and second tag as wc
+        temp = list(node)
+        remember = temp[0]
+        if (not check_wildcard(remember) and not check_wildcard(temp[1])):
+            temp[0] = WILDCARD_MOCK
+            results.append(tuple(temp))
+        # now do the second node
+        if (not check_wildcard(remember) and not check_wildcard(temp[1])):
+            temp[0] = remember
+            temp[1] = WILDCARD_MOCK
+            results.append(tuple(temp))
+    elif node_type == COMPOUND_NODE:
+        # add an expansion of the compound node
+        # the node tag is replaced with a wildcard
+        if (not check_wildcard(node[0])):
+            temp = list(node)
+            temp[0] = WILDCARD_MOCK
+            results.append(tuple(temp))
+    elif node_type == EDGE_PAIR_NODE:
+        # replace tag with a wildcard
+        if (not check_wildcard(node[-1])):
+            temp = list(node)
+            temp[-1] = WILDCARD_MOCK
+            results.append(tuple(temp))
+    elif node_type == TERMINAL_NODE or EOL_NODE:
+        # no expansion for them
+        pass
+    return results
+
+
 def format_paragraph(paragraph):
+    """Returns a formatted paragraph"""
     return paragraph
 
 
@@ -134,7 +188,8 @@ def parse_file(filename,
                edge_pairs=False,
                unbounded=False,
                shortened=True,
-               location=False):
+               location=False,
+               synonyms=False):
     """Parses a file and ouputs to a file with math tuples
 
     Parameters:
@@ -161,7 +216,8 @@ def parse_file(filename,
                                              edge_pairs=edge_pairs,
                                              unbounded=unbounded,
                                              shortened=shortened,
-                                             location=location)
+                                             location=location,
+                                             synonyms=synonyms)
                 print(paragraph, file=out)
                 print(ex, file=out)
                 # now move the content further along
@@ -213,6 +269,11 @@ if __name__ == "__main__":
                         action="store_false",
                         help="Whether symbol pairs should be unbounded",
                         default=True)
+    parser.add_argument('-synonyms',
+                        dest="synonyms",
+                        action="store_true",
+                        help="Whether to expand nodes to include synonyms",
+                        default=False)
     prompt = "Whether to include location or not in symbol pairs"
     parser.add_argument('-location',
                         dest="location",
@@ -244,6 +305,7 @@ if __name__ == "__main__":
                edge_pairs=args.edge_pairs,
                unbounded=args.unbounded,
                shortened=args.shortened,
-               location=args.location
+               location=args.location,
+               synonyms=args.synonyms
                )
     logger.info("Done")
