@@ -66,10 +66,8 @@ public class FindOptimal {
     private BufferedWriter output;
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
-    private static String FIELD = Constants.FIELD;
     private static Float RELEVANT_LOWER = new Float(0.0);
     private static int TOP_K = 10000;
-    private QueryBuilder builder;
     private Path queries;
     private Logger logger;
     /*
@@ -127,8 +125,6 @@ public class FindOptimal {
         this.output = output;
         this.answers = new Judgements(results.toFile());
         this.logger = logger;
-        Analyzer analyzer = new MathAnalyzer();
-        this.builder = new QueryBuilder(analyzer);
         this.queries = queries;
     }
     /*
@@ -246,21 +242,23 @@ public class FindOptimal {
      * @return a the reciprocal rank (<1.0)
      */
     public double reciprocal_rank(IndexSearcher searcher, SearchResult result) throws IOException{
-        ScoreDoc[] hits = result.getResults().scoreDocs;
-        double rank = (double) 0.0;
         double reciprocal = (double) 0.0;
-        int count = 1;
-        for (ScoreDoc hit : hits){
-            Document doc = searcher.doc(hit.doc);
-            rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
-            if (rank > FindOptimal.RELEVANT_LOWER){
-                this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
-                reciprocal = (double) 1 / (double) count;
-                break;
+        if(result.getResults() != null){
+            ScoreDoc[] hits = result.getResults().scoreDocs;
+            double rank = (double) 0.0;
+            int count = 1;
+            for (ScoreDoc hit : hits){
+                Document doc = searcher.doc(hit.doc);
+                rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
+                if (rank > FindOptimal.RELEVANT_LOWER){
+                    this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
+                    reciprocal = (double) 1 / (double) count;
+                    break;
+                }
+                count += 1;
             }
-            count += 1;
+            this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Reciprocal: " + reciprocal);
         }
-        this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Reciprocal: " + reciprocal);
         return reciprocal;
     }
     /*
@@ -272,21 +270,21 @@ public class FindOptimal {
      * @return 1 if answer is found
      */
     public double found_answer(IndexSearcher searcher, SearchResult result) throws IOException{
-        ScoreDoc[] hits = result.getResults().scoreDocs;
-        ArrayList<String> filenames = new ArrayList<String>();
-        for (ScoreDoc hit : hits){
-            // build the list of filenames to check against the answers
-            Document doc = searcher.doc(hit.doc);
-            filenames.add(this.parseTitle(doc.get("path")));
+        double found = (double) 0.0;
+        if (result.getResults() != null){
+            ScoreDoc[] hits = result.getResults().scoreDocs;
+            ArrayList<String> filenames = new ArrayList<String>();
+            for (ScoreDoc hit : hits){
+                // build the list of filenames to check against the answers
+                Document doc = searcher.doc(hit.doc);
+                filenames.add(this.parseTitle(doc.get("path")));
+            }
+            int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
+            if(results[3] > 0){
+                found = (double) 1.0;
+            }
+            this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Answer found: " + found);
         }
-        int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
-        double found;
-        if(results[3] > 0){
-            found = (double) 1.0;
-        }else{
-            found = (double) 0.0;
-        }
-        this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Answer found: " + found);
         return found;
     }
     /*
@@ -400,13 +398,7 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        features.add(ConvertConfig.COMPOUND);
-        features.add(ConvertConfig.EDGE);
-        features.add(ConvertConfig.TERMINAL);
-        features.add(ConvertConfig.UNBOUNDED);
-        features.add(ConvertConfig.SHORTENED);
-        // features.add(ConvertConfig.EOL);
-        // features.add(ConvertConfig.LOCATION);
+        features.add(ConvertConfig.SYNONYMS);
         
         BufferedWriter outputWriter = null;
         try {

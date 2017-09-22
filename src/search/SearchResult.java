@@ -53,7 +53,11 @@ public class SearchResult {
     }
 
     public int hitsNumber(){
-        return this.results.totalHits;
+        int hits = 0;
+        if (this.results != null){
+            hits = this.results.totalHits;
+        }
+        return hits;
     }
 
     /*

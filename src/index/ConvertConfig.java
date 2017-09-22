@@ -260,9 +260,13 @@ public class ConvertConfig {
         if (this.unbounded){
             result = result + " -unbounded";
         }
+        if (this.synonyms){
+            result = result + " -synonyms";
+        }
         if (this.window_size > 1){
             result = result + " -window_size " + Integer.toString(this.window_size);
         }
+        
         if (result.equals("")){
             result = "base";
         }
