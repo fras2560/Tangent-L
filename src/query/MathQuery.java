@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import index.ConvertConfig;
+import utilities.Constants;
 import utilities.ProjectLogger;
 
 import org.apache.lucene.index.Term;
@@ -37,14 +39,16 @@ public class MathQuery {
     private ArrayList<String> terms;
     private Logger logger;
     private String fieldName;
+
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
         this.logger = ProjectLogger.getLogger();
-        this.fieldName = "contents";
+        this.fieldName = Constants.FIELD;
     }
+
     public MathQuery(Node node){
-        this.fieldName = "contents";
+        this.fieldName = Constants.FIELD;
         this.logger = ProjectLogger.getLogger();
         this.terms = new ArrayList<String>();
         this.logger.log(Level.FINEST, "Node Type:" + node.getNodeType());
@@ -64,6 +68,10 @@ public class MathQuery {
                 this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
         }
+    }
+
+    public void addTerm(String term){
+        this.terms.add(term);
     }
 
     public String getFieldName(){
@@ -86,17 +94,32 @@ public class MathQuery {
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
 
-    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq){
-        WildcardQuery tempQuery = null;
-        for (String term : terms){
-            term = term.trim(); 
-            if (!term.equals("")){
-                tempQuery = new WildcardQuery(new Term(field, term));
-                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym){
+        // check if synonyms were indexed or not
+        if (!synonym){
+            WildcardQuery tempQuery = null;
+            for (String term : terms){
+                term = term.trim(); 
+                if (!term.equals("")){
+                    tempQuery = new WildcardQuery(new Term(field, term));
+                    bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+                }
             }
-        }
-        if (tempQuery == null){
-            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+            if (tempQuery == null){
+                bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+            }
+        }else{
+            TermQuery tempQuery = null;
+            for(String term : terms){
+                term = term.trim();
+                if(!term.equals("")){
+                    tempQuery = new TermQuery(new Term(field, term));
+                    bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+                }
+            }
+            if (tempQuery == null){
+                bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+            }
         }
         return bq.build();
     }

@@ -36,7 +36,12 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
  */
 public final class MathAnalyzer extends StopwordAnalyzerBase {
   private final CharArraySet stemExclusionSet;
-   
+  private ConvertConfig config;
+  public MathAnalyzer(ConvertConfig config){
+      this(DefaultSetHolder.DEFAULT_STOP_SET);
+      this.config = config;
+  }
+      
   /**
    * Returns an unmodifiable instance of the default stop words set.
    * @return default stop words set.
@@ -80,6 +85,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
   public MathAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet) {
     super(stopwords);
     this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(stemExclusionSet));
+    this.config = new ConvertConfig();
   }
 
   /**
@@ -104,8 +110,12 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
     result = new EnglishPossessiveFilter(result);
     result = new LowerCaseFilter(result);
     result = new StopFilter(result, stopwords);
-    if(!stemExclusionSet.isEmpty())
-      result = new SetKeywordMarkerFilter(result, stemExclusionSet);
+    if(!stemExclusionSet.isEmpty()){
+        result = new SetKeywordMarkerFilter(result, stemExclusionSet);
+    }
+    if (this.config.getSynonym()){
+        result = new MathSynonymFilter(result);
+    }
     
     result = new PorterStemFilter(result);
     return new TokenStreamComponents(source, result);

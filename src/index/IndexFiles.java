@@ -43,6 +43,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import utilities.Constants;
 import utilities.ProjectLogger;
 
 
@@ -71,7 +72,7 @@ public class IndexFiles {
       try {
         this.logger.log(Level.FINE, "Indexing to directory: '" + indexPath.toString() + "'...");
         Directory dir = FSDirectory.open(indexPath);
-        Analyzer analyzer = new MathAnalyzer();
+        Analyzer analyzer = new MathAnalyzer(config);
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         if (create) {
           // Create a new index in the directory, removing any
@@ -184,8 +185,8 @@ public class IndexFiles {
         Set<String> bannedTags = new HashSet<String>();
         // Set<String> bannedTags = new HashSet();
         // bannedTags.add("Math");
-        doc.add(new TextField("contents", new HTMLStripCharFilter(new InputStreamReader(stream,
-                                                                                        StandardCharsets.UTF_8),
+        doc.add(new TextField(Constants.FIELD, new HTMLStripCharFilter(new InputStreamReader(stream,
+                                                                                             StandardCharsets.UTF_8),
                                                                   bannedTags)));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):

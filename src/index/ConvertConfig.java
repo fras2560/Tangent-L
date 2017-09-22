@@ -35,6 +35,7 @@ public class ConvertConfig {
     private boolean edge_pairs;
     private boolean unbounded;
     private boolean location;
+    private boolean synonyms;
     private int window_size;
     /*
      * The possible features that Tangent can use
@@ -46,6 +47,7 @@ public class ConvertConfig {
     public static String EDGE = "EDGE_PAIRS";
     public static String UNBOUNDED = "UNBOUNDED";
     public static String LOCATION = "LOCATION";
+    public static String SYNONYMS = "SYNONYMS";
     /*
      * Class constructor
      */
@@ -58,7 +60,9 @@ public class ConvertConfig {
         this.edge_pairs = false;
         this.unbounded = false;
         this.location = false;
+        this.synonyms = false;
     }
+
     @Override
     /*
      * Returns True if the two objects are equal False otherwise
@@ -86,8 +90,10 @@ public class ConvertConfig {
                 && this.compound_symbols == c.compound_symbols
                 && this.eol == c.eol
                 && this.shortened == c.shortened
-                && this.window_size == c.window_size;
+                && this.window_size == c.window_size
+                && this.synonyms == c.synonyms;
     }
+
     /*
      * Flips the current attributes setting.
      * Parameter attribute is one of the static String of ConvertConfig
@@ -109,8 +115,11 @@ public class ConvertConfig {
             this.unbounded = !this.unbounded;
         }else if(attribute.equals(ConvertConfig.LOCATION)){
             this.location = !this.location;
+        }else if (attribute.equals(ConvertConfig.SYNONYMS)){
+            this.synonyms = !this.synonyms;
         }
     }
+
     /*
      * Updates the window size that Tangent will use
      * @param n the size of the new window
@@ -120,6 +129,7 @@ public class ConvertConfig {
             this.window_size = n;
         }
     }
+
     /*
      * Sets the attribute to some new value
      * @param attribute The attribute to change
@@ -140,8 +150,11 @@ public class ConvertConfig {
             this.unbounded = setting;
         }else if(attribute.equals(ConvertConfig.LOCATION)){
             this.location = setting;
+        }else if(attribute.equals(ConvertConfig.SYNONYMS)){
+            this.synonyms = setting;
         }
     }
+
     /*
      * Updates the config to the optimal configuration
      */
@@ -151,6 +164,7 @@ public class ConvertConfig {
         this.unbounded = true;
         return;
     }
+
     /*
      * Returns the an Array of Commands that can be used to pass parameters to Tangent
      * @return a list of commands
@@ -178,6 +192,9 @@ public class ConvertConfig {
         if (this.unbounded){
             commands.add("-unbounded");
         }
+        if (this.synonyms){
+            commands.add("-synonyms");
+        }
         if (this.window_size > 1){
             commands.add("-window_size");
             commands.add(Integer.toString(this.window_size));
@@ -188,6 +205,7 @@ public class ConvertConfig {
         }
         return result;
     }
+
     /*
      * Returns a copy of the ConvertConfig
      * @return a copy of the ConvertConfig
@@ -204,6 +222,15 @@ public class ConvertConfig {
         config.setWindowSize(this.window_size);
         return config;
     }
+
+    /*
+     * Getter for synonyms
+     * @returns boolean True if synonyms are to be used
+     */
+    public boolean getSynonym(){
+        return this.synonyms;
+    }
+
     /*
      * Returns a String representation of the object
      * @return a String representation

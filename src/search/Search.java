@@ -15,7 +15,10 @@
  */
 package search;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +52,7 @@ public class Search {
     private IndexSearcher searcher;
     private QueryBuilder builder;
     private ConvertConfig config;
-
+    private boolean synonym;
     private static final int DEFAULT_K = 100;
 
     public Search(Path index) throws IOException{
@@ -65,11 +68,15 @@ public class Search {
     }
 
     public Search(Path index, Logger logger, ConvertConfig config) throws IOException{
+        // remember if synonyms were used when indexing
+        this.synonym = config.getSynonym();
+        // dont want synonyms if not needed if in the analyzor
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
         Similarity similarity = MathSimilarity.getSimilarity();
         this.searcher.setSimilarity(similarity);
-        this.builder = new QueryBuilder(new MathAnalyzer());
+        this.builder = new QueryBuilder(new MathAnalyzer(config));
         this.config = config;
         this.logger = logger;
     }
@@ -88,7 +95,8 @@ public class Search {
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
                                                     mathQuery.getFieldName(),
-                                                    bq);
+                                                    bq,
+                                                    this.synonym);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
@@ -97,10 +105,6 @@ public class Search {
             for (ScoreDoc hit: hits){
                 Document doc = searcher.doc(hit.doc);
                 files.add(this.parseTitle(doc.get("path")));
-                this.logger.log(Level.FINER, "Query name:" +
-                                             mathQuery.getQueryName() +
-                                             " " +
-                                             this.searcher.explain(buildQuery, hit.doc));
             }
         }
         return files;
@@ -126,7 +130,8 @@ public class Search {
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
                                                     mathQuery.getFieldName(),
-                                                    bq);
+                                                    bq,
+                                                    this.synonym);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
@@ -161,6 +166,52 @@ public class Search {
         return results;
     }
 
+    public void explainQueries(Path queries) throws IOException,
+                                                    XPathExpressionException,
+                                                    InterruptedException,
+                                                    ParserConfigurationException,
+                                                    SAXException{
+        this.explainQueries(queries, Search.DEFAULT_K);
+    }
+    
+    public void explainQueries(Path queries, int k) throws IOException,
+                                                    XPathExpressionException,
+                                                    InterruptedException,
+                                                    ParserConfigurationException,
+                                                    SAXException{
+        ArrayList<SearchResult> queryResults = this.searchQueries(queries, k);
+        for (SearchResult queryResult : queryResults){
+            // loop through each query and explain it
+            queryResult.explainResults(searcher);
+        }
+    }
+
+    public void explainQueries(Path queries, Path output)throws IOException,
+                                                                XPathExpressionException,
+                                                                InterruptedException,
+                                                                ParserConfigurationException,
+                                                                SAXException{
+        this.explainQueries(queries, output, Search.DEFAULT_K);
+    }
+
+    public void explainQueries(Path queries, Path output, int k)throws IOException,
+                                                                XPathExpressionException,
+                                                                InterruptedException,
+                                                                ParserConfigurationException,
+                                                                SAXException{
+        ArrayList<SearchResult> queryResults = this.searchQueries(queries, k);
+        // create the file and a writer to it
+        File outputText = output.toFile();
+        outputText.createNewFile();
+        FileOutputStream fos = new FileOutputStream(outputText);
+        OutputStreamWriter osw = new OutputStreamWriter(fos);
+        BufferedWriter bw = new BufferedWriter(osw);
+        for (SearchResult queryResult : queryResults){
+            // loop through each query and explain it
+            queryResult.explainResults(searcher, bw);
+        }
+    }
+    
     public void recordQueries(Path queries, BufferedWriter queryWriter) throws IOException,
                                                                                XPathExpressionException,
                                                                                InterruptedException,

@@ -52,6 +52,27 @@ public class SearchResult {
         return this.query;
     }
 
+    public int hitsNumber(){
+        return this.results.totalHits;
+    }
+
+    /*
+     * Returns a String representation of the object
+     * @return a String representation
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString(){
+        String result = this.mathQuery.getQueryName();
+        if (this.results != null){
+            ScoreDoc[] hits = this.results.scoreDocs;
+            for (ScoreDoc hit : hits){
+                result =  result + " " + hit.doc +":" + hit.score;
+            }
+        }
+        return result;
+    }
+
     public void explainResults(IndexSearcher searcher) throws IOException{
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;

@@ -45,8 +45,11 @@ import index.IndexFiles;
 import index.MathAnalyzer;
 import query.ParseQueries;
 import search.Judgements;
+import search.Search;
+import search.SearchResult;
 import query.MathQuery;
 import query.MathSimilarity;
+import utilities.Constants;
 import utilities.ProjectLogger;
 
 /*
@@ -63,7 +66,7 @@ public class FindOptimal {
     private BufferedWriter output;
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
-    private static String FIELD = "contents";
+    private static String FIELD = Constants.FIELD;
     private static Float RELEVANT_LOWER = new Float(0.0);
     private static int TOP_K = 10000;
     private QueryBuilder builder;
@@ -163,7 +166,7 @@ public class FindOptimal {
                                                                                           SAXException{
         Path indexPath;
         this.updateQueries(config);
-        double[] baseLine = this.scoreIndex(this.createIndex(config));
+        double[] baseLine = this.scoreIndex(this.createIndex(config), config);
         double[] results;
         this.output.write("---------------------------------------------");
         this.output.newLine();
@@ -181,7 +184,7 @@ public class FindOptimal {
             this.updateQueries(config);
             this.output.newLine();
             indexPath = this.createIndex(config);
-            results = this.scoreIndex(indexPath);
+            results = this.scoreIndex(indexPath, config);
             this.output.write(config + "," + results[0] + "," + results[1]);
             this.output.newLine();
             config.flipBit(feature);
@@ -242,16 +245,14 @@ public class FindOptimal {
      * @exception IOException
      * @return a the reciprocal rank (<1.0)
      */
-    public double reciprocal_rank(IndexSearcher searcher,
-                                 TopDocs searchDocs,
-                                 MathQuery query) throws IOException{
-        ScoreDoc[] hits = searchDocs.scoreDocs;
+    public double reciprocal_rank(IndexSearcher searcher, SearchResult result) throws IOException{
+        ScoreDoc[] hits = result.getResults().scoreDocs;
         double rank = (double) 0.0;
         double reciprocal = (double) 0.0;
         int count = 1;
         for (ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            rank = this.answers.findResult(query, this.parseTitle(doc.get("path")));
+            rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
             if (rank > FindOptimal.RELEVANT_LOWER){
                 this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
                 reciprocal = (double) 1 / (double) count;
@@ -259,7 +260,7 @@ public class FindOptimal {
             }
             count += 1;
         }
-        this.logger.log(Level.FINEST, query  + " Reciprocal: " + reciprocal);
+        this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Reciprocal: " + reciprocal);
         return reciprocal;
     }
     /*
@@ -270,22 +271,22 @@ public class FindOptimal {
      * @exception IOException
      * @return 1 if answer is found
      */
-    public double found_answer(IndexSearcher searcher, TopDocs searchDocs, MathQuery query) throws IOException{
-        ScoreDoc[] hits = searchDocs.scoreDocs;
+    public double found_answer(IndexSearcher searcher, SearchResult result) throws IOException{
+        ScoreDoc[] hits = result.getResults().scoreDocs;
         ArrayList<String> filenames = new ArrayList<String>();
         for (ScoreDoc hit : hits){
             // build the list of filenames to check against the answers
             Document doc = searcher.doc(hit.doc);
             filenames.add(this.parseTitle(doc.get("path")));
         }
-        int[] results = this.answers.recallResult(query, filenames);
+        int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
         double found;
         if(results[3] > 0){
             found = (double) 1.0;
         }else{
             found = (double) 0.0;
         }
-        this.logger.log(Level.FINEST, "Answer found: " + found);
+        this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Answer found: " + found);
         return found;
     }
     /*
@@ -298,48 +299,35 @@ public class FindOptimal {
      * @exception SAXException
      * @return score of the index
      */
-    public double[] scoreIndex(Path index) throws IOException,
-                                               InterruptedException,
-                                               XPathExpressionException,
-                                               ParserConfigurationException,
-                                               SAXException{
+    public double[] scoreIndex(Path index, ConvertConfig config) throws IOException,
+                                                                        InterruptedException,
+                                                                        XPathExpressionException,
+                                                                        ParserConfigurationException,
+                                                                        SAXException{
 
         double found_mean = (double) 0.0;
         double reciprocal_mean = (double) 0.0;
-        IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
-        IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(MathSimilarity.getSimilarity());
+        Search searcher = new Search(index, config);
+        SearchResult result;
         int count = 0;
         double reciprocal;
         double found;
         for (MathQuery mq: this.mathQueries){
-            Query realQuery = this.builder.createBooleanQuery(FindOptimal.FIELD, mq.getQuery());
-            if (realQuery == null){
-                this.logger.log(Level.WARNING, "Query has no elements  " + mq);
-                this.logger.log(Level.FINER, mq.getQueryName() + " found:" + 0 + " reciprocal:" + 0);
-                this.output.write(mq.getQueryName() + "," + 0 + "," + 0);
-                this.output.newLine();
-            }else{
-                BooleanQuery.Builder bq = new BooleanQuery.Builder();
-                Query buildQuery = mq.buildQuery(realQuery.toString().split("contents:"),
-                                                 FindOptimal.FIELD,
-                                                 bq);
-                TopDocs searchResults = searcher.search(buildQuery, FindOptimal.TOP_K);
-                found = this.found_answer(searcher, searchResults, mq);
-                reciprocal = this.reciprocal_rank(searcher, searchResults, mq); 
-                this.logger.log(Level.FINER,
-                                mq.getQueryName() +
-                                " found:" +
-                                found +
-                                " reciprocal:" +
-                                reciprocal +
-                                "Total Results:" +
-                                searchResults.totalHits);
-                this.output.write(mq.getQueryName() + "," + found + "," + reciprocal);
-                this.output.newLine();
-                found_mean += found;
-                reciprocal_mean += reciprocal;
-            }
+            result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+            found = this.found_answer(searcher.getSearcher(), result);
+            reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
+            this.logger.log(Level.FINER,
+                            mq.getQueryName() +
+                            " found:" +
+                            found +
+                            " reciprocal:" +
+                            reciprocal +
+                            "Total Results:" +
+                             result.hitsNumber());
+            this.output.write(mq.getQueryName() + "," + found + "," + reciprocal);
+            this.output.newLine();
+            found_mean += found;
+            reciprocal_mean += reciprocal;
             count += 1;
         }
         this.logger.log(Level.INFO,
