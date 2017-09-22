@@ -104,8 +104,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
   @Override
   protected TokenStreamComponents createComponents(String fieldName) {
     final Tokenizer source = new MathTokenizer();
-    TokenStream result = new MathFilter(source);
-    result = new ClassicFilter(result);
+    TokenStream result = new ClassicFilter(source);
     result = new StandardFilter(result);
     result = new EnglishPossessiveFilter(result);
     result = new LowerCaseFilter(result);

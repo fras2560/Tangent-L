@@ -43,6 +43,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import query.MathSimilarity;
 import utilities.Constants;
 import utilities.ProjectLogger;
 
@@ -74,6 +75,7 @@ public class IndexFiles {
         Directory dir = FSDirectory.open(indexPath);
         Analyzer analyzer = new MathAnalyzer(config);
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        iwc.setSimilarity(MathSimilarity.getSimilarity());
         if (create) {
           // Create a new index in the directory, removing any
           // previously indexed documents:
