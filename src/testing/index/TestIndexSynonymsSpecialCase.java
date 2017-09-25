@@ -8,9 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -18,17 +15,13 @@ import org.apache.lucene.store.FSDirectory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 import index.ConvertConfig;
 import index.IndexFiles;
-import query.MathQuery;
-import search.Search;
-import search.SearchResult;
 import testing.BaseTest;
 import utilities.ProjectLogger;
 
-public class TestIndexSynonyms extends BaseTest{
+public class TestIndexSynonymsSpecialCase extends BaseTest {
     private Path folder;
     private Path index;
     private Path documents;
@@ -36,7 +29,7 @@ public class TestIndexSynonyms extends BaseTest{
 
     @Before
     public void setUp() throws Exception{
-        this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_1");
+        this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_synonym_case");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
         this.queries = Paths.get(this.folder.toString(), "queries", "queries.xml");
@@ -55,9 +48,8 @@ public class TestIndexSynonyms extends BaseTest{
         // remove the index created
         this.deleteDirectory(this.index);
     }
-
     @Test
-    public void testIndex1() {
+    public void testIndex() {
         ProjectLogger.setLevel(Level.FINEST);
         IndexFiles indexer = new IndexFiles();
         try {
@@ -76,4 +68,5 @@ public class TestIndexSynonyms extends BaseTest{
             fail("IOException raised");
         }
     }
+
 }

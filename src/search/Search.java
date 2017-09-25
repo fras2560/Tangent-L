@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,6 +43,7 @@ import index.MathAnalyzer;
 import query.ParseQueries;
 import query.MathQuery;
 import query.MathSimilarity;
+import utilities.Functions;
 import utilities.ProjectLogger;
 
 
@@ -104,7 +104,7 @@ public class Search {
             ScoreDoc[] hits = searchResultsWild.scoreDocs;
             for (ScoreDoc hit: hits){
                 Document doc = searcher.doc(hit.doc);
-                files.add(this.parseTitle(doc.get("path")));
+                files.add(Functions.parseTitle(doc.get("path")));
             }
         }
         return files;
@@ -319,7 +319,7 @@ public class Search {
         Float score = (float) 0;
         for (ScoreDoc hit : hits){
             Document doc = this.searcher.doc(hit.doc);
-            rank = judgements.findResult(query, this.parseTitle(doc.get("path")));
+            rank = judgements.findResult(query, Functions.parseTitle(doc.get("path")));
             if (rank >= 0){
                 if (rank == 0){
                     score += (-4 * (std / (hit.score - mean)));
@@ -348,12 +348,17 @@ public class Search {
         partialScores.add(new Double (0));
         partialScores.add(new Double (0));
         partialScores.add(new Double (0));
-        Double temp;
         int index = 0;
         for (ScoreDoc hit : hits){
             Document doc = this.searcher.doc(hit.doc);
-            rank = judgements.findResult(query, this.parseTitle(doc.get("path")));
-            this.logger.log(Level.FINEST, "Rank:" + rank + " Title:" + this.parseTitle(doc.get("path")) + " Path:" + doc.get("path"));
+            rank = judgements.findResult(query, Functions.parseTitle(doc.get("path")));
+            this.logger.log(Level.FINEST,
+                            "Rank:" +
+                            rank +
+                            " Title:" +
+                            Functions.parseTitle(doc.get("path")) +
+                            " Path:" +
+                            doc.get("path"));
             if (rank > Judgements.rLower){
                 if (index < 5){
                     relevantScores.set(0, relevantScores.get(0) + new Double(1));
@@ -390,13 +395,7 @@ public class Search {
         return scores;
     }
 
-    public String parseTitle(String title){
-        String[] parts = title.split("/");
-        String filename = parts[parts.length -1];
-        String[] temp = filename.split("\\.");
-        String[] nameparts = Arrays.copyOfRange(temp, 0, temp.length - 1);
-        return String.join(".", nameparts);
-    }
+
 
     public ConvertConfig getConfig(){
         return this.config;

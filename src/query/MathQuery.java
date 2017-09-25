@@ -20,11 +20,8 @@ import java.util.logging.Logger;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import index.ConvertConfig;
 import utilities.Constants;
 import utilities.ProjectLogger;
-
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;

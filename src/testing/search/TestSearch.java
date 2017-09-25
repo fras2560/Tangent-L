@@ -91,16 +91,6 @@ public class TestSearch extends BaseTest{
     }
 
     @Test
-    public void testParseTitle() {
-        String test = "/home/d6fraser/git/UWResearch/resources/test/index_test_1/documents/1301.6848_1_17.xhtml";
-        String expect = "1301.6848_1_17";
-        assertEquals(this.searcher.parseTitle(test), expect);
-        test = "/home/d6fraser/git/UWResearch/resources/test/index_test_1/documents/math-ph0607065_1_57.xhtml";
-        expect = "math-ph0607065_1_57";
-        assertEquals(this.searcher.parseTitle(test), expect);
-    }
-
-    @Test
     public void testSearchQueries() {
         try {
             ArrayList<SearchResult> results = this.searcher.searchQueries(this.queries);

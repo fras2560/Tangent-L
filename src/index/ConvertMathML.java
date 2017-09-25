@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import utilities.Functions;
 import utilities.ProjectLogger;
 
 
@@ -82,10 +83,7 @@ public class ConvertMathML {
      */
     public Path convert(ConvertConfig config) throws IOException, InterruptedException{
         // the output file
-        String[] fn = this.file.getFileName().toString().split("\\.");
-        String new_filename = fn[0] + "_temp." + fn[1];
-        String new_path = Paths.get(this.file.getParent().toString(), new_filename).toString();
-        Path new_file = Paths.get(new_path);
+        Path new_file = Functions.createtempFile(this.file);
         String[] attributes = config.toCommands();
         String[] program = {"python3",
                             this.app.toString(),

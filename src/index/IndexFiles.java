@@ -170,6 +170,7 @@ public class IndexFiles {
         // field that is indexed (i.e. searchable), but don't tokenize 
         // the field into separate words and don't index term frequency
         // or positional information:
+        logger.log(Level.INFO, "Working on file " + file.toString());
         Field pathField = new StringField("path", file.toString(), Field.Store.YES);
         doc.add(pathField);
         // Add the last modified date of the file a field named "modified".
@@ -209,44 +210,55 @@ public class IndexFiles {
   /** Index all text files under a directory. */
   public static void main(String[] args) {
     String usage = "java index.IndexFiles"
-                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
+                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
     Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
     Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "document", "arXiv");
+    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "index.log");
     boolean create = true;
-    ConvertConfig config = new ConvertConfig();
-    // use the best known configuration
-    config.optimalConfig();
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {
-        indexPath = Paths.get(args[i+1]);
-        i++;
+          indexPath = Paths.get(args[i+1]);
+          i++;
       } else if ("-docs".equals(args[i])) {
-        docsPath = Paths.get(args[i+1]);
-        i++;
+          docsPath = Paths.get(args[i+1]);
+          i++;
       } else if ("-update".equals(args[i])) {
-        create = false;
+          create = false;
+      } else if ("-logfile".equals(args[i])){
+          logFile = Paths.get(args[i+1]);
       }
     }
-    Logger logger = ProjectLogger.getLogger();
+    // make sure the files are legit
     if (docsPath == null) {
-      logger.log(Level.SEVERE, "Usage: " + usage);
-      System.exit(1);
+         ProjectLogger.getLogger().log(Level.SEVERE, "Usage: " + usage);
+         System.exit(1);
     }
     if (!Files.isReadable(docsPath)) {
-        logger.log(Level.SEVERE, "Document directory '" +
+        ProjectLogger.getLogger().log(Level.SEVERE, "Document directory '" +
                                           docsPath.toAbsolutePath() +
                                           "' does not exist or is not readable, please check the path");
-      System.exit(1);
+        System.exit(1);
     }
-    IndexFiles idf = new IndexFiles();
     try {
+        ProjectLogger.getLogger().setLevel(Level.FINEST);
+        ProjectLogger.setLogFile(logFile);
+        ProjectLogger.getLogger().log(Level.FINE, "Hello");
+        System.out.println(ProjectLogger.getLogger().getLevel());
+        ConvertConfig config = new ConvertConfig();
+        // use the best known configuration
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-        logger.log(Level.SEVERE, "Document directory does not exist");
+        ProjectLogger.getLogger().log(Level.SEVERE, "Document directory does not exist");
+        System.exit(1);
+    } catch(SecurityException e){
+        e.printStackTrace();
+        ProjectLogger.getLogger().log(Level.SEVERE, "Issue with the logger");
         System.exit(1);
     }
   }

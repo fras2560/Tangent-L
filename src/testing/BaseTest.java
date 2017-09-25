@@ -5,13 +5,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.logging.Level;
-
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
-
 import search.Search;
 import search.SearchResult;
+import utilities.Functions;
 import utilities.ProjectLogger;
 
 public class BaseTest {
@@ -45,7 +43,7 @@ public class BaseTest {
             doc = searcher.getSearcher().doc(hit.doc);
             // make sure it is in the expected list
             System.out.println(expect.get(index) + " " +  doc.get("path"));
-            if (!expect.get(index).equals(searcher.parseTitle(doc.get("path")))){
+            if (!expect.get(index).equals(Functions.parseTitle(doc.get("path")))){
                 same = false;
                 break;
             }

@@ -7,6 +7,6 @@ import org.apache.lucene.search.similarities.Similarity;
 
 public class MathSimilarity {
     public static Similarity getSimilarity(){
-        return new BM25Similarity();
+        return new ClassicSimilarity();
     }
 }

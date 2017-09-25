@@ -14,6 +14,7 @@ public class ProjectLogger {
     public ProjectLogger(){
         
     }
+
     public static void setLevel(Level level){
         ProjectLogger.level = level;
         ProjectLogger.logger.setLevel(level);
@@ -22,12 +23,15 @@ public class ProjectLogger {
         ProjectLogger.logger.addHandler(consoleHandler);
         ProjectLogger.logger.setUseParentHandlers( false );
     }
+
     public static Logger getLogger(){
         return ProjectLogger.logger;
     }
+
     public static void setLogger(Logger logger){
         ProjectLogger.logger = logger;
     }
+
     public static void setLogFile(Path logFile) throws SecurityException, IOException{
         Handler fileHandler  = new FileHandler(logFile.toString());
         SimpleFormatter formatter = new SimpleFormatter(); 

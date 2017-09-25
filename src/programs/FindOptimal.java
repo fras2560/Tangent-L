@@ -27,29 +27,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.QueryBuilder;
 import org.xml.sax.SAXException;
-
 import index.ConvertConfig;
 import index.IndexFiles;
-import index.MathAnalyzer;
 import query.ParseQueries;
 import search.Judgements;
 import search.Search;
 import search.SearchResult;
 import query.MathQuery;
-import query.MathSimilarity;
-import utilities.Constants;
 import utilities.ProjectLogger;
 
 /*
@@ -67,9 +55,10 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 10000;
+    private static int TOP_K = 10;
     private Path queries;
     private Logger logger;
+    private boolean greedy;
     /*
      * Class Constructor
      * @param documents path to the directory of documents
@@ -92,18 +81,17 @@ public class FindOptimal {
                                             XPathExpressionException,
                                             ParserConfigurationException,
                                             SAXException{
-        this(documents, index, output, queries, results, ProjectLogger.getLogger());
+        this(documents, index, output, queries, results, ProjectLogger.getLogger(), true);
     }
 
     /*
-     * Class Constructor with both logger and recall setting
+     * Class Constructor
      * @param documents path to the directory of documents
      * @param index path to the directory which will hold all the created indexes
      * @param output file where findings of the program will be printed to
      * @param queries path to where the queries
      * @param results path to the ground truth of the queries
-     * @param logger the specified logger to use
-     * @param recall True if should use recall for scoring
+     * @param greedy True if a greedy algorithm should be used, False then it is exhaustive
      * @exception IOException
      * @exception InterruptedException
      * @exception XPathExpressionException
@@ -115,7 +103,36 @@ public class FindOptimal {
                        BufferedWriter output,
                        Path queries,
                        Path results,
-                       Logger logger) throws IOException,
+                       boolean greedy) throws IOException,
+                                            InterruptedException,
+                                            XPathExpressionException,
+                                            ParserConfigurationException,
+                                            SAXException{
+        this(documents, index, output, queries, results, ProjectLogger.getLogger(), greedy);
+    }
+    
+    /*
+     * Class Constructor with both logger and recall setting
+     * @param documents path to the directory of documents
+     * @param index path to the directory which will hold all the created indexes
+     * @param output file where findings of the program will be printed to
+     * @param queries path to where the queries
+     * @param results path to the ground truth of the queries
+     * @param logger the specified logger to use
+     * @param greedy True if a greedy algorithm should be used, False then it is exhaustive
+     * @exception IOException
+     * @exception InterruptedException
+     * @exception XPathExpressionException
+     * @exception ParserConfigurationException
+     * @exception SAXException
+     */
+    public FindOptimal(Path documents,
+                       Path index,
+                       BufferedWriter output,
+                       Path queries,
+                       Path results,
+                       Logger logger,
+                       boolean greedy) throws IOException,
                                               InterruptedException,
                                               XPathExpressionException,
                                               ParserConfigurationException,
@@ -126,6 +143,7 @@ public class FindOptimal {
         this.answers = new Judgements(results.toFile());
         this.logger = logger;
         this.queries = queries;
+        this.greedy = greedy;
     }
     /*
      * Updates the queries based uopon configuration
@@ -199,17 +217,25 @@ public class FindOptimal {
         if (!bestFeature.equals("")){
             // then information to gain by a feature
             ConvertConfig new_config;
-            for (String feature : keepFeatures){
-                // setup the new conversion configuration
+            if (this.greedy){
+                // just flip the best feature
                 new_config = config.copy();
-                new_config.flipBit(feature);
-                // remove the feature from the list to try
-                features.remove(feature);
+                new_config.flipBit(bestFeature);
+                features.remove(bestFeature);
                 this.optimize(new_config, features);
-                // add it back it
-                features.add(feature);
+            }else{
+                // branch on all features
+                for (String feature : keepFeatures){
+                    // setup the new conversion configuration
+                    new_config = config.copy();
+                    new_config.flipBit(feature);
+                    // remove the feature from the list to try
+                    features.remove(feature);
+                    this.optimize(new_config, features);
+                    // add it back it
+                    features.add(feature);
+                }
             }
-            
         }else{
             // then no information gain from any of the features
             this.output.write("Best Features: " +
@@ -392,14 +418,19 @@ public class FindOptimal {
           }
         }
         // setup the logger
-        ProjectLogger.setLevel(Level.INFO);
+        ProjectLogger.setLevel(Level.FINE);
         ProjectLogger.setLogFile(logFile);
         // set the config file
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        features.add(ConvertConfig.SYNONYMS);
-        
+        // features.add(ConvertConfig.SYNONYMS);
+        features.add(ConvertConfig.COMPOUND);
+        features.add(ConvertConfig.EDGE);
+        features.add(ConvertConfig.TERMINAL);
+        features.add(ConvertConfig.LOCATION);
+        features.add(ConvertConfig.UNBOUNDED);
+        features.add(ConvertConfig.SHORTENED);
         BufferedWriter outputWriter = null;
         try {
             // write out the queries
