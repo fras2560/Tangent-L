@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 
+import index.ConvertConfig;
 import search.Search;
 import utilities.ProjectLogger;
 
@@ -78,8 +79,11 @@ public class NTCIR_TEST {
             FileOutputStream ris = new FileOutputStream(resultsText);
             OutputStreamWriter rosw = new OutputStreamWriter(ris);
             resultsWriter = new BufferedWriter(rosw);
+            // setup the config file for searching
+            ConvertConfig config = new ConvertConfig();
+            config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
             // do the actual searching
-            Search searcher = new Search(index);
+            Search searcher = new Search(index, config);
             searcher.ntcirTest(queries, results, resultsWriter);
             searcher.recordQueries(queries, queryWriter, 100);;
             // close the files

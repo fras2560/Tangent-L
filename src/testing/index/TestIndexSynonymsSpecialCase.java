@@ -25,14 +25,12 @@ public class TestIndexSynonymsSpecialCase extends BaseTest {
     private Path folder;
     private Path index;
     private Path documents;
-    private Path queries;
 
     @Before
     public void setUp() throws Exception{
         this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_synonym_case");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
-        this.queries = Paths.get(this.folder.toString(), "queries", "queries.xml");
         File dir = this.index.toFile();
         // attempt to create the directory here
         boolean successful = dir.mkdir();

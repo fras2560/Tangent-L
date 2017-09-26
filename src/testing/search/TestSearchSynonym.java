@@ -28,7 +28,6 @@ public class TestSearchSynonym extends BaseTest{
     private Path index;
     private Path documents;
     private Search searcher;
-    private Path judgements;
     private Path queries;
 
     @Before
@@ -38,7 +37,6 @@ public class TestSearchSynonym extends BaseTest{
         this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_1");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
-        this.judgements = Paths.get(this.folder.toString(), "judgements", "judgements.txt");
         this.queries = Paths.get(this.folder.toString(), "queries", "queries.xml");
         File dir = this.index.toFile();
         // attempt to create the directory here

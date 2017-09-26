@@ -7,10 +7,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -18,13 +14,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.SAXException;
-
 import index.ConvertConfig;
 import index.IndexFiles;
-import query.MathQuery;
-import search.Search;
-import search.SearchResult;
 import testing.BaseTest;
 import utilities.ProjectLogger;
 
@@ -32,14 +23,12 @@ public class TestIndexSynonyms extends BaseTest{
     private Path folder;
     private Path index;
     private Path documents;
-    private Path queries;
 
     @Before
     public void setUp() throws Exception{
         this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_1");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
-        this.queries = Paths.get(this.folder.toString(), "queries", "queries.xml");
         File dir = this.index.toFile();
         // attempt to create the directory here
         boolean successful = dir.mkdir();

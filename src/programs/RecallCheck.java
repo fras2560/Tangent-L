@@ -60,6 +60,7 @@ public class RecallCheck {
                                                                                      InterruptedException,
                                                                                      ParseException{
         Search searcher = new Search(index, logger, config);
+        this.logger = logger;
         boolean increasing = true;
         float previous = (float) 0.0;
         int stepSize = 100;
@@ -104,9 +105,9 @@ public class RecallCheck {
             System.exit(0);
         }
         ConvertConfig config = new ConvertConfig();
-        config.optimalConfig();
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
         // default values
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "config", "compound-unbounded-edge_pairs");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
         Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
         Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "recallChceck.log");
