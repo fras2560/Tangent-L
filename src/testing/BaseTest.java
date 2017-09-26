@@ -13,15 +13,22 @@ import utilities.Functions;
 import utilities.ProjectLogger;
 
 public class BaseTest {
-    public void deleteDirectory(Path directory){
-        File index = directory.toFile();
-        String[]entries = index.list();
-        for(String s: entries){
-            File currentFile = new File(index.getPath(),s);
-            currentFile.delete();
+    public boolean deleteDirectory(Path directory){
+        File dir = directory.toFile();
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDirectory(children[i].toPath());
+                if (!success) {
+                    return false;
+                }
+            }
         }
-        index.delete();
+        // either file or an empty directory
+        System.out.println("removing file or directory : " + dir.getName());
+        return dir.delete();
     }
+
     public void setupLogger(Path logger) throws SecurityException, IOException{
         ProjectLogger.setLogFile(logger);
         ProjectLogger.setLevel(Level.FINEST);

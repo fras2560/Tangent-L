@@ -28,6 +28,7 @@ import index.ConvertConfig;
 import query.ParseQueries;
 import search.Judgements;
 import search.Search;
+import search.Search.SearchConfigException;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
@@ -40,7 +41,8 @@ public class RecallCheck {
                                                                                             ParserConfigurationException,
                                                                                             SAXException,
                                                                                             InterruptedException,
-                                                                                            ParseException{
+                                                                                            ParseException,
+                                                                                            SearchConfigException{
         this(index, queries, results, new ConvertConfig(), ProjectLogger.getLogger());
     }
 
@@ -49,7 +51,8 @@ public class RecallCheck {
                                                                       ParserConfigurationException,
                                                                       SAXException,
                                                                       InterruptedException,
-                                                                      ParseException{
+                                                                      ParseException,
+                                                                      SearchConfigException{
         this(index, queries, results, config, ProjectLogger.getLogger());
     }
 
@@ -58,7 +61,8 @@ public class RecallCheck {
                                                                                      ParserConfigurationException,
                                                                                      SAXException,
                                                                                      InterruptedException,
-                                                                                     ParseException{
+                                                                                     ParseException,
+                                                                                     SearchConfigException{
         Search searcher = new Search(index, logger, config);
         this.logger = logger;
         boolean increasing = true;
@@ -98,7 +102,7 @@ public class RecallCheck {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String usage = "Usage:\tjava naiveMathIndexer..RecallCheck [-index dir] [-queries file] [-results file] [-log logFile]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
@@ -126,16 +130,35 @@ public class RecallCheck {
             i++;
           }
         }
-        // setup the logger
-        ProjectLogger.setLevel(Level.INFO);
-        ProjectLogger.setLogFile(logFile);
         try {
+            // setup the logger
+            ProjectLogger.setLevel(Level.INFO);
+            ProjectLogger.setLogFile(logFile);
             // write out the queries
             // do the actual searching
             new RecallCheck(index, queries, results, config);
             // close the files
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
+            e.printStackTrace();
+        } catch (XPathExpressionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SearchConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("Config files did not match");
             e.printStackTrace();
         }
     }

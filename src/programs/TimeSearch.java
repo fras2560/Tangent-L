@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 import index.ConvertConfig;
 import query.ParseQueries;
 import search.Search;
+import search.Search.SearchConfigException;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
@@ -23,7 +24,8 @@ public class TimeSearch{
                                                                   ParserConfigurationException,
                                                                   SAXException,
                                                                   InterruptedException,
-                                                                  ParseException{
+                                                                  ParseException,
+                                                                  SearchConfigException{
         this(index, queries, new ConvertConfig(), size, ProjectLogger.getLogger());
     }
     public TimeSearch(Path index,
@@ -34,7 +36,8 @@ public class TimeSearch{
                                         ParserConfigurationException,
                                         SAXException,
                                         InterruptedException,
-                                        ParseException{
+                                        ParseException,
+                                        SearchConfigException{
         this(index, queries, config, size, ProjectLogger.getLogger());
     }
     public TimeSearch(Path index,
@@ -46,13 +49,14 @@ public class TimeSearch{
                                              ParserConfigurationException,
                                              SAXException,
                                              InterruptedException,
-                                             ParseException{
+                                             ParseException,
+                                             SearchConfigException{
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         queryLoader.deleteFile();
         Date start, end;
         ArrayList<Double> times = new ArrayList<Double>();
-        Search searcher = new Search(index);
+        Search searcher = new Search(index, config);
         for (MathQuery mq: mathQueries){
             start = new Date();
             searcher.searchQuery(mq, size);
@@ -91,7 +95,7 @@ public class TimeSearch{
                            );
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String usage = "Usage:\tjava naiveMathIndexer.TimeQueries [-index dir] [-queries file] [-precision precision] [-log logFile]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
@@ -119,14 +123,33 @@ public class TimeSearch{
             i++;
           }
         }
-        // setup the logger
-        ProjectLogger.setLevel(Level.INFO);
-        ProjectLogger.setLogFile(logFile);
         try {
+            // setup the logger
+            ProjectLogger.setLevel(Level.INFO);
+            ProjectLogger.setLogFile(logFile);
             // time all the different queries
             new TimeSearch(index, queries, config, precision);
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
+            e.printStackTrace();
+        }catch (XPathExpressionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SearchConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("Config files did not match");
             e.printStackTrace();
         }
     }

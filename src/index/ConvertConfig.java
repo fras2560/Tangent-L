@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 package index;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 
 
@@ -40,18 +49,26 @@ public class ConvertConfig {
     /*
      * The possible features that Tangent can use
      */
-    public static String SHORTENED = "SHORTENED";
-    public static String EOL = "EOL";
-    public static String COMPOUND = "COMPOUND_SYMBOLS";
-    public static String TERMINAL = "TERMINAL_SYMBOLS";
-    public static String EDGE = "EDGE_PAIRS";
-    public static String UNBOUNDED = "UNBOUNDED";
-    public static String LOCATION = "LOCATION";
-    public static String SYNONYMS = "SYNONYMS";
+    public final static String SHORTENED = "SHORTENED";
+    public final static String EOL = "EOL";
+    public final static String COMPOUND = "COMPOUND_SYMBOLS";
+    public final static String TERMINAL = "TERMINAL_SYMBOLS";
+    public final static String EDGE = "EDGE_PAIRS";
+    public final static String UNBOUNDED = "UNBOUNDED";
+    public final static String LOCATION = "LOCATION";
+    public final static String SYNONYMS = "SYNONYMS";
+    private final static String DELIMINTER = "-";
+    private final static String SEPERATOR = ":";
+    private final static String WINDOW_SIZE = "WINDOW_SIZE";
+    private static String FILENAME = "index.config";
     /*
      * Class constructor
      */
     public ConvertConfig(){
+        this.initConfig();
+    }
+
+    private void initConfig(){
         this.window_size = 1;
         this.shortened = true;
         this.eol = false;
@@ -129,6 +146,41 @@ public class ConvertConfig {
             this.window_size = n;
         }
     }
+    /*
+     * Getter for different attributes
+     * @param attribute the Attribute to get
+     * @return result the boolean value of the attribute
+     */
+    public boolean getAttribute(String attribute){
+        // just assume false
+        boolean result = false;
+        if (attribute.equals(ConvertConfig.SHORTENED)){
+            result = this.shortened;
+        }else if(attribute.equals(ConvertConfig.EOL)){
+            result = this.eol;
+        }else if(attribute.equals(ConvertConfig.COMPOUND)){
+            result = this.compound_symbols;
+        }else if(attribute.equals(ConvertConfig.TERMINAL)){
+            result = this.terminal_symbols;
+        }else if(attribute.equals(ConvertConfig.EDGE)){
+            result = this.edge_pairs;
+        }else if(attribute.equals(ConvertConfig.UNBOUNDED)){
+            result = this.unbounded;
+        }else if(attribute.equals(ConvertConfig.LOCATION)){
+            result = this.location;
+        }else if (attribute.equals(ConvertConfig.SYNONYMS)){
+            result = this.synonyms;
+        }
+        return result;
+    }
+
+    /*
+     * Getter for window size
+     * @return int the window size
+     */
+    public int getWindowsSize(){
+        return this.window_size;
+    }
 
     /*
      * Sets the attribute to some new value
@@ -172,31 +224,31 @@ public class ConvertConfig {
     public String[] toCommands(){
         LinkedList <String> commands = new LinkedList <String>();
         if (!this.shortened){
-            commands.add("-shortened");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SHORTENED.toLowerCase());
         }
         if (this.location){
-            commands.add("-location");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.LOCATION.toLowerCase());
         }
         if (this.eol){
-            commands.add("-eol");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.EOL.toLowerCase());
         }
         if (this.compound_symbols){
-            commands.add("-compound_symbols");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.COMPOUND.toLowerCase());
         }
         if (this.terminal_symbols){
-            commands.add("-terminal_symbols");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.TERMINAL.toLowerCase());
         }
         if (this.edge_pairs){
-            commands.add("-edge_pairs");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.EDGE.toLowerCase());
         }
         if (this.unbounded){
-            commands.add("-unbounded");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.UNBOUNDED.toLowerCase());
         }
         if (this.synonyms){
-            commands.add("-synonyms");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS.toLowerCase());
         }
         if (this.window_size > 1){
-            commands.add("-window_size");
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE.toLowerCase());
             commands.add(Integer.toString(this.window_size));
         }
         String[] result = {};
@@ -232,6 +284,132 @@ public class ConvertConfig {
     }
 
     /*
+     * Checks if the this config file is compatible with the given config
+     * @param config the configuration to check is compatible
+     * @returns boolean True if this is compatible with config
+     */
+    public boolean compatible(ConvertConfig config){
+        // assume compatible
+        boolean result = true;
+        if (config.shortened != this.shortened || config.location != this.location){
+            result = false;
+        }else if(this.eol != true && this.eol != config.eol){
+            // eol is backwards compatible
+            result = false;
+        }else if(this.compound_symbols != true && this.compound_symbols != config.compound_symbols){
+            // compound symbol is backwards compatible
+            result = false;
+        }else if(this.terminal_symbols != true && this.terminal_symbols != config.terminal_symbols){
+            // terminal symbol is backwards compatible
+            result = false;
+        }else if(this.edge_pairs != true && this.edge_pairs != config.edge_pairs){
+            // edge pairs is backwards compatible
+            result = false;
+        }else if(this.synonyms != true && this.synonyms != config.synonyms){
+            // synonyms is backwards compatible
+            result = false;
+        }else if(this.unbounded != true && this.unbounded != config.unbounded){
+            // unbounded is backwards compatible
+            result = false;
+        }else if (this.window_size < config.window_size){
+            // window size should be bigger or same size
+            // unbounded is not a substitute for this
+            result = false;
+        }
+        return result;
+    }
+
+    /*
+     * Saves a config file in the directory given
+     * @param directory the directory to save the config file
+     */
+    public void saveConfig(Path directory) throws IOException{
+        Path filename = Paths.get(directory.toString(), ConvertConfig.FILENAME);
+        File file = filename.toFile();
+        // if previous file then just remove
+        if (file.exists()){
+            file.delete();
+        }
+        // create the new file
+        file.createNewFile();
+        BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+        fileWriter.write(ConvertConfig.COMPOUND + ConvertConfig.SEPERATOR + this.compound_symbols);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.EDGE + ConvertConfig.SEPERATOR + this.edge_pairs);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.EOL + ConvertConfig.SEPERATOR + this.eol);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.LOCATION + ConvertConfig.SEPERATOR + this.location);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.SHORTENED + ConvertConfig.SEPERATOR + this.shortened);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.SYNONYMS + ConvertConfig.SEPERATOR + this.synonyms);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.TERMINAL + ConvertConfig.SEPERATOR + this.terminal_symbols);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.UNBOUNDED + ConvertConfig.SEPERATOR + this.unbounded);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.window_size);
+        fileWriter.newLine();
+        fileWriter.close();
+        
+    }
+
+    /*
+     * Loads a config file from the direcotyr given
+     * @param directory the directory to save the config file
+     */
+    public void loadConfig(Path directory) throws IOException{
+        Path filename = Paths.get(directory.toString(), ConvertConfig.FILENAME);
+        File file = filename.toFile();
+        // check to see if file exists
+        if (file.exists()){
+            BufferedReader fileReader = new BufferedReader(new FileReader(file));
+            String line;
+            String attribute;
+            boolean setting;
+            String[] parts;
+            while ((line = fileReader.readLine()) != null){
+                parts = line.split(ConvertConfig.SEPERATOR);
+                if (parts.length != 2){
+                    // not sure what the file is
+                    fileReader.close();
+                    throw new IOException("Unrecongizable config file");
+                }
+                attribute = parts[0].trim();
+                if (attribute.equals(ConvertConfig.WINDOW_SIZE)){
+                    int window_size = Integer.parseInt(parts[1].trim());
+                    this.setWindowSize(window_size);
+                }else{
+                    setting = Boolean.parseBoolean(parts[1].trim());
+                    this.setBooleanAttribute(attribute, setting);
+                }
+                
+            }
+            fileReader.close();
+        }else{
+            // try to parse the config file name from the directory string
+            file = directory.toFile();
+            String name = file.getName();
+            if (!name.equals("base")){
+                String[] parts = name.split(ConvertConfig.DELIMINTER);
+                for (String attribute: parts){
+                    attribute = attribute.toUpperCase().trim();
+                    if (attribute.contains(ConvertConfig.WINDOW_SIZE)){
+                        String[] number = attribute.split(ConvertConfig.SEPERATOR);
+                        if (number.length > 2){
+                            this.setWindowSize(Integer.parseInt((number[1])));
+                        }
+                    }else{
+                        this.flipBit(attribute);
+                    }
+                }
+            }
+            this.saveConfig(directory);
+        }
+    }
+
+    /*
      * Returns a String representation of the object
      * @return a String representation
      * (non-Javadoc)
@@ -240,33 +418,33 @@ public class ConvertConfig {
     public String toString(){
         String result = "";
         if (!this.shortened){
-            result = result + " -shortened";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SHORTENED;
         }
         if (this.location){
-            result = result + " -location";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.LOCATION;
         }
         if (this.eol){
-            result = result + " -eol";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.EOL;
         }
         if (this.compound_symbols){
-            result = result +  " -compound_symbols";
+            result = result +  " " + ConvertConfig.DELIMINTER + ConvertConfig.COMPOUND;
         }
         if (this.terminal_symbols){
-            result = result + " -terminal_symbols";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.TERMINAL;
         }
         if (this.edge_pairs){
-            result = result + " -edge_pairs";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.EDGE;
         }
         if (this.unbounded){
-            result = result + " -unbounded";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.UNBOUNDED;
         }
         if (this.synonyms){
-            result = result + " -synonyms";
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS;
         }
         if (this.window_size > 1){
-            result = result + " -window_size " + Integer.toString(this.window_size);
+            result = (result + " "+ ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR +
+                      Integer.toString(this.window_size));
         }
-        
         if (result.equals("")){
             result = "base";
         }

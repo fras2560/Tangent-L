@@ -55,23 +55,29 @@ public class Search {
     private boolean synonym;
     private static final int DEFAULT_K = 100;
 
-    public Search(Path index) throws IOException{
+    public Search(Path index) throws IOException, SearchConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig());
     }
 
-    public Search(Path index, Logger logger) throws IOException{
+    public Search(Path index, Logger logger) throws IOException, SearchConfigException{
         this(index, logger, new ConvertConfig());
     }
 
-    public Search(Path index, ConvertConfig config) throws IOException{
+    public Search(Path index, ConvertConfig config) throws IOException, SearchConfigException{
         this(index, ProjectLogger.getLogger(), config);
     }
 
-    public Search(Path index, Logger logger, ConvertConfig config) throws IOException{
+    public Search(Path index, Logger logger, ConvertConfig config) throws IOException, SearchConfigException{
         // remember if synonyms were used when indexing
         this.synonym = config.getSynonym();
         // dont want synonyms if not needed if in the analyzor
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
+        // make sure the config and index are compatible
+        ConvertConfig indexConfig = new ConvertConfig();
+        indexConfig.loadConfig(index);
+        if (!config.compatible(indexConfig)){
+            throw new SearchConfigException("Config did not match index");
+        }
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
         Similarity similarity = MathSimilarity.getSimilarity();
@@ -404,4 +410,16 @@ public class Search {
     public IndexSearcher getSearcher(){
         return this.searcher;
     }
+
+    public class SearchConfigException extends Exception{
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        public SearchConfigException(String message){
+            super(message);
+        }
+    }
+
 }

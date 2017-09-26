@@ -36,6 +36,7 @@ import index.IndexFiles;
 import query.ParseQueries;
 import search.Judgements;
 import search.Search;
+import search.Search.SearchConfigException;
 import search.SearchResult;
 import query.MathQuery;
 import utilities.ProjectLogger;
@@ -177,7 +178,8 @@ public class FindOptimal {
                                                                                           XPathExpressionException,
                                                                                           InterruptedException,
                                                                                           ParserConfigurationException,
-                                                                                          SAXException{
+                                                                                          SAXException,
+                                                                                          SearchConfigException{
         Path indexPath;
         this.updateQueries(config);
         double[] baseLine = this.scoreIndex(this.createIndex(config), config);
@@ -327,7 +329,8 @@ public class FindOptimal {
                                                                         InterruptedException,
                                                                         XPathExpressionException,
                                                                         ParserConfigurationException,
-                                                                        SAXException{
+                                                                        SAXException,
+                                                                        SearchConfigException{
 
         double found_mean = (double) 0.0;
         double reciprocal_mean = (double) 0.0;
@@ -385,7 +388,7 @@ public class FindOptimal {
         this.logger.log(Level.INFO, "Directory: " + directoryPath);
         return directoryPath;
     }
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException{
         String usage = "Usage:\tjava nativeMathIndexer.index.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents dir] [-logFile file]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
@@ -440,15 +443,29 @@ public class FindOptimal {
             OutputStreamWriter osw = new OutputStreamWriter(outputIS);
             outputWriter = new BufferedWriter(osw);
             // find the optimal
-            FindOptimal fo = new FindOptimal(documents,
-                                             indexDirectory,
-                                             outputWriter,
-                                             queries,
-                                             results);
+            FindOptimal fo;
+            fo = new FindOptimal(documents,
+                                 indexDirectory,
+                                 outputWriter,
+                                 queries,
+                                 results);
             fo.optimize(config, features);
             outputWriter.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
+            e.printStackTrace();
+            if(outputWriter != null){
+                outputWriter.close();
+            }
+        }catch (XPathExpressionException | InterruptedException | ParserConfigurationException | SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            if(outputWriter != null){
+                outputWriter.close();
+            }
+        }catch (SearchConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("Config files did not match");
             e.printStackTrace();
             if(outputWriter != null){
                 outputWriter.close();

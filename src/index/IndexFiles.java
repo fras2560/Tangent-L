@@ -102,6 +102,7 @@ public class IndexFiles {
         writer.close();
         Date end = new Date();
         this.logger.log(Level.INFO, end.getTime() - start.getTime() + " total milliseconds");
+        config.saveConfig(indexPath);
       } catch (IOException e) {
         this.logger.log(Level.WARNING, " caught a " + e.getClass() + "\n with message: " + e.getMessage());
       }
