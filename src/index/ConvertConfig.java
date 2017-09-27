@@ -369,7 +369,7 @@ public class ConvertConfig {
             String attribute;
             boolean setting;
             String[] parts;
-            while ((line = fileReader.readLine()) != null){
+            while ((line = fileReader.readLine()) != null && !line.trim().equals("")){
                 parts = line.split(ConvertConfig.SEPERATOR);
                 if (parts.length != 2){
                     // not sure what the file is
