@@ -54,6 +54,7 @@ public class Search {
     private ConvertConfig config;
     private boolean synonym;
     private static final int DEFAULT_K = 100;
+    private static final int MAX_CLUASES = 4096;
 
     public Search(Path index) throws IOException, SearchConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig());
@@ -68,6 +69,8 @@ public class Search {
     }
 
     public Search(Path index, Logger logger, ConvertConfig config) throws IOException, SearchConfigException{
+        // increase the clause count since formulas can be a slight bit longer
+        BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
         // remember if synonyms were used when indexing
         this.synonym = config.getSynonym();
         // dont want synonyms if not needed if in the analyzor
@@ -75,7 +78,8 @@ public class Search {
         // make sure the config and index are compatible
         ConvertConfig indexConfig = new ConvertConfig();
         indexConfig.loadConfig(index);
-        if (!config.compatible(indexConfig)){
+        // index config needs to be compatible with the searching config (not necessarily reverse direction)
+        if (!indexConfig.compatible(config)){
             throw new SearchConfigException("Config did not match index");
         }
         IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
@@ -126,6 +130,7 @@ public class Search {
                         mathQuery.getQuery().replaceAll("//", "//") +
                         " Query: name: " +
                         mathQuery.getQueryName());
+        System.out.println(mathQuery.getQueryName());
         Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
         SearchResult result = null;
         if (realQuery == null){
