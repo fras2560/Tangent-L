@@ -32,16 +32,18 @@ public class TestParseQueries {
     public void test() {
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
-                           "query",
-                           "simple-queries.xml");
+                           "test",
+                           "index_test_1",
+                           "queries",
+                           "queries.xml");
         try {
             ParseQueries pq = new ParseQueries(p.toFile());
             ArrayList<MathQuery> queries = pq.getQueries();
-            System.out.println("\nQueries:");
-            for (MathQuery q : queries){
-                System.out.println("----------------------------------");
-                System.out.println(q);
-            }
+            MathQuery mq = queries.get(0);
+            assertEquals(mq.getQueryName(), "NTCIR12-MathIR-1");
+            assertEquals(mq.getTerms().get(0), "#('v!x','+','n')# #('+','*','n')#");
+            assertEquals(mq.getTerms().get(1), "Mean");
+            assertEquals(mq.getTerms().get(2), "Arithmetic");
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

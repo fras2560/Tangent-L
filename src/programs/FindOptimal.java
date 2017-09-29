@@ -32,6 +32,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
+import index.ConvertConfig.ConvertConfigException;
 import index.IndexFiles;
 import query.ParseQueries;
 import search.Judgements;
@@ -56,7 +57,7 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 10;
+    private static int TOP_K = 10000;
     private Path queries;
     private Logger logger;
     private boolean greedy;
@@ -179,7 +180,8 @@ public class FindOptimal {
                                                                                           InterruptedException,
                                                                                           ParserConfigurationException,
                                                                                           SAXException,
-                                                                                          SearchConfigException{
+                                                                                          SearchConfigException,
+                                                                                          ConvertConfigException{
         Path indexPath;
         this.updateQueries(config);
         double[] baseLine = this.scoreIndex(this.createIndex(config), config);
@@ -197,7 +199,6 @@ public class FindOptimal {
         ArrayList<String> keepFeatures = new ArrayList<String>();
         for(String feature : features){
             config.flipBit(feature);
-            this.updateQueries(config);
             this.output.newLine();
             indexPath = this.createIndex(config);
             results = this.scoreIndex(indexPath, config);
@@ -330,7 +331,8 @@ public class FindOptimal {
                                                                         XPathExpressionException,
                                                                         ParserConfigurationException,
                                                                         SAXException,
-                                                                        SearchConfigException{
+                                                                        SearchConfigException,
+                                                                        ConvertConfigException{
 
         double found_mean = (double) 0.0;
         double reciprocal_mean = (double) 0.0;
@@ -339,6 +341,7 @@ public class FindOptimal {
         int count = 0;
         double reciprocal;
         double found;
+        this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
             found = this.found_answer(searcher.getSearcher(), result);
@@ -358,7 +361,7 @@ public class FindOptimal {
             count += 1;
         }
         this.logger.log(Level.INFO,
-                        "Scores: "+ (found_mean / (double) count) + "," + (reciprocal_mean / (double) count));
+                        config.toString() + " Scores: " + (found_mean / (double) count) + "," + (reciprocal_mean / (double) count));
         double[] results = {found_mean / (double) count, reciprocal_mean / (double) count};
         return results;
     }
@@ -368,15 +371,21 @@ public class FindOptimal {
      * @exception IOException
      * @return the path to the created index
      */
-    public Path createIndex(ConvertConfig config) throws IOException{
+    public Path createIndex(ConvertConfig config) throws IOException, ConvertConfigException{
         String name = config.toString().replace(" ", "");
         this.logger.log(Level.INFO, "Creating index: " + "The name of config: " + name);
         Path directoryPath = Paths.get(this.index.toString(), name);
         File directory = directoryPath.toFile();
         // already created
-        this.logger.log(Level.INFO, "" + directory +  " exists: " +directory.exists());
+        this.logger.log(Level.INFO, "" + directory +  " exists: " + directory.exists());
         if (directory.exists()){
             return directoryPath;
+        }
+        // look for compatible index
+        Path compatible = this.findCompatible(config);
+        if (compatible != null){
+            System.out.println("Found compatible index " + compatible);
+            return compatible;
         }
         if(!directory.mkdir()){
             throw new IOException("Unable to create directory");
@@ -388,8 +397,31 @@ public class FindOptimal {
         this.logger.log(Level.INFO, "Directory: " + directoryPath);
         return directoryPath;
     }
+    public Path findCompatible(ConvertConfig config) throws ConvertConfigException{
+        Path compatible = null;
+        File dir = new File(this.index.toString());
+        File[] directoryListing = dir.listFiles();
+        ConvertConfig indexConfig = new ConvertConfig();
+        if (directoryListing != null) {
+           for (File child : directoryListing) {
+               try {
+                   indexConfig.loadConfig(child.toPath());
+               } catch (IOException e) {
+                   // TODO Auto-generated catch block
+                   e.printStackTrace();
+                   this.logger.warning("unable to load config:" + child.toPath());
+               }
+               if (indexConfig.compatible(config)){
+                   compatible = child.toPath();
+                   System.out.println("Two compatible config:" + indexConfig + " " + config);
+                   break;
+               }
+            }
+        }
+        return compatible;
+    }
     public static void main(String[] args) throws IOException{
-        String usage = "Usage:\tjava nativeMathIndexer.index.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents dir] [-logFile file]";
+        String usage = "Usage:\tjava programs.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents dir] [-logFile file]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
             System.out.println(usage);  
             System.exit(0);
@@ -421,19 +453,21 @@ public class FindOptimal {
           }
         }
         // setup the logger
-        ProjectLogger.setLevel(Level.FINE);
+        ProjectLogger.setLevel(Level.INFO);
         ProjectLogger.setLogFile(logFile);
         // set the config file
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        // features.add(ConvertConfig.SYNONYMS);
-        features.add(ConvertConfig.COMPOUND);
-        features.add(ConvertConfig.EDGE);
-        features.add(ConvertConfig.TERMINAL);
-        features.add(ConvertConfig.LOCATION);
-        features.add(ConvertConfig.UNBOUNDED);
+        // only need to flip a certain number of features
         features.add(ConvertConfig.SHORTENED);
+        features.add(ConvertConfig.LOCATION);
+        // this are all backwards compatible
+        config.flipBit(ConvertConfig.COMPOUND);
+        config.flipBit(ConvertConfig.TERMINAL);
+        config.flipBit(ConvertConfig.EDGE);
+        config.flipBit(ConvertConfig.SYNONYMS);
+        config.flipBit(ConvertConfig.UNBOUNDED);
         BufferedWriter outputWriter = null;
         try {
             // write out the queries
@@ -466,6 +500,13 @@ public class FindOptimal {
         }catch (SearchConfigException e) {
             // TODO Auto-generated catch block
             System.err.println("Config files did not match");
+            e.printStackTrace();
+            if(outputWriter != null){
+                outputWriter.close();
+            }
+        } catch (ConvertConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("Index did not have config file");
             e.printStackTrace();
             if(outputWriter != null){
                 outputWriter.close();

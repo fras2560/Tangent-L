@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
+import index.ConvertConfig.ConvertConfigException;
 import query.ParseQueries;
 import search.Search;
 import search.Search.SearchConfigException;
@@ -25,9 +26,11 @@ public class TimeSearch{
                                                                   SAXException,
                                                                   InterruptedException,
                                                                   ParseException,
-                                                                  SearchConfigException{
+                                                                  SearchConfigException,
+                                                                  ConvertConfigException{
         this(index, queries, new ConvertConfig(), size, ProjectLogger.getLogger());
     }
+
     public TimeSearch(Path index,
                        Path queries,
                        ConvertConfig config,
@@ -37,9 +40,11 @@ public class TimeSearch{
                                         SAXException,
                                         InterruptedException,
                                         ParseException,
-                                        SearchConfigException{
+                                        SearchConfigException,
+                                        ConvertConfigException{
         this(index, queries, config, size, ProjectLogger.getLogger());
     }
+
     public TimeSearch(Path index,
                       Path queries,
                       ConvertConfig config,
@@ -50,7 +55,8 @@ public class TimeSearch{
                                              SAXException,
                                              InterruptedException,
                                              ParseException,
-                                             SearchConfigException{
+                                             SearchConfigException,
+                                             ConvertConfigException{
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         queryLoader.deleteFile();
@@ -150,6 +156,10 @@ public class TimeSearch{
         } catch (SearchConfigException e) {
             // TODO Auto-generated catch block
             System.err.println("Config files did not match");
+            e.printStackTrace();
+        } catch (ConvertConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("ConvertConfig not found raised");
             e.printStackTrace();
         }
     }

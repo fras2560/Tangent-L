@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import index.ConvertConfig;
+import index.ConvertConfig.ConvertConfigException;
 import testing.BaseTest;
 
 
@@ -75,6 +76,10 @@ public class TestConfig extends BaseTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
             assertEquals("unable to load config", false, true);
+        } catch (ConvertConfigException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            assertEquals("ConvertConfig not found raised",  true, false);
         }
         assertNotEquals(loaded_config.getAttribute(ConvertConfig.SYNONYMS), false);
         assertNotEquals(loaded_config.getWindowsSize(), 1);
@@ -82,40 +87,6 @@ public class TestConfig extends BaseTest {
         assertEquals(loaded_config.getWindowsSize(), 3);
     }
 
-    @Test
-    public void testSaveFromDirectoryName(){
-        ConvertConfig config = new ConvertConfig();
-        try {
-            config.loadConfig(this.tempDirectory);
-            assertEquals(config, new ConvertConfig());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            assertEquals("Unable to load temp directory", false, true);
-        }
-        // a made up directory
-        File directory = Paths.get(this.tempDirectory.toString(),
-                                   "-shortened-location-eol-compound_symbols-terminal_symbols-edge_pairs-unbounded").toFile();
-        directory.mkdir();
-        try {
-            config.loadConfig(directory.toPath());
-            assertEquals(config.getAttribute(ConvertConfig.SHORTENED), false);
-            assertEquals(config.getAttribute(ConvertConfig.LOCATION), true);
-            assertEquals(config.getAttribute(ConvertConfig.EOL), true);
-            assertEquals(config.getAttribute(ConvertConfig.COMPOUND), true);
-            assertEquals(config.getAttribute(ConvertConfig.TERMINAL), true);
-            assertEquals(config.getAttribute(ConvertConfig.EDGE), true);
-            assertEquals(config.getAttribute(ConvertConfig.UNBOUNDED), true);
-            assertEquals(config.getAttribute(ConvertConfig.SYNONYMS), false);
-            // make sure config was saved for later use
-            assertEquals(Paths.get(directory.toPath().toString(), "index.config").toFile().exists(), true);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            assertEquals("Unable to load directory with special name", false, true);
-        }
-        
-    }
     @Test 
     public void testCopy(){
         ConvertConfig config = new ConvertConfig();

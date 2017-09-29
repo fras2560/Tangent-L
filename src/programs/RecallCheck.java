@@ -25,6 +25,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
+import index.ConvertConfig.ConvertConfigException;
 import query.ParseQueries;
 import search.Judgements;
 import search.Search;
@@ -37,12 +38,13 @@ public class RecallCheck {
     private Logger logger;
 
     public RecallCheck(Path index, Path queries, Path results) throws IOException,
-                                                                                            XPathExpressionException,
-                                                                                            ParserConfigurationException,
-                                                                                            SAXException,
-                                                                                            InterruptedException,
-                                                                                            ParseException,
-                                                                                            SearchConfigException{
+                                                                      XPathExpressionException,
+                                                                      ParserConfigurationException,
+                                                                      SAXException,
+                                                                      InterruptedException,
+                                                                      ParseException,
+                                                                      SearchConfigException,
+                                                                      ConvertConfigException{
         this(index, queries, results, new ConvertConfig(), ProjectLogger.getLogger());
     }
 
@@ -52,7 +54,8 @@ public class RecallCheck {
                                                                       SAXException,
                                                                       InterruptedException,
                                                                       ParseException,
-                                                                      SearchConfigException{
+                                                                      SearchConfigException,
+                                                                      ConvertConfigException{
         this(index, queries, results, config, ProjectLogger.getLogger());
     }
 
@@ -62,7 +65,8 @@ public class RecallCheck {
                                                                                      SAXException,
                                                                                      InterruptedException,
                                                                                      ParseException,
-                                                                                     SearchConfigException{
+                                                                                     SearchConfigException,
+                                                                                     ConvertConfigException{
         Search searcher = new Search(index, logger, config);
         this.logger = logger;
         boolean increasing = true;
@@ -159,6 +163,10 @@ public class RecallCheck {
         } catch (SearchConfigException e) {
             // TODO Auto-generated catch block
             System.err.println("Config files did not match");
+            e.printStackTrace();
+        } catch (ConvertConfigException e) {
+            // TODO Auto-generated catch block
+            System.err.println("Config file not found");
             e.printStackTrace();
         }
     }

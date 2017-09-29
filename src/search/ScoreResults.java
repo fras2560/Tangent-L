@@ -90,6 +90,7 @@ public class ScoreResults {
         Float N = (float) 0.0;
         Iterator<Entry<String, ArrayList<Result>>> it = this.results.entrySet().iterator();
         while (it.hasNext()) {
+            @SuppressWarnings("rawtypes")
             Map.Entry pair = (Map.Entry)it.next();
             n = (float) 0.0;
             R = (float) 0.0;
@@ -138,6 +139,7 @@ public class ScoreResults {
         Float r = (float) 0.0;
         Iterator<Entry<String, ArrayList<Result>>> it = this.results.entrySet().iterator();
         while (it.hasNext()) {
+            @SuppressWarnings("rawtypes")
             Map.Entry pair = (Map.Entry)it.next();
             precision = (float) 0.0;
             count = (float) 0.0;

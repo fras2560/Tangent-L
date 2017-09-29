@@ -359,7 +359,7 @@ public class ConvertConfig {
      * Loads a config file from the direcotyr given
      * @param directory the directory to save the config file
      */
-    public void loadConfig(Path directory) throws IOException{
+    public void loadConfig(Path directory) throws IOException, ConvertConfigException{
         Path filename = Paths.get(directory.toString(), ConvertConfig.FILENAME);
         File file = filename.toFile();
         // check to see if file exists
@@ -388,24 +388,18 @@ public class ConvertConfig {
             }
             fileReader.close();
         }else{
-            // try to parse the config file name from the directory string
-            file = directory.toFile();
-            String name = file.getName();
-            if (!name.equals("base")){
-                String[] parts = name.split(ConvertConfig.DELIMINTER);
-                for (String attribute: parts){
-                    attribute = attribute.toUpperCase().trim();
-                    if (attribute.contains(ConvertConfig.WINDOW_SIZE)){
-                        String[] number = attribute.split(ConvertConfig.SEPERATOR);
-                        if (number.length > 2){
-                            this.setWindowSize(Integer.parseInt((number[1])));
-                        }
-                    }else{
-                        this.flipBit(attribute);
-                    }
-                }
-            }
-            this.saveConfig(directory);
+            throw new ConvertConfigException("Index did not have config");
+        }
+    }
+
+    public class ConvertConfigException extends Exception{
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        public ConvertConfigException(String message){
+            super(message);
         }
     }
 
