@@ -16,7 +16,7 @@ WINDOWS = "nt"
 if os.name == WINDOWS:
     ENCODING = "utf-8"
 else:
-    ENCOING = "utf-8"
+    ENCODING = "utf-8"
 
 def convert_math_expression(mathml,
                             window_size=1,
