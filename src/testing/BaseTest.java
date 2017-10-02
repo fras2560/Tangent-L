@@ -49,7 +49,7 @@ public class BaseTest {
             // loop through every result of the
             doc = searcher.getSearcher().doc(hit.doc);
             // make sure it is in the expected list
-            System.out.println(expect.get(index) + " " +  doc.get("path"));
+            System.out.println(expect.get(index) + " " +  Functions.parseTitle(doc.get("path")));
             if (!expect.get(index).equals(Functions.parseTitle(doc.get("path")))){
                 same = false;
                 break;

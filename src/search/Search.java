@@ -54,9 +54,9 @@ public class Search {
     private QueryBuilder builder;
     private ConvertConfig config;
     private boolean synonym;
+    private IndexReader reader;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
-
     public Search(Path index) throws IOException, SearchConfigException, ConvertConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig());
     }
@@ -86,13 +86,17 @@ public class Search {
             System.out.println(config + " vs " + indexConfig);
             throw new SearchConfigException("Config did not match index");
         }
-        IndexReader reader = DirectoryReader.open(FSDirectory.open(index));
+        this.reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
         Similarity similarity = MathSimilarity.getSimilarity();
         this.searcher.setSimilarity(similarity);
         this.builder = new QueryBuilder(new MathAnalyzer(config));
         this.config = config;
         this.logger = logger;
+    }
+
+    public void close() throws IOException {
+        this.reader.close();
     }
 
     public ArrayList<String> searchQueryFiles(MathQuery mathQuery) throws IOException{

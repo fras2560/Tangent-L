@@ -22,6 +22,13 @@ public class TestParseTitle {
     }
 
     @Test
+    public void testParseTitleWindows() {
+        String test = "C:\\Users\\Dallas\\git\\UWResearch\\resources\\test\\index_test_1\\documents\\1301.6848_1_17.xhtml";
+        String expect = "1301.6848_1_17";
+        assertEquals(Functions.parseTitle(test), expect);
+    }
+
+    @Test
     public void testCreateTempName(){
         Path test = Paths.get("/home/d6fraser/git/UWResearch/resources/test/index_test_1/documents/1301.6848_1_17.xhtml");
         Path expect = Paths.get("/home/d6fraser/git/UWResearch/resources/test/index_test_1/documents/1301.6848_1_17_temp.xhtml");

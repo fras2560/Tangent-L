@@ -29,10 +29,12 @@ public class TestJudgements {
     public void test() {
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
-                           "results",
-                           "NTCIR12-ArXiv-Math.dat");
+                           "test",
+                           "index_test_1",
+                           "judgements",
+                           "judgements.txt");
         Judgements r = new Judgements(p.toFile());
-        assertEquals(r.length(), 4251);
+        assertEquals(r.length(), 3);
     }
 
     @Test
@@ -53,7 +55,9 @@ public class TestJudgements {
     public void testQuery(){
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
-                           "results",
+                           "test",
+                           "index_test_1",
+                           "judgements",
                            "NTCIR12-ArXiv-Math.dat");
         Judgements r = new Judgements(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
@@ -69,8 +73,10 @@ public class TestJudgements {
     public void testRecallCheck(){
         Path p = Paths.get(System.getProperty("user.dir"),
                            "resources",
-                           "results",
-                           "NTCIR12-ArXiv-Math.dat");
+                           "test",
+                           "index_test_1",
+                           "judgements",
+                            "NTCIR12-ArXiv-Math.dat");
         Judgements r = new Judgements(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         ArrayList<String> results = new ArrayList<String>(); 

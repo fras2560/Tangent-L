@@ -99,10 +99,11 @@ public class IndexFiles {
         // you're done adding documents to it):
         //
         // writer.forceMerge(1);
-        writer.close();
         Date end = new Date();
         this.logger.log(Level.INFO, end.getTime() - start.getTime() + " total milliseconds");
         config.saveConfig(indexPath);
+        writer.close();
+        dir.close();
       } catch (IOException e) {
         this.logger.log(Level.WARNING, " caught a " + e.getClass() + "\n with message: " + e.getMessage());
       }

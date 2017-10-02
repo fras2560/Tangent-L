@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Functions {
 
     public static String parseTitle(String title){
-        String[] parts = title.split("/");
+        String[] parts = title.split("/|\\\\");
         String filename = parts[parts.length -1];
         String[] temp = filename.split("\\.");
         String[] nameparts = Arrays.copyOfRange(temp, 0, temp.length - 1);

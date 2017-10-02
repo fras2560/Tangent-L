@@ -28,12 +28,22 @@ import index.ConvertMathML;
 public class TestConvert {
     @Test
     public void test() {
-        Path p = Paths.get(System.getProperty("user.dir"), "resources", "temp", "32 (number).mml");
+        Path p = Paths.get(System.getProperty("user.dir"),
+                           "resources",
+                           "test",
+                           "index_test_1",
+                           "documents",
+                           "1301.6848_1_17.xhtml");
         System.out.println(p.toString());
         ConvertMathML math =  new ConvertMathML(p);
         try {
             Path result = math.convert();
-            Path expect = Paths.get(System.getProperty("user.dir"), "resources", "temp", "32 (number)_temp.mml");
+            Path expect = Paths.get(System.getProperty("user.dir"),
+                                    "resources",
+                                    "test",
+                                    "index_test_1",
+                                    "documents",
+                                    "1301.6848_1_17_temp.xhtml");
             System.out.println("Result: " + result.toString());
             System.out.println("Expect: " + expect.toString());
             assertEquals(result, expect);

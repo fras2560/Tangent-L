@@ -97,19 +97,27 @@ public class ConvertMathML {
             this.logger.log(Level.FINEST, s);
             
         }
-        Process proc = Runtime.getRuntime().exec(command);
+        Process proc;
+        try {
+            proc = Runtime.getRuntime().exec(command);
+        } catch (IOException e){
+            this.logger.log(Level.WARNING, "Unable to find python3 using python command");
+            program[0] = "python";
+            command = ArrayUtils.addAll(program,attributes);
+            proc = Runtime.getRuntime().exec(command);
+        }
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
         // read the output from the command
         this.logger.log(Level.FINEST, "Here is the standard output of the command:\n");
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            this.logger.log(Level.FINEST, s);
+            this.logger.log(Level.INFO, s);
         }
         // read any errors from the attempted command
         this.logger.log(Level.FINEST, "Here is the standard error of the command:\n");
         while ((s = stdError.readLine()) != null) {
-            this.logger.log(Level.FINEST, s);
+            this.logger.log(Level.WARNING, s);
         }
         proc.waitFor();
         return new_file;

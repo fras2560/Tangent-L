@@ -3,13 +3,16 @@ import re
 import string
 import io
 import xml
+import os
+import codecs
+import platform
 from bs4 import BeautifulSoup
 from xml.parsers import expat
 from mathsymbol import MathSymbol
 from symboltree import SymbolTree
 from latex_mml import LatexToMathML
 from exceptions import UnknownTagException
-
+from utility import uprint
 __author__ = 'Nidhin, FWTompa'
 
 ## TODO: produce cleaned_file_content for text indexing on a separate pass (called separately in Version 0.2)
@@ -132,12 +135,12 @@ class MathExtractor:
         """
         if (len(elem) == 0):
             return None
-
         elem_content = io.StringIO(elem) # treat the string as if a file
         parser = xml.etree.ElementTree.XMLParser(encoding="utf-8")
         root = xml.etree.ElementTree.parse(elem_content,
                                            parser=parser).getroot()
-        print("parse_from_mathml tree: " + xml.etree.ElementTree.tostring(root,encoding="unicode"))
+        mmathml = xml.etree.ElementTree.tostring(root, encoding="unicode")
+        uprint("parse_from_mathml tree: " + mmathml)
         return MathSymbol.parse_from_mathml(root)
 
     @classmethod

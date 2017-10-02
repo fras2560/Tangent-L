@@ -7,22 +7,39 @@ Purpose: To test the convert of mathml to Tangent Tuples
 '''
 import unittest
 import os
-from tangent.convert import convert_math_expression,\
-                            check_node,\
-                            check_wildcard,\
-                            determine_node,\
-                            expand_node_with_wildcards,\
-                            EDGE_PAIR_NODE, COMPOUND_NODE, \
-                            EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
-                            WILDCARD_MOCK, WILDCARD
-
+WINDOWS = "nt"
+try:
+    from tangent.convert import convert_math_expression,\
+                                check_node,\
+                                check_wildcard,\
+                                determine_node,\
+                                expand_node_with_wildcards,\
+                                EDGE_PAIR_NODE, COMPOUND_NODE, \
+                                EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
+                                WILDCARD_MOCK, WILDCARD
+except ImportError:
+    from convert import convert_math_expression,\
+                                check_node,\
+                                check_wildcard,\
+                                determine_node,\
+                                expand_node_with_wildcards,\
+                                EDGE_PAIR_NODE, COMPOUND_NODE, \
+                                EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
+                                WILDCARD_MOCK, WILDCARD
 
 class TestBase(unittest.TestCase):
     def loadFile(self, math_file):
-        with open(math_file) as f:
-            lines = []
-            for line in f:
-                lines.append(line)
+        if os.name == WINDOWS:
+            with open(math_file, encoding="utf8") as f:
+                lines = []
+                for line in f:
+                    lines.append(line)
+        
+        else:
+            with open(math_file) as f:
+                lines = []
+                for line in f:
+                    lines.append(line)
         return " ".join(lines)
 
     def log(self, out):

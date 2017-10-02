@@ -59,6 +59,7 @@ public class TestIndexSynonyms extends BaseTest{
             // try opening the index if no errors are raised should be fine
             IndexReader reader = DirectoryReader.open(FSDirectory.open(this.index));
             new IndexSearcher(reader);
+            reader.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

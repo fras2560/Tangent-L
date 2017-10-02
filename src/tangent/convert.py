@@ -1,8 +1,9 @@
-from math_extractor import MathExtractor
-from mathdocument import MathDocument
 import argparse
 import logging
 import sys
+import os
+from math_extractor import MathExtractor
+from mathdocument import MathDocument
 TERMINAL_NODE = "terminal_node"
 COMPOUND_NODE = "compound_node"
 EDGE_PAIR_NODE = "edge_pair"
@@ -11,7 +12,11 @@ SYMBOL_PAIR_NODE = "symbol_pair"
 EDGES = ['n', 'a', 'b', 'c', 'o', 'u', 'd', 'w', 'e']
 WILDCARD_MOCK = "?x"
 WILDCARD = "*"
-
+WINDOWS = "nt"
+if os.name == WINDOWS:
+    ENCODING = "utf-8"
+else:
+    ENCOING = "utf-8"
 
 def convert_math_expression(mathml,
                             window_size=1,
@@ -199,7 +204,7 @@ def parse_file(filename,
     """
 
     (ext, content) = MathDocument.read_doc_file(filename)
-    with open(output_file, "w+") as out:
+    with open(output_file, "w+", encoding=ENCODING) as out:
         while len(content) != 0:
             (start, end) = MathExtractor.next_math_token(content)
             if start == -1:

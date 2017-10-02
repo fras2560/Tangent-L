@@ -65,6 +65,12 @@ public class TestSearchCompatible extends BaseTest{
     @After
     public void tearDown(){
         // remove the index created
+        try {
+            this.searcher.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.deleteDirectory(this.index);
     }
 
