@@ -103,7 +103,6 @@ public class TestConfig extends BaseTest {
     @Test
     public void testToString() {
         ConvertConfig config = new ConvertConfig();
-        
         assertEquals(config.toString(), "base");
         config.flipBit(ConvertConfig.COMPOUND);
         assertEquals(config.toString(), " -compound_symbols".toUpperCase());
@@ -128,7 +127,9 @@ public class TestConfig extends BaseTest {
         config.flipBit(ConvertConfig.LOCATION);
         config.setWindowSize(2);
         assertEquals(config.toString(), " -window_size:2".toUpperCase());
-        
+        config.setWindowSize(1);
+        config.flipBit(ConvertConfig.SYMBOLS);
+        assertEquals(config.toString(), " -!symbol_pairs".toUpperCase());
     }
 
     @Test
@@ -183,6 +184,13 @@ public class TestConfig extends BaseTest {
         assertEquals(config.compatible(compare), true);
         assertEquals(compare.compatible(config), false);
         config.setBooleanAttribute(ConvertConfig.UNBOUNDED, false);
+        // symbol pairs is backwards compatible
+        config.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
+        assertEquals(config.compatible(compare), true);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.SYMBOLS, false);
+        assertEquals(compare.compatible(config), false);
+        
     }
 
     @Test

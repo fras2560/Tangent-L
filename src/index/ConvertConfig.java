@@ -45,6 +45,7 @@ public class ConvertConfig {
     private boolean unbounded;
     private boolean location;
     private boolean synonyms;
+    private boolean symbol_pairs;
     private int window_size;
     /*
      * The possible features that Tangent can use
@@ -57,6 +58,7 @@ public class ConvertConfig {
     public final static String UNBOUNDED = "UNBOUNDED";
     public final static String LOCATION = "LOCATION";
     public final static String SYNONYMS = "SYNONYMS";
+    public final static String SYMBOLS = "SYMBOL_PAIRS";
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
@@ -78,6 +80,7 @@ public class ConvertConfig {
         this.unbounded = false;
         this.location = false;
         this.synonyms = false;
+        this.symbol_pairs = true;
     }
 
     @Override
@@ -108,7 +111,8 @@ public class ConvertConfig {
                 && this.eol == c.eol
                 && this.shortened == c.shortened
                 && this.window_size == c.window_size
-                && this.synonyms == c.synonyms;
+                && this.synonyms == c.synonyms
+                && this.symbol_pairs == c.symbol_pairs;
     }
 
     /*
@@ -134,6 +138,8 @@ public class ConvertConfig {
             this.location = !this.location;
         }else if (attribute.equals(ConvertConfig.SYNONYMS)){
             this.synonyms = !this.synonyms;
+        }else if (attribute.equals(ConvertConfig.SYMBOLS)){
+            this.symbol_pairs = !this.symbol_pairs;
         }
     }
 
@@ -170,6 +176,8 @@ public class ConvertConfig {
             result = this.location;
         }else if (attribute.equals(ConvertConfig.SYNONYMS)){
             result = this.synonyms;
+        }else if (attribute.equals(ConvertConfig.SYMBOLS)){
+            result = this.symbol_pairs;
         }
         return result;
     }
@@ -204,6 +212,8 @@ public class ConvertConfig {
             this.location = setting;
         }else if(attribute.equals(ConvertConfig.SYNONYMS)){
             this.synonyms = setting;
+        }else if (attribute.equals(ConvertConfig.SYMBOLS)){
+            this.symbol_pairs = setting;
         }
     }
 
@@ -247,6 +257,9 @@ public class ConvertConfig {
         if (this.synonyms){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS.toLowerCase());
         }
+        if (!this.symbol_pairs){
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYMBOLS.toLowerCase());
+        }
         if (this.window_size > 1){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE.toLowerCase());
             commands.add(Integer.toString(this.window_size));
@@ -271,6 +284,8 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.TERMINAL, this.terminal_symbols);
         config.setBooleanAttribute(ConvertConfig.LOCATION, this.location);
         config.setBooleanAttribute(ConvertConfig.UNBOUNDED, this.unbounded);
+        config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbol_pairs);
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, this.synonyms);
         config.setWindowSize(this.window_size);
         return config;
     }
@@ -315,6 +330,9 @@ public class ConvertConfig {
             // window size should be bigger or same size
             // unbounded is not a substitute for this
             result = false;
+        }else if (this.symbol_pairs != true && this.symbol_pairs != config.symbol_pairs){
+            // symbol pairs is backwards compatible
+            result = false;
         }
         return result;
     }
@@ -350,6 +368,8 @@ public class ConvertConfig {
         fileWriter.write(ConvertConfig.UNBOUNDED + ConvertConfig.SEPERATOR + this.unbounded);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.window_size);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbol_pairs);
         fileWriter.newLine();
         fileWriter.close();
         
@@ -413,6 +433,9 @@ public class ConvertConfig {
         String result = "";
         if (!this.shortened){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SHORTENED;
+        }
+        if (!this.symbol_pairs){
+            result = result + " " + ConvertConfig.DELIMINTER + "!" +ConvertConfig.SYMBOLS;
         }
         if (this.location){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.LOCATION;

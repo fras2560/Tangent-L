@@ -18,8 +18,10 @@ if os.name == WINDOWS:
 else:
     ENCODING = "utf-8"
 
+
 def convert_math_expression(mathml,
                             window_size=1,
+                            symbol_pairs=True,
                             eol=False,
                             compound_symbols=False,
                             terminal_symbols=False,
@@ -33,6 +35,7 @@ def convert_math_expression(mathml,
     Parameters:
         mathml: the math expression (string)
         (window_size): The size of the path between nodes for symbols pairs
+        (symbol_pairs): True will include symbol pairs
         (eol): True will included eol nodes
         (compound_symbols): True to include compound symbols nodes
         (terminal_symbols): True to include terminal symbols nodes
@@ -54,6 +57,7 @@ def convert_math_expression(mathml,
     pairs = tree_root.get_pairs("",
                                 window_size,
                                 eol=eol_check,
+                                symbol_pairs=symbol_pairs,
                                 compound_symbols=compound_symbols,
                                 terminal_symbols=terminal_symbols,
                                 edge_pairs=edge_pairs,
@@ -187,6 +191,7 @@ def parse_file(filename,
                file_id,
                output_file,
                window_size=1,
+               symbol_pairs=True,
                eol=False,
                compound_symbols=False,
                terminal_symbols=False,
@@ -215,6 +220,7 @@ def parse_file(filename,
                 paragraph = format_paragraph(content[0:start])
                 ex = convert_math_expression(content[start:end],
                                              window_size=1,
+                                             symbol_pairs=symbol_pairs,
                                              eol=eol,
                                              compound_symbols=compound_symbols,
                                              terminal_symbols=terminal_symbols,
@@ -244,6 +250,11 @@ if __name__ == "__main__":
                         '--outfile',
                         help='The file to output to',
                         required=True)
+    parser.add_argument("-symbol_pairs",
+                        dest="symbol_pairs",
+                        action="store_false",
+                        help="Do not use symbol pairs",
+                        default=True)
     parser.add_argument('-eol',
                         dest="eol",
                         action="store_true",
@@ -304,6 +315,7 @@ if __name__ == "__main__":
                0,
                outfile,
                window_size=args.window_size,
+               symbol_pairs=args.symbol_pairs,
                eol=args.eol,
                compound_symbols=args.compound_symbols,
                terminal_symbols=args.terminal_symbols,

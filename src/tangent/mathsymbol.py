@@ -74,6 +74,7 @@ class MathSymbol:
     def get_pairs(self,
                   prefix,
                   window,
+                  symbol_pairs=True,
                   compound_symbols=False,
                   terminal_symbols=False,
                   edge_pairs=False,
@@ -146,22 +147,24 @@ class MathSymbol:
                 # if less than one then information captured
                 # by symbol pairs
                 ret.append((self.tag, str(available_edges)))
-        for child, label in children:
-            if child:
-                ret.extend(filter(lambda x: x is not None,
-                                  map(mk_helper(loc),
-                                      child.get_symbols(label,
-                                                        window,
-                                                        unbounded=unbounded))))
-                ret.extend(child.get_pairs(prefix+label,
-                                           window,
-                                           eol=eol,
-                                           compound_symbols=compound_symbols,
-                                           terminal_symbols=terminal_symbols,
-                                           edge_pairs=edge_pairs,
-                                           unbounded=unbounded,
-                                           shortened=shortened,
-                                           include_location=include_location))
+        if symbol_pairs:
+            for child, label in children:
+                if child:
+                    ret.extend(filter(lambda x: x is not None,
+                                      map(mk_helper(loc),
+                                          child.get_symbols(label,
+                                                            window,
+                                                            unbounded=unbounded))))
+                    ret.extend(child.get_pairs(prefix+label,
+                                               window,
+                                               eol=eol,
+                                               symbol_pairs=symbol_pairs,
+                                               compound_symbols=compound_symbols,
+                                               terminal_symbols=terminal_symbols,
+                                               edge_pairs=edge_pairs,
+                                               unbounded=unbounded,
+                                               shortened=shortened,
+                                               include_location=include_location))
         if terminal_symbols and len(ret) == 0:
             # add the terminal symbols
             ret.append((self.tag, "!0"))

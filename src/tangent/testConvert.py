@@ -16,7 +16,7 @@ try:
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
-                                WILDCARD_MOCK, WILDCARD
+                                WILDCARD_MOCK
 except ImportError:
     from convert import convert_math_expression,\
                                 check_node,\
@@ -25,7 +25,8 @@ except ImportError:
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
-                                WILDCARD_MOCK, WILDCARD
+                                WILDCARD_MOCK
+
 
 class TestBase(unittest.TestCase):
     def loadFile(self, math_file):
@@ -34,7 +35,6 @@ class TestBase(unittest.TestCase):
                 lines = []
                 for line in f:
                     lines.append(line)
-        
         else:
             with open(math_file) as f:
                 lines = []
@@ -45,6 +45,30 @@ class TestBase(unittest.TestCase):
     def log(self, out):
         if self.debug:
             print(out)
+
+
+class TestSymbolPairs(TestBase):
+    def setUp(self):
+        self.debug = True
+        self.file = os.path.join(os.getcwd(), "testFiles", "test_wildcard.xml")
+        self.mathml = self.loadFile(self.file)
+
+    def tearDown(self):
+        pass
+
+    def testConvert(self):
+        results = convert_math_expression(self.mathml, symbol_pairs=False)
+        expect = []
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
+
+    def testConvertNotFalse(self):
+        results = convert_math_expression(self.mathml,
+                                          symbol_pairs=False,
+                                          eol=True)
+        expect = ["""#('v!t','!0','n')#"""]
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
 
 
 class TestDifferentWildcardReplacements(TestBase):
