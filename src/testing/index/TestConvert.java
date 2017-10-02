@@ -20,24 +20,74 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import index.ConvertConfig;
 import index.ConvertMathML;
 
 
 public class TestConvert {
+    Path path;
+    Path temp_file;
+    @Before
+    public void setUp(){
+        this.path = Paths.get(System.getProperty("user.dir"),
+                              "resources",
+                              "test",
+                              "index_test_1",
+                              "documents",
+                              "1301.6848_1_17.xhtml");
+        this.temp_file = null;
+    }
+
+    @After
+    public void tearDown(){
+        if (this.temp_file != null){
+            this.temp_file.toFile().delete();
+        }
+    }
+
+    @Test
+    public void testConvertSymbolsPairs(){
+        ConvertConfig config = new ConvertConfig();
+        config.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
+        ConvertMathML math = new ConvertMathML(this.path);
+        try{
+            Path result = math.convert(config);
+            this.temp_file = result;
+            Path expect = Paths.get(System.getProperty("user.dir"),
+                                    "resources",
+                                    "test",
+                                    "index_test_1",
+                                    "documents",
+                                    "1301.6848_1_17_temp.xhtml");
+            System.out.println("Result: " + result.toString());
+            System.out.println("Expect: " + expect.toString());
+            assertEquals(result, expect);
+            assertEquals(result.toFile().exists(), true);
+            assertEquals(result.toFile().delete(), true);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+            fail("Threw IOException");
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+            fail("Threw InterruptException");
+        }
+    }
+
     @Test
     public void test() {
-        Path p = Paths.get(System.getProperty("user.dir"),
-                           "resources",
-                           "test",
-                           "index_test_1",
-                           "documents",
-                           "1301.6848_1_17.xhtml");
-        System.out.println(p.toString());
-        ConvertMathML math =  new ConvertMathML(p);
+        System.out.println(this.path.toString());
+        ConvertMathML math =  new ConvertMathML(this.path);
         try {
             Path result = math.convert();
+            this.temp_file = result;
             Path expect = Paths.get(System.getProperty("user.dir"),
                                     "resources",
                                     "test",
