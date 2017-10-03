@@ -66,7 +66,24 @@ class TestSymbolPairs(TestBase):
         results = convert_math_expression(self.mathml,
                                           symbol_pairs=False,
                                           eol=True)
-        expect = ["""#('v!t','!0','n')#"""]
+        expect = ["""#('*','!0','n')#"""]
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
+
+    def testConvertEdgePairs(self):
+        file = os.path.join(os.getcwd(), "testFiles", "test_edge_pair.xml")
+        mathml = self.loadFile(file)
+        results = convert_math_expression(mathml,
+                                          symbol_pairs=False,
+                                          edge_pairs=True)
+        expect = ["""#('n','a','v!k')#""",
+                  """#('n','n','/')#""",
+                  """#('n','n','n!2')#""",
+                  """#('n','a','n!2')#""",
+                  """#('n','n','gt')#""",
+                  """#('w','n','n!2')#""",
+                  """#('w','e','n!2')#""",
+                  """#('n','n','m!()1x2')#"""]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
 

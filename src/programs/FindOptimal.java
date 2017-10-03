@@ -112,7 +112,7 @@ public class FindOptimal {
                                             SAXException{
         this(documents, index, output, queries, results, ProjectLogger.getLogger(), greedy);
     }
-    
+
     /*
      * Class Constructor with both logger and recall setting
      * @param documents path to the directory of documents
@@ -147,6 +147,7 @@ public class FindOptimal {
         this.queries = queries;
         this.greedy = greedy;
     }
+
     /*
      * Updates the queries based uopon configuration
      * @param config Tangent features to be used when converting the queries
@@ -165,6 +166,7 @@ public class FindOptimal {
         this.mathQueries = queryLoader.getQueries();
         queryLoader.deleteFile();
     }
+
     /*
      * finds the optimal features to be used *recursive) and outputs the results to a file
      * @param config Tangent features to be used when converting the queries
@@ -250,6 +252,7 @@ public class FindOptimal {
         }
         return;
     }
+
     /*
      * Parses the title of the file
      * @param title title to parse
@@ -262,6 +265,7 @@ public class FindOptimal {
         String[] nameparts = Arrays.copyOfRange(temp, 0, temp.length - 1);
         return String.join(".", nameparts);
     }
+
     /*
      * Returns the reciprocal rank of the results
      * @param searcher searcher that produced the results
@@ -290,6 +294,7 @@ public class FindOptimal {
         }
         return reciprocal;
     }
+
     /*
      * Returns 1 if the result is found
      * @param searcher searcher that produced the results
@@ -316,6 +321,7 @@ public class FindOptimal {
         }
         return found;
     }
+
     /*
      * Scores the index
      * @param index the path to the created index
@@ -365,10 +371,12 @@ public class FindOptimal {
         double[] results = {found_mean / (double) count, reciprocal_mean / (double) count};
         return results;
     }
+
     /*
      * Returns a path to the index that is created using the config features
      * @param config the features to be used in the index
      * @exception IOException
+     * @exception ConvertConfigException
      * @return the path to the created index
      */
     public Path createIndex(ConvertConfig config) throws IOException, ConvertConfigException{
@@ -397,6 +405,13 @@ public class FindOptimal {
         this.logger.log(Level.INFO, "Directory: " + directoryPath);
         return directoryPath;
     }
+
+    /*
+     * Returns a path to an Index that used a compatible config file
+     * @param config the config that needs to be compatible with index
+     * @exception ConvertConfigException
+     * @return the path to the compatible index
+     */
     public Path findCompatible(ConvertConfig config) throws ConvertConfigException{
         Path compatible = null;
         File dir = new File(this.index.toString());
@@ -413,13 +428,14 @@ public class FindOptimal {
                }
                if (indexConfig.compatible(config)){
                    compatible = child.toPath();
-                   System.out.println("Two compatible config:" + indexConfig + " " + config);
+                   System.out.println("Two compatible config:" + indexConfig + " TO " + config);
                    break;
                }
             }
         }
         return compatible;
     }
+
     public static void main(String[] args) throws IOException{
         String usage = "Usage:\tjava programs.FindOptimal [-indexDirectory dir] [-queries file] [-results file] [-documents dir] [-logFile file]";
         if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
@@ -460,14 +476,18 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         // only need to flip a certain number of features
-        features.add(ConvertConfig.SHORTENED);
-        features.add(ConvertConfig.LOCATION);
-        // this are all backwards compatible
-        config.flipBit(ConvertConfig.COMPOUND);
-        config.flipBit(ConvertConfig.TERMINAL);
+//        features.add(ConvertConfig.SYMBOLS);
+//        features.add(ConvertConfig.SHORTENED);
+//        features.add(ConvertConfig.LOCATION);
+//        features.add(ConvertConfig.COMPOUND);
+//        features.add(ConvertConfig.TERMINAL);
+//        features.add(ConvertConfig.EDGE);
+//        features.add(ConvertConfig.SYNONYMS);
+//        features.add(ConvertConfig.UNBOUNDED);
+        features.add(ConvertConfig.SYMBOLS);
         config.flipBit(ConvertConfig.EDGE);
-        config.flipBit(ConvertConfig.SYNONYMS);
-        config.flipBit(ConvertConfig.UNBOUNDED);
+        
+        // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {
             // write out the queries
@@ -482,7 +502,8 @@ public class FindOptimal {
                                  indexDirectory,
                                  outputWriter,
                                  queries,
-                                 results);
+                                 results,
+                                 false);
             fo.optimize(config, features);
             outputWriter.close();
         } catch (IOException e) {

@@ -25,9 +25,9 @@ public class ExplainResult {
             System.exit(0);
         }
         // default arguments
-        Path indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal", "-compound_symbols");
+        Path indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal", "-COMPOUND_SYMBOLS-TERMINAL_SYMBOLS-EDGE_PAIRS-UNBOUNDED-SYNONYMS");
         Path output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "explain.txt");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia-Sample.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
         Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "explainResults.log");
         Path documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
@@ -51,29 +51,29 @@ public class ExplainResult {
           }
         }
         // setup the logger
-        ProjectLogger.setLevel(Level.INFO);
+        ProjectLogger.setLevel(Level.FINER);
         ProjectLogger.setLogFile(logFile);
         // set the config file
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         // this are all backwards compatible
-        config.flipBit(ConvertConfig.COMPOUND);
-        System.out.println(config);
         BufferedWriter outputWriter = null;
         try {
+            // load the config file
+            config.loadConfig(indexDirectory);
+            // explain the results
+            Search search = new Search(indexDirectory, config);
+            search.explainQueries(queries, 2);
+            // find the score
             // write out the queries
             File outputText = output.toFile();
-            outputText.createNewFile();
             FileOutputStream outputIS = new FileOutputStream(outputText);
             OutputStreamWriter osw = new OutputStreamWriter(outputIS);
             outputWriter = new BufferedWriter(osw);
-            // explain the results
-            Search search = new Search(indexDirectory, config);
-            search.explainQueries(queries);
-            // find the score
             FindOptimal fo = new FindOptimal(documents, indexDirectory, outputWriter, queries, results);
             double[] score = fo.scoreIndex(indexDirectory, config);
             System.out.println(score[0] + "," + score[1]);
+            outputWriter.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
             e.printStackTrace();

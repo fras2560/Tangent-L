@@ -200,6 +200,7 @@ public class Search {
         ArrayList<SearchResult> queryResults = this.searchQueries(queries, k);
         for (SearchResult queryResult : queryResults){
             // loop through each query and explain it
+            System.out.println("Returned: " + queryResult.hitsNumber());
             queryResult.explainResults(searcher);
         }
     }
@@ -228,6 +229,8 @@ public class Search {
             // loop through each query and explain it
             queryResult.explainResults(searcher, bw);
         }
+        bw.close();
+        fos.close();
     }
     
     public void recordQueries(Path queries, BufferedWriter queryWriter) throws IOException,

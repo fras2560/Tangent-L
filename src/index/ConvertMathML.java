@@ -112,12 +112,12 @@ public class ConvertMathML {
         this.logger.log(Level.FINEST, "Here is the standard output of the command:\n");
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            this.logger.log(Level.FINE, s);
+            this.logger.log(Level.FINEST, s);
         }
         // read any errors from the attempted command
         this.logger.log(Level.FINEST, "Here is the standard error of the command:\n");
         while ((s = stdError.readLine()) != null) {
-            this.logger.log(Level.SEVERE, s);
+            // this.logger.log(Level.SEVERE, s);
         }
         proc.waitFor();
         return new_file;

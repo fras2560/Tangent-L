@@ -113,7 +113,6 @@ public class RecallCheck {
             System.exit(0);
         }
         ConvertConfig config = new ConvertConfig();
-        config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
         // default values
         Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
         Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
@@ -138,6 +137,8 @@ public class RecallCheck {
             // setup the logger
             ProjectLogger.setLevel(Level.INFO);
             ProjectLogger.setLogFile(logFile);
+            // load the config from the index
+            config.loadConfig(index);
             // write out the queries
             // do the actual searching
             new RecallCheck(index, queries, results, config);

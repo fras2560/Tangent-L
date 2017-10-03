@@ -108,7 +108,6 @@ public class TimeSearch{
             System.exit(0);
         }
         ConvertConfig config = new ConvertConfig();
-        config.optimalConfig();
         // default values
         int precision = 1000;
         Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "config", "compound-unbounded-edge_pairs");
@@ -131,6 +130,7 @@ public class TimeSearch{
         }
         try {
             // setup the logger
+            config.loadConfig(index);
             ProjectLogger.setLevel(Level.INFO);
             ProjectLogger.setLogFile(logFile);
             // time all the different queries

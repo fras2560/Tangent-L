@@ -79,9 +79,9 @@ public class NTCIR_TEST {
             FileOutputStream ris = new FileOutputStream(resultsText);
             OutputStreamWriter rosw = new OutputStreamWriter(ris);
             resultsWriter = new BufferedWriter(rosw);
-            // setup the config file for searching
+            // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
-            config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+            config.loadConfig(index);
             // do the actual searching
             Search searcher = new Search(index, config);
             searcher.ntcirTest(queries, results, resultsWriter);

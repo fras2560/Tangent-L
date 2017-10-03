@@ -147,24 +147,25 @@ class MathSymbol:
                 # if less than one then information captured
                 # by symbol pairs
                 ret.append((self.tag, str(available_edges)))
-        if symbol_pairs:
-            for child, label in children:
-                if child:
+        for child, label in children:
+            if child:
+                if symbol_pairs:
                     ret.extend(filter(lambda x: x is not None,
                                       map(mk_helper(loc),
                                           child.get_symbols(label,
                                                             window,
-                                                            unbounded=unbounded))))
-                    ret.extend(child.get_pairs(prefix+label,
-                                               window,
-                                               eol=eol,
-                                               symbol_pairs=symbol_pairs,
-                                               compound_symbols=compound_symbols,
-                                               terminal_symbols=terminal_symbols,
-                                               edge_pairs=edge_pairs,
-                                               unbounded=unbounded,
-                                               shortened=shortened,
-                                               include_location=include_location))
+                                                            unbounded=unbounded
+                                                            ))))
+                ret.extend(child.get_pairs(prefix+label,
+                                           window,
+                                           eol=eol,
+                                           symbol_pairs=symbol_pairs,
+                                           compound_symbols=compound_symbols,
+                                           terminal_symbols=terminal_symbols,
+                                           edge_pairs=edge_pairs,
+                                           unbounded=unbounded,
+                                           shortened=shortened,
+                                           include_location=include_location))
         if terminal_symbols and len(ret) == 0:
             # add the terminal symbols
             ret.append((self.tag, "!0"))

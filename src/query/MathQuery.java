@@ -25,6 +25,7 @@ import utilities.ProjectLogger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -91,6 +92,28 @@ public class MathQuery {
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
 
+    public Query buildQuery(String[] terms, String field, PhraseQuery.Builder pq, boolean synonym){
+     // check if synonyms were indexed or not
+        Term tempQuery = null;
+        if (!synonym){
+            if (tempQuery == null){
+                pq.add(new Term(field, ""));
+            }
+        }else{
+            for(String term : terms){
+                term = term.trim();
+                System.out.println("Terms: " +  term);
+                if(!term.equals("")){
+                    tempQuery = new Term(field, term);
+                    pq.add(tempQuery);
+                }
+            }
+            if (tempQuery == null){
+                pq.add(new Term(field, ""));
+            }
+        }
+        return pq.build();
+    }
     public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym){
         // check if synonyms were indexed or not
         if (!synonym){
@@ -109,6 +132,7 @@ public class MathQuery {
             TermQuery tempQuery = null;
             for(String term : terms){
                 term = term.trim();
+                System.out.println("Terms: " +  term);
                 if(!term.equals("")){
                     tempQuery = new TermQuery(new Term(field, term));
                     bq.add(tempQuery, BooleanClause.Occur.SHOULD);
