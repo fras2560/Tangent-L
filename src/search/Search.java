@@ -74,10 +74,12 @@ public class Search {
                                                                           ConvertConfigException{
         // increase the clause count since formulas can be a slight bit longer
         BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
+        
         // remember if synonyms were used when indexing
         this.synonym = config.getSynonym();
-        // dont want synonyms if not needed if in the analyzor
-        config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
+        // dont want synonyms if not needed since it is in the analyzor
+        // prevent a memory leak, so copy it
+        this.config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
         // make sure the config and index are compatible
         ConvertConfig indexConfig = new ConvertConfig();
         indexConfig.loadConfig(index);

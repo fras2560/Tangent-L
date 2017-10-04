@@ -132,7 +132,6 @@ public class MathQuery {
             TermQuery tempQuery = null;
             for(String term : terms){
                 term = term.trim();
-                System.out.println("Terms: " +  term);
                 if(!term.equals("")){
                     tempQuery = new TermQuery(new Term(field, term));
                     bq.add(tempQuery, BooleanClause.Occur.SHOULD);
