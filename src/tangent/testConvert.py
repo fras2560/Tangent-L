@@ -364,7 +364,6 @@ class TestArxivQuery(TestBase):
     def testUnbounded(self):
         results = convert_math_expression(self.mathml, unbounded=True)
         expect = ['''#('*','=','n')#''',
-                  '''#('*','n!1')#''',
                   '''#('=','n!1','n')#''']
         self.log(results)
         self.assertEqual(" ".join(expect), results)

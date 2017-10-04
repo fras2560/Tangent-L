@@ -89,7 +89,13 @@ def check_node(node):
         # only need to look at first part
         check = not check_wildcard(node[0])
     elif node_type == SYMBOL_PAIR_NODE:
-        check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
+        # does it make sense to keep pairs of symbols with no path
+        # if one of those symbols is a wildcard
+        if len(node) == 2:
+            # if one is a wildcard the dont want to keep it
+            check = not(check_wildcard(node[0]) or check_wildcard(node[1]))
+        else:
+            check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
     elif node_type == EDGE_PAIR_NODE or node_type == COMPOUND_NODE:
         # keep them regardless at this point
         pass
@@ -152,17 +158,20 @@ def expand_node_with_wildcards(node):
     results = [node]
     node_type = determine_node(node)
     if node_type == SYMBOL_PAIR_NODE:
-        # expands to two nodes, one with first tag as wc and second tag as wc
-        temp = list(node)
-        remember = temp[0]
-        if (not check_wildcard(remember) and not check_wildcard(temp[1])):
-            temp[0] = WILDCARD_MOCK
-            results.append(tuple(temp))
-        # now do the second node
-        if (not check_wildcard(remember) and not check_wildcard(temp[1])):
-            temp[0] = remember
-            temp[1] = WILDCARD_MOCK
-            results.append(tuple(temp))
+        # if just two symbols (no path) then no point in expanding
+        if len(node) > 2:
+            # expands to two nodes
+            # one with first tag as wc and second tag as wc
+            temp = list(node)
+            remember = temp[0]
+            if (not check_wildcard(remember) and not check_wildcard(temp[1])):
+                temp[0] = WILDCARD_MOCK
+                results.append(tuple(temp))
+            # now do the second node
+            if (not check_wildcard(remember) and not check_wildcard(temp[1])):
+                temp[0] = remember
+                temp[1] = WILDCARD_MOCK
+                results.append(tuple(temp))
     elif node_type == COMPOUND_NODE:
         # add an expansion of the compound node
         # the node tag is replaced with a wildcard
