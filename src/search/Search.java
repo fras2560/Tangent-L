@@ -79,6 +79,7 @@ public class Search {
         this.synonym = config.getSynonym();
         // dont want synonyms if not needed since it is in the analyzor
         // prevent a memory leak, so copy it
+        this.config = config.copy();
         this.config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
         // make sure the config and index are compatible
         ConvertConfig indexConfig = new ConvertConfig();

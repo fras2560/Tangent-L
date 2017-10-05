@@ -202,6 +202,7 @@ public class FindOptimal {
         for(String feature : features){
             config.flipBit(feature);
             this.output.newLine();
+            System.out.println(config + " " + feature);
             indexPath = this.createIndex(config);
             results = this.scoreIndex(indexPath, config);
             this.output.write(config + "," + results[0] + "," + results[1]);
@@ -443,12 +444,24 @@ public class FindOptimal {
             System.exit(0);
         }
         // default arguments
-        Path documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
-        Path indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-        Path output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output.txt");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-        Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal.log");
+        boolean wiki = false;
+        Path documents, indexDirectory, output,queries, results, logFile;
+        if (!wiki){
+            documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
+            indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "findOptimal");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "output.txt");
+            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
+            results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "findOptimal.log");
+        }else{
+            documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
+            indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output.txt");
+            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+            results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal.log");
+            
+        }
         // check command line for override default methods
         for(int i = 0;i < args.length;i++) {
           if ("-index".equals(args[i])) {
@@ -476,16 +489,14 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         // only need to flip a certain number of features
-//        features.add(ConvertConfig.SYMBOLS);
-//        features.add(ConvertConfig.SHORTENED);
-//        features.add(ConvertConfig.LOCATION);
-//        features.add(ConvertConfig.COMPOUND);
-//        features.add(ConvertConfig.TERMINAL);
-//        features.add(ConvertConfig.EDGE);
-//        features.add(ConvertConfig.SYNONYMS);
-//        features.add(ConvertConfig.UNBOUNDED);
-        features.add(ConvertConfig.SYMBOLS);
+        features.add(ConvertConfig.SHORTENED);
+        features.add(ConvertConfig.LOCATION);
+        // start with these since they are compatible
         config.flipBit(ConvertConfig.EDGE);
+        config.flipBit(ConvertConfig.COMPOUND);
+        config.flipBit(ConvertConfig.UNBOUNDED);
+        config.flipBit(ConvertConfig.TERMINAL);
+        config.flipBit(ConvertConfig.SYNONYMS);
         
         // this are all backwards compatible
         BufferedWriter outputWriter = null;

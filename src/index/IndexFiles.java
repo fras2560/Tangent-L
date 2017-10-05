@@ -40,6 +40,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -65,6 +66,13 @@ public class IndexFiles {
                              Path docsPath,
                              boolean create,
                              ConvertConfig config) throws IOException{
+      this.indexDirectory(indexPath, docsPath, create, config, MathSimilarity.getSimilarity());
+  }
+  public void indexDirectory(Path indexPath,
+                             Path docsPath,
+                             boolean create,
+                             ConvertConfig config,
+                             Similarity simlarity) throws IOException{
       if (!Files.isReadable(docsPath)) {
           this.logger.log(Level.SEVERE, docsPath + ": File does not exist");
           throw new IOException("File does not exist");
@@ -75,7 +83,7 @@ public class IndexFiles {
         Directory dir = FSDirectory.open(indexPath);
         Analyzer analyzer = new MathAnalyzer(config);
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-        iwc.setSimilarity(MathSimilarity.getSimilarity());
+        iwc.setSimilarity(simlarity);
         if (create) {
           // Create a new index in the directory, removing any
           // previously indexed documents:

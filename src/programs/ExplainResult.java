@@ -55,7 +55,7 @@ public class ExplainResult {
         ProjectLogger.setLogFile(logFile);
         // set the config file
         ConvertConfig config = new ConvertConfig();
-        // lay out what features to use
+        // lay out what features to user
         // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {

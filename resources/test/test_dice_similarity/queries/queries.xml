@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topics xmlns="http://ntcir-math.nii.ac.jp/" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <topic>
+    <num>NTCIR12-MathIR-1</num>
+    <query>
+      <keyword id="w.0">Mean</keyword>
+      <keyword id="w.1">Mean</keyword>
+      <keyword id="w.2">Arithmetic</keyword>
+    </query>
+  </topic>
+</topics>
