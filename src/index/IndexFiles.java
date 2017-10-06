@@ -33,9 +33,11 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -198,9 +200,17 @@ public class IndexFiles {
         Set<String> bannedTags = new HashSet<String>();
         // Set<String> bannedTags = new HashSet();
         // bannedTags.add("Math");
-        doc.add(new TextField(Constants.FIELD, new HTMLStripCharFilter(new InputStreamReader(stream,
-                                                                                             StandardCharsets.UTF_8),
-                                                                  bannedTags)));
+        FieldType fieldType = new FieldType();
+        fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+        fieldType.setTokenized(true);
+        fieldType.setStoreTermVectors(true);
+        doc.add(new Field(Constants.FIELD,
+                          new HTMLStripCharFilter(new InputStreamReader(stream, StandardCharsets.UTF_8)),
+                          fieldType
+                          ));
+//        doc.add(new TextField(Constants.FIELD, new HTMLStripCharFilter(new InputStreamReader(stream,
+//                                                                                             StandardCharsets.UTF_8),
+//                                                                  bannedTags)));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());

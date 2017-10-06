@@ -54,9 +54,12 @@ public class TestDiceSimilarity extends BaseTest{
         }
         // create the index
         IndexFiles indexer = new IndexFiles();
-        indexer.indexDirectory(this.index, this.documents, true, new ConvertConfig(), new DiceSimilarity());
+        DiceSimilarity dice = new DiceSimilarity();
+        ConvertConfig config = new ConvertConfig();
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        indexer.indexDirectory(this.index, this.documents, true, config, dice);
         // init the searching object
-        this.searcher = new Search(this.index);
+        this.searcher = new Search(this.index, dice, config, true);
     }
 
     @After

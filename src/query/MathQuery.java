@@ -22,9 +22,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import utilities.Constants;
 import utilities.ProjectLogger;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -37,7 +40,8 @@ public class MathQuery {
     private ArrayList<String> terms;
     private Logger logger;
     private String fieldName;
-
+    private static final String BOOSTSYMBOL = "^";
+    
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
@@ -88,41 +92,54 @@ public class MathQuery {
         return String.join(" ", this.terms);
     }
 
-    public String toString(){
+    /*
+     * Prints a query to a String, with <code>field</code> assumed to be the
+     * default field and omitted
+     * (non-Javadoc)
+     * @see org.apache.lucene.search.Query#toString(java.lang.String)
+     * @return the string representation
+     */
+    public String toString(String field){
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
 
-    public Query buildQuery(String[] terms, String field, PhraseQuery.Builder pq, boolean synonym){
-     // check if synonyms were indexed or not
-        Term tempQuery = null;
-        if (!synonym){
-            if (tempQuery == null){
-                pq.add(new Term(field, ""));
-            }
-        }else{
-            for(String term : terms){
-                term = term.trim();
-                System.out.println("Terms: " +  term);
-                if(!term.equals("")){
-                    tempQuery = new Term(field, term);
-                    pq.add(tempQuery);
-                }
-            }
-            if (tempQuery == null){
-                pq.add(new Term(field, ""));
+    public ArrayList<String> uniqueTerms(String[] terms){
+        String termsString = String.join(" ", terms);
+        ArrayList<String> boostedTerms = new ArrayList<String>();
+        for (String term : terms){
+            if (!boostedTerms.contains(term)){
+                boostedTerms.add(term);
             }
         }
-        return pq.build();
+        return boostedTerms;
     }
+
     public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym){
+        return this.buildQuery(terms, field, bq, synonym, false);
+    }
+    
+    
+    
+    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym, boolean dice){
         // check if synonyms were indexed or not
+        float boost;
+        BoostQuery booster;
+        String termsString = String.join(" ", terms);
+        ArrayList<String> uniqueTerms = this.uniqueTerms(terms);
         if (!synonym){
             WildcardQuery tempQuery = null;
-            for (String term : terms){
+            for (String term : uniqueTerms){
                 term = term.trim(); 
                 if (!term.equals("")){
                     tempQuery = new WildcardQuery(new Term(field, term));
-                    bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+                    if (dice){
+                        bq.add(new DiceQuery(tempQuery, uniqueTerms), BooleanClause.Occur.SHOULD);
+                    }else{
+                        boost = StringUtils.countMatches(termsString, term);
+                        booster = new BoostQuery(tempQuery, boost);
+                        bq.add(booster, BooleanClause.Occur.SHOULD);
+                    }
+                    
                 }
             }
             if (tempQuery == null){
@@ -130,11 +147,17 @@ public class MathQuery {
             }
         }else{
             TermQuery tempQuery = null;
-            for(String term : terms){
+            for(String term : uniqueTerms){
                 term = term.trim();
                 if(!term.equals("")){
                     tempQuery = new TermQuery(new Term(field, term));
-                    bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+                    if (dice){
+                        bq.add(new DiceQuery(tempQuery, uniqueTerms), BooleanClause.Occur.SHOULD);
+                    }else{
+                        boost = StringUtils.countMatches(termsString, term);
+                        booster = new BoostQuery(tempQuery, boost);
+                        bq.add(booster, BooleanClause.Occur.SHOULD);
+                    }
                 }
             }
             if (tempQuery == null){

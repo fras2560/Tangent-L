@@ -57,24 +57,54 @@ public class Search {
     private IndexReader reader;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
+    private boolean dice;
     public Search(Path index) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), new ConvertConfig());
+        this(index, ProjectLogger.getLogger(), new ConvertConfig(), MathSimilarity.getSimilarity(), false);
+    }
+
+    public Search(Path index, Similarity similarity)throws IOException, SearchConfigException, ConvertConfigException{
+        this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity, false);
+    }
+
+    public Search(Path index, Similarity similarity, boolean dice)throws IOException,
+                                                                         SearchConfigException,
+                                                                         ConvertConfigException{
+        this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity, dice);
+    }
+
+    public Search(Path index, Similarity similarity, ConvertConfig config) throws IOException,
+                                                                                  SearchConfigException,
+                                                                                  ConvertConfigException{
+        this(index, ProjectLogger.getLogger(), config, similarity, false);
+    }
+
+    public Search(Path index, Similarity similarity, ConvertConfig config, boolean dice) throws IOException,
+                                                                                                SearchConfigException,
+                                                                                                ConvertConfigException{
+        this(index, ProjectLogger.getLogger(), config, similarity, dice);
     }
 
     public Search(Path index, Logger logger) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, logger, new ConvertConfig());
+        this(index, logger, new ConvertConfig(), MathSimilarity.getSimilarity(), false);
     }
 
     public Search(Path index, ConvertConfig config) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), config);
+        this(index, ProjectLogger.getLogger(), config, MathSimilarity.getSimilarity(), false);
     }
 
-    public Search(Path index, Logger logger, ConvertConfig config) throws IOException,
+    public Search(Path index, Logger logger, ConvertConfig config)throws IOException,
                                                                           SearchConfigException,
                                                                           ConvertConfigException{
+        this(index, logger, config, MathSimilarity.getSimilarity(), false);
+    }
+
+    public Search(Path index,
+                  Logger logger,
+                  ConvertConfig config,
+                  Similarity similarity,
+                  boolean dice) throws IOException, SearchConfigException, ConvertConfigException{
         // increase the clause count since formulas can be a slight bit longer
         BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
-        
         // remember if synonyms were used when indexing
         this.synonym = config.getSynonym();
         // dont want synonyms if not needed since it is in the analyzor
@@ -91,11 +121,11 @@ public class Search {
         }
         this.reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
-        Similarity similarity = MathSimilarity.getSimilarity();
         this.searcher.setSimilarity(similarity);
         this.builder = new QueryBuilder(new MathAnalyzer(config));
         this.config = config;
         this.logger = logger;
+        this.dice = dice;
     }
 
     public void close() throws IOException {
@@ -117,7 +147,8 @@ public class Search {
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
                                                     mathQuery.getFieldName(),
                                                     bq,
-                                                    this.synonym);
+                                                    this.synonym,
+                                                    this.dice);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
@@ -152,7 +183,8 @@ public class Search {
             Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
                                                     mathQuery.getFieldName(),
                                                     bq,
-                                                    this.synonym);
+                                                    this.synonym,
+                                                    this.dice);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
