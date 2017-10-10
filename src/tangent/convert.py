@@ -4,6 +4,7 @@ import sys
 import os
 from math_extractor import MathExtractor
 from mathdocument import MathDocument
+from tangent.htmlStriper import strip_tags
 TERMINAL_NODE = "terminal_node"
 COMPOUND_NODE = "compound_node"
 EDGE_PAIR_NODE = "edge_pair"
@@ -193,7 +194,7 @@ def expand_node_with_wildcards(node):
 
 def format_paragraph(paragraph):
     """Returns a formatted paragraph"""
-    return paragraph
+    return strip_tags(paragraph)
 
 
 def parse_file(filename,
