@@ -23,8 +23,7 @@ public class DiceSimilarity extends TFIDFSimilarity{
 
     @Override
     public float coord(int overlap, int maxOverlap) {
-        System.out.println("Overlap :" + overlap + " MaxOverlap: " + maxOverlap);
-      return 1f / maxOverlap;
+      return 1f;
     }
 
     @Override
