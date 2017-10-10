@@ -34,6 +34,7 @@ import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.FloatPoint;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
@@ -178,6 +179,12 @@ public class IndexFiles {
     try (InputStream stream = Files.newInputStream(new_file)) {
         // make a new, empty document
         Document doc = new Document();
+        // keep some stats about the number of math formula sizes
+        FileStatistics stats = new FileStatistics(new InputStreamReader(stream, StandardCharsets.UTF_8));
+        doc.add(new FloatPoint(Constants.WORD_COUNT, stats.getWordCount()));
+        doc.add(new FloatPoint(Constants.AVERAGE_FORMULA_SIZE, stats.averageFormulaSize()));
+        doc.add(new FloatPoint(Constants.MAX_FORMULA_SIZE, stats.maxFormulaSize()));
+        doc.add(new FloatPoint(Constants.FORMULA_COUNT, stats.getFormulaCount()));
         // Add the path of the file as a field named "path".  Use a
         // field that is indexed (i.e. searchable), but don't tokenize 
         // the field into separate words and don't index term frequency
@@ -205,9 +212,12 @@ public class IndexFiles {
         fieldType.setTokenized(true);
         fieldType.setStoreTermVectors(true);
         doc.add(new Field(Constants.FIELD,
-                          new HTMLStripCharFilter(new InputStreamReader(stream, StandardCharsets.UTF_8)),
+                          new InputStreamReader(stream, StandardCharsets.UTF_8),
                           fieldType
                           ));
+
+
+        
 //        doc.add(new TextField(Constants.FIELD, new HTMLStripCharFilter(new InputStreamReader(stream,
 //                                                                                             StandardCharsets.UTF_8),
 //                                                                  bannedTags)));
