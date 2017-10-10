@@ -44,7 +44,6 @@ public class FileStatistics {
                 token = token.trim();
             }
         }
-        is.close();
     }
 
     public float getWordCount(){
