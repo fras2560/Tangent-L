@@ -89,6 +89,7 @@ public class TestDiceSimilarity extends BaseTest{
             expect2.add("1303.3122_1_41");
             expect2.add("1307.6316_1_108");
             System.out.println(result);
+            System.out.println("---------------------");
             result.explainResults(this.searcher.getSearcher());
             assertEquals(this.compareResults(expect2, result, this.searcher), true);
         } catch (IOException e) {

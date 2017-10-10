@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import query.MathQuery;
+import query.TermCountPair;
 
 public class TestMathQuery {
     @Before
@@ -23,9 +24,11 @@ public class TestMathQuery {
     public void testUniqueTerms() {
         MathQuery mq = new MathQuery("test");
         String[] terms = {"hello", "hello", "there"};
-        ArrayList<String> result = mq.uniqueTerms(terms);
+        ArrayList<TermCountPair> result = mq.uniqueTerms(terms);
         assertEquals(result.get(0) , "hello");
+        assertEquals(result.get(0).getCount() == 2f, true);
         assertEquals(result.get(1), "there");
+        assertEquals(result.get(1).getCount() == 1f, true);
         assertEquals(result.size(), 2);
     }
 
