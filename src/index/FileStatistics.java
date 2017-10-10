@@ -51,6 +51,14 @@ public class FileStatistics {
         return this.words;
     }
 
+    public float getFormulaCount(){
+        Float total = new Float(0);
+        for (Float formula : this.formulas){
+            total += formula;
+        }
+        return total.floatValue(); 
+    }
+
     public float averageFormulaSize(){
         Float total = new Float(0);
         for (Float formula : this.formulas){
