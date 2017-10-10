@@ -103,13 +103,26 @@ public class MathQuery {
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
 
-    public ArrayList<String> uniqueTerms(String[] terms){
-        String termsString = String.join(" ", terms);
-        ArrayList<String> boostedTerms = new ArrayList<String>();
+    public ArrayList<TermCountPair> uniqueTerms(String[] terms){
+        ArrayList<TermCountPair> boostedTerms = new ArrayList<TermCountPair>();
         for (String term : terms){
-            if (!boostedTerms.contains(term)){
-                boostedTerms.add(term);
+            if (!term.trim().equals("")){
+                int pos = 0;
+                boolean found = false;
+                for (TermCountPair tcp : boostedTerms){
+                    if (tcp.equals(term)){
+                        found = true;
+                        break;
+                    }
+                    pos += 1;
+                }
+                if (!found){
+                    boostedTerms.add(new TermCountPair(term));
+                }else{
+                    boostedTerms.get(pos).increment();
+                }
             }
+
         }
         return boostedTerms;
     }
@@ -125,18 +138,17 @@ public class MathQuery {
         float boost;
         BoostQuery booster;
         String termsString = String.join(" ", terms);
-        ArrayList<String> uniqueTerms = this.uniqueTerms(terms);
+        ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(terms);
         if (!synonym){
             WildcardQuery tempQuery = null;
-            for (String term : uniqueTerms){
-                term = term.trim(); 
-                if (!term.equals("")){
-                    tempQuery = new WildcardQuery(new Term(field, term));
+            for (TermCountPair termPair : uniqueTerms){
+                if (!termPair.getTerm().trim().equals("")){
+                    tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        bq.add(new DiceQuery(tempQuery, uniqueTerms), BooleanClause.Occur.SHOULD);
+                        booster = new BoostQuery(tempQuery, termPair.getCount());
+                        bq.add(new DiceQuery(booster, uniqueTerms), BooleanClause.Occur.SHOULD);
                     }else{
-                        boost = StringUtils.countMatches(termsString, term);
-                        booster = new BoostQuery(tempQuery, boost);
+                        booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
                     }
                     
@@ -147,15 +159,14 @@ public class MathQuery {
             }
         }else{
             TermQuery tempQuery = null;
-            for(String term : uniqueTerms){
-                term = term.trim();
-                if(!term.equals("")){
-                    tempQuery = new TermQuery(new Term(field, term));
+            for(TermCountPair termPair : uniqueTerms){
+                if(!termPair.getTerm().trim().equals("")){
+                    tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        bq.add(new DiceQuery(tempQuery, uniqueTerms), BooleanClause.Occur.SHOULD);
+                        booster = new BoostQuery(tempQuery, termPair.getCount());
+                        bq.add(new DiceQuery(booster, uniqueTerms), BooleanClause.Occur.SHOULD);
                     }else{
-                        boost = StringUtils.countMatches(termsString, term);
-                        booster = new BoostQuery(tempQuery, boost);
+                        booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
                     }
                 }
