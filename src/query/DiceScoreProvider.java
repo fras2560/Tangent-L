@@ -27,8 +27,6 @@ public class DiceScoreProvider extends CustomScoreProvider{
         LeafReader reader = this.context.reader();
         System.out.println("Reader: " + reader);
         if (reader != null){
-            System.out.println(reader.getNumericDocValues(Constants.FORMULA_COUNT).get(doc));
-            System.out.println(reader.getNumericDocValues(Constants.WORD_COUNT).get(doc));
             numberOfTerms = reader.getNumericDocValues(Constants.FORMULA_COUNT).get(doc);
         }
         float denominator = this.sizeOfQuery + numberOfTerms;

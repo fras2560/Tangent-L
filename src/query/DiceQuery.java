@@ -21,10 +21,8 @@ public class DiceQuery extends CustomScoreQuery{
         // remember the query
         this.term = term;
         for (TermCountPair tcp : terms){
-            System.out.println(tcp);
             this.sizeOfQuery += tcp.getCount();
         }
-        System.out.println("Size of query"  + this.sizeOfQuery);
     }
     
     protected CustomScoreProvider getCustomScoreProvider(LeafReaderContext context) throws IOException{

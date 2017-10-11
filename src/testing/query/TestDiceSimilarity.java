@@ -84,12 +84,9 @@ public class TestDiceSimilarity extends BaseTest{
             MathQuery query = mathQueries.get(0);
             SearchResult result = this.searcher.searchQuery(query);
             ArrayList<String> expect2 = new ArrayList<String>();
-            expect2.add("math-ph0607065_1_57");
-            expect2.add("1301.6848_1_17");
-            expect2.add("1303.3122_1_41");
-            expect2.add("1307.6316_1_108");
-            System.out.println(result);
-            System.out.println("---------------------");
+            expect2.add("3");
+            expect2.add("2");
+            expect2.add("1");
             result.explainResults(this.searcher.getSearcher());
             assertEquals(this.compareResults(expect2, result, this.searcher), true);
         } catch (IOException e) {
