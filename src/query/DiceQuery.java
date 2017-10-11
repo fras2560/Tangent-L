@@ -14,9 +14,12 @@ public class DiceQuery extends CustomScoreQuery{
     ArrayList<TermCountPair> termCounts;
     float denominator;
     float sizeOfQuery;
-    public DiceQuery(Query subQuery, ArrayList<TermCountPair> terms) {
+    TermCountPair term;
+    public DiceQuery(Query subQuery, ArrayList<TermCountPair> terms, TermCountPair term) {
         super(subQuery);
         this.sizeOfQuery = 0;
+        // remember the query
+        this.term = term;
         for (TermCountPair tcp : terms){
             System.out.println(tcp);
             this.sizeOfQuery += tcp.getCount();
@@ -25,9 +28,6 @@ public class DiceQuery extends CustomScoreQuery{
     }
     
     protected CustomScoreProvider getCustomScoreProvider(LeafReaderContext context) throws IOException{
-        float numOfTerms = 0f;
-        
-        this.denominator = this.sizeOfQuery + numOfTerms;
-        return new DiceScoreProvider(Constants.FIELD, context, this.denominator);
+        return new DiceScoreProvider(Constants.FIELD, context, this.sizeOfQuery, this.term);
     }
 }

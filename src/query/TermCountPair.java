@@ -1,7 +1,5 @@
 package query;
 
-import index.ConvertConfig;
-
 public class TermCountPair {
     private String term;
     private float count;

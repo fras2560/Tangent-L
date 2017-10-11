@@ -192,10 +192,18 @@ def expand_node_with_wildcards(node):
     return results
 
 
-def format_paragraph(paragraph):
-    """Returns a formatted paragraph"""
-    striped = strip_tags(paragraph)
-    print(paragraph, striped)
+def format_paragraph(paragraph, query):
+    """Returns a formatted paragraph
+    
+    Parameters:
+        paragraph: the string paragraph to convert (str)
+        query: a boolea that says whether it a query file or not (boolean)
+    Returns:
+        striped: the formated paragraph
+    """
+    striped = paragraph
+    if not query:
+        striped = strip_tags(paragraph)
     return striped
 
 
@@ -211,7 +219,8 @@ def parse_file(filename,
                unbounded=False,
                shortened=True,
                location=False,
-               synonyms=False):
+               synonyms=False,
+               query=True):
     """Parses a file and ouputs to a file with math tuples
 
     Parameters:
@@ -226,10 +235,10 @@ def parse_file(filename,
             (start, end) = MathExtractor.next_math_token(content)
             if start == -1:
                 # can just print the rest
-                print(format_paragraph(content), end="", file=out)
+                print(format_paragraph(content, query), end="", file=out)
                 content = ""
             else:
-                paragraph = format_paragraph(content[0:start])
+                paragraph = format_paragraph(content[0:start], query)
                 ex = convert_math_expression(content[start:end],
                                              window_size=1,
                                              symbol_pairs=symbol_pairs,
@@ -262,6 +271,11 @@ if __name__ == "__main__":
                         '--outfile',
                         help='The file to output to',
                         required=True)
+    parser.add_argument("-query",
+                        dest="query",
+                        action="store_true",
+                        help="True if a query file",
+                        default=False)
     parser.add_argument("-symbol_pairs",
                         dest="symbol_pairs",
                         action="store_false",
@@ -335,6 +349,7 @@ if __name__ == "__main__":
                unbounded=args.unbounded,
                shortened=args.shortened,
                location=args.location,
-               synonyms=args.synonyms
+               synonyms=args.synonyms,
+               query=args.query
                )
     logger.info("Done")

@@ -135,9 +135,7 @@ public class MathQuery {
     
     public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym, boolean dice){
         // check if synonyms were indexed or not
-        float boost;
         BoostQuery booster;
-        String termsString = String.join(" ", terms);
         ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(terms);
         if (!synonym){
             WildcardQuery tempQuery = null;
@@ -145,13 +143,11 @@ public class MathQuery {
                 if (!termPair.getTerm().trim().equals("")){
                     tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        booster = new BoostQuery(tempQuery, termPair.getCount());
-                        bq.add(new DiceQuery(booster, uniqueTerms), BooleanClause.Occur.SHOULD);
+                        bq.add(new DiceQuery(tempQuery, uniqueTerms, termPair), BooleanClause.Occur.SHOULD);
                     }else{
                         booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
                     }
-                    
                 }
             }
             if (tempQuery == null){
@@ -163,8 +159,7 @@ public class MathQuery {
                 if(!termPair.getTerm().trim().equals("")){
                     tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        booster = new BoostQuery(tempQuery, termPair.getCount());
-                        bq.add(new DiceQuery(booster, uniqueTerms), BooleanClause.Occur.SHOULD);
+                        bq.add(new DiceQuery(tempQuery, uniqueTerms, termPair), BooleanClause.Occur.SHOULD);
                     }else{
                         booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);

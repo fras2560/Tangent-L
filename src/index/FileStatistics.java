@@ -17,6 +17,7 @@ public class FileStatistics {
         this.words = 0;
         this.formulas = new ArrayList<Float>();
         while ((character = is.read()) != -1){
+            System.out.println(token);
             if (Character.isWhitespace(character)){
                 if (token.startsWith("NUMBER SIGN") && token.endsWith("NUMBER SIGN") && !token.equals("NUMBER SIGN")){
                     // just count the number of math tuples
@@ -43,6 +44,11 @@ public class FileStatistics {
                 token += Character.getName(character);
                 token = token.trim();
             }
+        }
+        if (math == true){
+            this.formulas.add(new Float(formulaSize));
+            System.out.println("Formula size: " + formulaSize);
+            formulaSize = 0f;
         }
     }
 

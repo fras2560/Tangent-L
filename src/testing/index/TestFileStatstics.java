@@ -3,16 +3,13 @@ package testing.index;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import index.FileStatistics;
 
 public class TestFileStatstics {
@@ -31,7 +28,6 @@ public class TestFileStatstics {
         try {
             Path testFile = Paths.get(this.folder.toString(), "1.html");
             FileStatistics fs = new FileStatistics(new InputStreamReader(Files.newInputStream(testFile)));
-            System.out.println(fs.getWordCount());
             assertEquals(fs.getWordCount() == 3065.0, true);
             assertEquals(fs.averageFormulaSize() == 9.0, true);
             assertEquals(fs.maxFormulaSize() == 17, true);

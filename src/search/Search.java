@@ -58,6 +58,7 @@ public class Search {
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
     private boolean dice;
+
     public Search(Path index) throws IOException, SearchConfigException, ConvertConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig(), MathSimilarity.getSimilarity(), false);
     }
@@ -107,10 +108,7 @@ public class Search {
         BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
         // remember if synonyms were used when indexing
         this.synonym = config.getSynonym();
-        // dont want synonyms if not needed since it is in the analyzor
-        // prevent a memory leak, so copy it
-        this.config = config.copy();
-        this.config.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
+        this.config = config.getSearchConfig();
         // make sure the config and index are compatible
         ConvertConfig indexConfig = new ConvertConfig();
         indexConfig.loadConfig(index);
@@ -139,6 +137,8 @@ public class Search {
     public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
         this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
                 "Query: name: " + mathQuery.getQueryName());
+        System.out.println("Query: " + mathQuery.getQuery().replaceAll("//", "//") +
+                "Query: name: " + mathQuery.getQueryName());
         Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
         ArrayList<String> files = new ArrayList<String>();
         if (realQuery != null){
@@ -153,6 +153,8 @@ public class Search {
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
+            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
+            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
             ScoreDoc[] hits = searchResultsWild.scoreDocs;
             for (ScoreDoc hit: hits){
                 Document doc = searcher.doc(hit.doc);
@@ -189,6 +191,7 @@ public class Search {
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
+            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
             result = new SearchResult(searchResultsWild, mathQuery, k, buildQuery);
         }
         return result;

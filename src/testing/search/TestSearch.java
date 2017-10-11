@@ -22,8 +22,20 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.LeafReader;
+import org.apache.lucene.index.LeafReaderContext;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +48,8 @@ import search.Judgements;
 import search.Search;
 import search.SearchResult;
 import testing.BaseTest;
+import utilities.Constants;
+import utilities.ProjectLogger;
 
 public class TestSearch extends BaseTest{
     private Path folder;
@@ -49,6 +63,7 @@ public class TestSearch extends BaseTest{
     public void setUp() throws Exception{
         // uncomment for debugging
         // this.debugLogger();
+        ProjectLogger.setLevel(Level.FINEST);
         this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_1");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
@@ -83,6 +98,42 @@ public class TestSearch extends BaseTest{
             e.printStackTrace();
         }
         this.deleteDirectory(this.index);
+    }
+
+    @Test
+    public void testStatsBeingRecorded(){
+        try {
+            // find the document id
+            Term searchTerm = new Term(Constants.FIELD, "('v!a','m!()1x1','n')");
+            TopDocs searchResultsWild = this.searcher.getSearcher().search(new TermQuery(searchTerm), 4);
+            ScoreDoc[] hits = searchResultsWild.scoreDocs;
+            int docId = -1;
+            Document doc;
+            String idealDocument = Paths.get(this.documents.toString(), "1301.6848_1_17.xhtml").toString();
+            for (ScoreDoc hit: hits){
+                doc = this.searcher.getSearcher().doc(hit.doc);
+                System.out.println(doc.get("path"));
+                if (doc.get("path").equals(idealDocument)){
+                    docId = hit.doc;
+                }
+            }
+            if (docId < 0){
+                fail("Did not find document");
+            }
+            IndexReader reader = DirectoryReader.open(FSDirectory.open(this.index));
+            for (LeafReaderContext lrc : reader.leaves()){
+                LeafReader lr = lrc.reader();
+                // this may not be a consistent tests across platforms
+                assertEquals(lr.getNumericDocValues(Constants.WORD_COUNT).get(docId) == 10, true);
+                assertEquals(lr.getNumericDocValues(Constants.FORMULA_COUNT).get(docId) == 37, true);
+                assertEquals(lr.getNumericDocValues(Constants.AVERAGE_FORMULA_SIZE).get(docId) == 12, true);
+                assertEquals(lr.getNumericDocValues(Constants.MAX_FORMULA_SIZE).get(docId) == 23, true);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Fail IO exception");
+        }
+        
     }
 
     @Test
@@ -144,6 +195,7 @@ public class TestSearch extends BaseTest{
             queryLoader.deleteFile();
             MathQuery query = mathQueries.get(0);
             SearchResult result = this.searcher.searchQuery(query);
+            System.out.println(result);
             ArrayList<String> expect2 = new ArrayList<String>();
             expect2.add("1301.6848_1_17");
             expect2.add("1303.3122_1_41");
@@ -185,6 +237,7 @@ public class TestSearch extends BaseTest{
             queryLoader.deleteFile();
             MathQuery query = mathQueries.get(0);
             ArrayList<String> results = this.searcher.searchQueryFiles(query);
+            
             assertEquals(results.get(0) , "1301.6848_1_17");
             assertEquals(results.get(1).equals("1307.6316_1_108") ||
                          results.get(1).equals("1303.3122_1_41"),  true);

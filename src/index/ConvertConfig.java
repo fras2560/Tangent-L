@@ -46,6 +46,7 @@ public class ConvertConfig {
     private boolean location;
     private boolean synonyms;
     private boolean symbol_pairs;
+    private boolean query;
     private int window_size;
     /*
      * The possible features that Tangent can use
@@ -62,6 +63,7 @@ public class ConvertConfig {
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
+    private final static String QUERY = "QUERY";
     private static String FILENAME = "index.config";
     /*
      * Class constructor
@@ -81,6 +83,14 @@ public class ConvertConfig {
         this.location = false;
         this.synonyms = false;
         this.symbol_pairs = true;
+        this.query = false;
+    }
+
+    public ConvertConfig getSearchConfig(){
+        ConvertConfig searchConfig = this.copy();
+        searchConfig.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
+        searchConfig.query = true;
+        return searchConfig;
     }
 
     @Override
@@ -263,6 +273,9 @@ public class ConvertConfig {
         if (this.window_size > 1){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE.toLowerCase());
             commands.add(Integer.toString(this.window_size));
+        }
+        if (this.query){
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.QUERY.toLowerCase());
         }
         String[] result = {};
         if (!commands.isEmpty()){

@@ -25,19 +25,15 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.FloatPoint;
 import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -46,7 +42,6 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-
 import query.MathSimilarity;
 import utilities.Constants;
 import utilities.ProjectLogger;
@@ -176,15 +171,14 @@ public class IndexFiles {
                        ConvertConfig config) throws IOException, InterruptedException {
     Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
+    FileStatistics fs = null;
+    try (InputStream stream = Files.newInputStream(new_file)){
+        // get the statistics of the file
+        fs = new FileStatistics(new InputStreamReader(stream, StandardCharsets.UTF_8));
+    }
     try (InputStream stream = Files.newInputStream(new_file)) {
         // make a new, empty document
         Document doc = new Document();
-        // keep some stats about the number of math formula sizes
-        FileStatistics stats = new FileStatistics(new InputStreamReader(stream, StandardCharsets.UTF_8));
-        doc.add(new FloatPoint(Constants.WORD_COUNT, stats.getWordCount()));
-        doc.add(new FloatPoint(Constants.AVERAGE_FORMULA_SIZE, stats.averageFormulaSize()));
-        doc.add(new FloatPoint(Constants.MAX_FORMULA_SIZE, stats.maxFormulaSize()));
-        doc.add(new FloatPoint(Constants.FORMULA_COUNT, stats.getFormulaCount()));
         // Add the path of the file as a field named "path".  Use a
         // field that is indexed (i.e. searchable), but don't tokenize 
         // the field into separate words and don't index term frequency
@@ -203,10 +197,7 @@ public class IndexFiles {
         // Add the contents of the file to a field named "contents".  Specify a Reader,
         // so that the text of the file is tokenized and indexed, but not stored.
         // Note that FileReader expects the file to be in UTF-8 encoding.
-        // If that's not the case searching for special characters will fail.
-        Set<String> bannedTags = new HashSet<String>();
-        // Set<String> bannedTags = new HashSet();
-        // bannedTags.add("Math");
+        // If that's not the case searching for special characters will fail.;
         FieldType fieldType = new FieldType();
         fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
         fieldType.setTokenized(true);
@@ -215,12 +206,15 @@ public class IndexFiles {
                           new InputStreamReader(stream, StandardCharsets.UTF_8),
                           fieldType
                           ));
-
-
-        
-//        doc.add(new TextField(Constants.FIELD, new HTMLStripCharFilter(new InputStreamReader(stream,
-//                                                                                             StandardCharsets.UTF_8),
-//                                                                  bannedTags)));
+        // keep some stats about the number of math formula sizes
+        System.out.println(fs.getFormulaCount() + " " + fs.getWordCount());
+        if (fs != null){
+            doc.add(new NumericDocValuesField(Constants.WORD_COUNT, (long) fs.getWordCount()));
+            doc.add(new NumericDocValuesField(Constants.FORMULA_COUNT, (long) fs.getFormulaCount()));
+            doc.add(new NumericDocValuesField(Constants.MAX_FORMULA_SIZE, (long) fs.maxFormulaSize()));
+            doc.add(new NumericDocValuesField(Constants.AVERAGE_FORMULA_SIZE, (long) fs.averageFormulaSize()));
+            
+        }
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());

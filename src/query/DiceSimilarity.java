@@ -1,8 +1,6 @@
 package query;
 
 import org.apache.lucene.index.FieldInvertState;
-import org.apache.lucene.search.similarities.BasicStats;
-import org.apache.lucene.search.similarities.SimilarityBase;
 import org.apache.lucene.search.similarities.TFIDFSimilarity;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.SmallFloat;
@@ -38,7 +36,7 @@ public class DiceSimilarity extends TFIDFSimilarity{
 
     @Override
     public float tf(float freq) {
-      return freq == 0f ? 0f : 1f;
+      return freq;
     }
 
     @Override

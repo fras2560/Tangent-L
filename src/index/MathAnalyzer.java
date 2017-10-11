@@ -63,6 +63,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    */
   public MathAnalyzer() {
     this(DefaultSetHolder.DEFAULT_STOP_SET);
+    this.config = new ConvertConfig();
   }
   
   /**
@@ -72,6 +73,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    */
   public MathAnalyzer(CharArraySet stopwords) {
     this(stopwords, CharArraySet.EMPTY_SET);
+    this.config = new ConvertConfig();
   }
 
   /**

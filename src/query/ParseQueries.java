@@ -56,7 +56,7 @@ public class ParseQueries{
     public ParseQueries(File f, ConvertConfig config, Logger logger) throws IOException, InterruptedException{
         this.logger = logger;
         this.logger = ProjectLogger.getLogger();
-        Path new_file = new ConvertMathML(f.toPath()).convert(config);
+        Path new_file = new ConvertMathML(f.toPath()).convert(config.getSearchConfig());
         this.f = new File(new_file.toString());
         this.queries = new ArrayList<MathQuery>();
     }

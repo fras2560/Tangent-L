@@ -73,10 +73,10 @@ public class TestSearchSynonym extends BaseTest{
             ArrayList<SearchResult> results = this.searcher.searchQueries(this.queries);
             assertEquals(results.size(), 1);
             ArrayList<String> expect = new ArrayList<String>();
-            expect.add("math-ph0607065_1_57");
-            expect.add("1307.6316_1_108");
-            expect.add("1301.6848_1_17");
             expect.add("1303.3122_1_41");
+            expect.add("1301.6848_1_17");
+            expect.add("1307.6316_1_108");
+            expect.add("math-ph0607065_1_57");
             assertEquals(this.compareResults(expect, results.get(0), this.searcher), true);
         } catch (IOException e) {
             e.printStackTrace();
