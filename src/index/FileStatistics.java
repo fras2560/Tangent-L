@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilities.Constants;
+
 public class FileStatistics {
     private List<Float> formulas;
     private float words;
@@ -18,7 +20,10 @@ public class FileStatistics {
         this.formulas = new ArrayList<Float>();
         while ((character = is.read()) != -1){
             if (Character.isWhitespace(character)){
-                if (token.startsWith("NUMBER SIGN") && token.endsWith("NUMBER SIGN") && !token.equals("NUMBER SIGN")){
+                if (token.startsWith("NUMBER SIGN") &&
+                    token.endsWith("NUMBER SIGN") &&
+                    !token.equals("NUMBER SIGN") &&
+                    !(token.equals(Constants.FORMULA_START_TAG) || token.equals(Constants.FORMULA_END_TAG))){
                     // just count the number of math tuples
                     formulaSize += 1f;
                     math = true;
@@ -26,6 +31,7 @@ public class FileStatistics {
                 }else{
                     if (math == true){
                         // add the math formula size
+                        formulaSize = formulaSize  -2f; // do not include start and end tag
                         this.formulas.add(new Float(formulaSize));
                         System.out.println("Formula size: " + formulaSize);
                         formulaSize = 0f;

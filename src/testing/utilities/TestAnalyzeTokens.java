@@ -31,5 +31,14 @@ public class TestAnalyzeTokens {
         assertEquals(result[3], "geometr");
     }
 
-    
+    @Test
+    public void test3() {
+        String t = "#(start)# #('v!x','+','n')# #('+','*','n')# #(end)# Mean Arithmetic";
+        String[] result = Functions.analyzeTokens(new MathAnalyzer(), "contents", t); 
+        assertEquals(result.length, 4);
+        assertEquals(result[0], "('v!x','+','n')");
+        assertEquals(result[1], "('+','*','n')");
+        assertEquals(result[2], "mean");
+        assertEquals(result[3], "arithmet");
+    }
 }

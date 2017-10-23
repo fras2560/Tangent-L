@@ -124,6 +124,7 @@ public class TestSearch extends BaseTest{
             for (LeafReaderContext lrc : reader.leaves()){
                 LeafReader lr = lrc.reader();
                 // this may not be a consistent tests across platforms
+                System.out.println(lr.getNumericDocValues(Constants.FORMULA_COUNT).get(docId));
                 assertEquals(lr.getNumericDocValues(Constants.WORD_COUNT).get(docId) == 10, true);
                 assertEquals(lr.getNumericDocValues(Constants.FORMULA_COUNT).get(docId) == 37, true);
                 assertEquals(lr.getNumericDocValues(Constants.AVERAGE_FORMULA_SIZE).get(docId) == 12, true);

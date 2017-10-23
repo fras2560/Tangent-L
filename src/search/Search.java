@@ -174,7 +174,9 @@ public class Search {
                         " Query: name: " +
                         mathQuery.getQueryName());
         String queryString = String.join(" ", mathQuery.getTerms());
+        System.out.println(queryString);
         String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
+        System.out.println("Tokens" + String.join(" ", tokens));
         SearchResult result = null;
         if (tokens.length <= 0){
             this.logger.log(Level.WARNING, "Query has no elements: " + mathQuery.getQueryName());
