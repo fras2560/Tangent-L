@@ -1,8 +1,15 @@
 package utilities;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 public class Functions {
 
@@ -22,5 +29,23 @@ public class Functions {
         Path new_path = Paths.get(file.getParent().toString(), new_filename);
         return new_path;
         
+    }
+
+    public static String[] analyzeTokens(Analyzer analyzer, String field, String queryText){
+        // Use the analyzer to get all the tokens, and then build an appropriate
+        // query based on the analysis chain.
+        List<String> tokens = new ArrayList<String>();
+        char[]  token;
+        try (TokenStream source = analyzer.tokenStream(field, queryText)) {
+            CharTermAttribute charAtt = source.getAttribute(CharTermAttribute.class);
+            source.reset();
+            while (source.incrementToken()) {
+                token = Arrays.copyOfRange(charAtt.buffer(), 0, charAtt.length());
+                tokens.add(new String(token));
+            }
+        } catch (IOException e) {
+          throw new RuntimeException("Error analyzing query text", e);
+        }
+        return tokens.toArray(new String[tokens.size()]);
     }
 }

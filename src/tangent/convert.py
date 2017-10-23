@@ -5,6 +5,8 @@ import os
 from math_extractor import MathExtractor
 from mathdocument import MathDocument
 from htmlStriper import strip_tags
+START_TAG = "#(start)#"
+END_TAG = "#(end)#"
 TERMINAL_NODE = "terminal_node"
 COMPOUND_NODE = "compound_node"
 EDGE_PAIR_NODE = "edge_pair"
@@ -78,6 +80,8 @@ def convert_math_expression(mathml,
                      if check_node(node)
                      for expanded_node in expand_node_with_wildcards(node)
                      ]
+    # add start and end strings
+    node_list = [START_TAG] + node_list + [END_TAG]
     return " ".join(node_list)
 
 

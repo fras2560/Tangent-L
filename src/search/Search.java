@@ -25,6 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -35,15 +37,14 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.QueryBuilder;
 import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
 import index.ConvertConfig.ConvertConfigException;
+import mathquery.MathSimilarity;
 import index.MathAnalyzer;
 import query.ParseQueries;
 import query.MathQuery;
-import query.MathSimilarity;
 import utilities.Functions;
 import utilities.ProjectLogger;
 
@@ -51,10 +52,10 @@ import utilities.ProjectLogger;
 public class Search {
     private Logger logger ;
     private IndexSearcher searcher;
-    private QueryBuilder builder;
     private ConvertConfig config;
     private boolean synonym;
     private IndexReader reader;
+    private Analyzer analyzer;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
     private boolean dice;
@@ -114,13 +115,13 @@ public class Search {
         indexConfig.loadConfig(index);
         // index config needs to be compatible with the searching config (not necessarily reverse direction)
         if (!indexConfig.compatible(config)){
-            System.out.println(config + " vs " + indexConfig);
+            logger.log(Level.WARNING, "Incompatible config files: " + config + " vs " + indexConfig);
             throw new SearchConfigException("Config did not match index");
         }
         this.reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
         this.searcher.setSimilarity(similarity);
-        this.builder = new QueryBuilder(new MathAnalyzer(config));
+        this.analyzer = new MathAnalyzer(config);
         this.config = config;
         this.logger = logger;
         this.dice = dice;
@@ -139,22 +140,20 @@ public class Search {
                 "Query: name: " + mathQuery.getQueryName());
         System.out.println("Query: " + mathQuery.getQuery().replaceAll("//", "//") +
                 "Query: name: " + mathQuery.getQueryName());
-        Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
+        String queryString = String.join(" ", mathQuery.getTerms());
+        String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
         ArrayList<String> files = new ArrayList<String>();
-        if (realQuery != null){
-            this.logger.log(Level.FINEST, realQuery.toString());
+        if (tokens.length > 0){
+            this.logger.log(Level.FINEST, "Tokens: " + String.join(" " , tokens));
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
+            Query buildQuery = mathQuery.buildQuery(tokens,
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
                                                     this.dice);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
-            this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
-            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
-            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
             ScoreDoc[] hits = searchResultsWild.scoreDocs;
             for (ScoreDoc hit: hits){
                 Document doc = searcher.doc(hit.doc);
@@ -174,24 +173,22 @@ public class Search {
                         mathQuery.getQuery().replaceAll("//", "//") +
                         " Query: name: " +
                         mathQuery.getQueryName());
-        Query realQuery = this.builder.createBooleanQuery(mathQuery.getFieldName(), mathQuery.getQuery());
+        String queryString = String.join(" ", mathQuery.getTerms());
+        String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
         SearchResult result = null;
-        if (realQuery == null){
+        if (tokens.length <= 0){
             this.logger.log(Level.WARNING, "Query has no elements: " + mathQuery.getQueryName());
             result = new SearchResult(null, mathQuery, k, null);
         }else{
-            this.logger.log(Level.FINEST, realQuery.toString());
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mathQuery.buildQuery(realQuery.toString().split(mathQuery.getFieldName() + ":"),
+            Query buildQuery = mathQuery.buildQuery(tokens,
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
                                                     this.dice);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
-            this.logger.log(Level.FINEST, "RealQuery:" + realQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
-            System.out.println("Total number of hits: " + searchResultsWild.totalHits);
             result = new SearchResult(searchResultsWild, mathQuery, k, buildQuery);
         }
         return result;

@@ -1,42 +1,38 @@
-package query;
+package mq;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.PostingsEnum;
 import org.apache.lucene.queries.CustomScoreProvider;
+import query.TermCountPair;
 
-import utilities.Constants;
-
-public class DiceScoreProvider extends CustomScoreProvider{
+public class MathqueryProvider extends CustomScoreProvider{
     private String _field;
     private LeafReaderContext context;
-    private float sizeOfQuery;
     private TermCountPair term;
     private List<TermCountPair> terms;
-    public DiceScoreProvider(String field,
+    public MathqueryProvider(String field,
                              LeafReaderContext context,
-                             float sizeOfQuery,
-                             TermCountPair term,
                              List<TermCountPair> terms) {
         super(context);
         this._field = field;
-        this.sizeOfQuery = sizeOfQuery;
         this.context = context;
-        this.term = term;
         this.terms = terms;
     }
 
     public float customScore(int doc, float subQueryScore, float valSrcScores [])  throws IOException {
         // subQueryScore is term frequency of the term
-        float intersection = subQueryScore < this.term.getCount() ? subQueryScore : this.term.getCount();
-        float numberOfTerms = 0f;
         LeafReader reader = this.context.reader();
         if (reader != null){
-            numberOfTerms = reader.getNumericDocValues(Constants.AVERAGE_FORMULA_SIZE).get(doc);
+            for (TermCountPair term : this.terms){
+                PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
+                System.out.println("Term: " + term + " freq:" + posting.freq());
+            }
         }
-        float denominator = this.sizeOfQuery + numberOfTerms;
 //        System.out.println("Doc:" + doc +
 //                           " Subqueryscore: " + subQueryScore +
 //                           " valSrcScores: " +  valSrcScores.length +
@@ -44,7 +40,6 @@ public class DiceScoreProvider extends CustomScoreProvider{
 //                           " querySize: " + this.sizeOfQuery + 
 //                           " denominator: " + denominator +
 //                           " intersection: " + intersection);
-        return (2 * (float) intersection) / denominator; // New Score
+        return 1f; // New Score
     }
-
 }

@@ -1,4 +1,4 @@
-package testing.search;
+package testing.query;
 
 import static org.junit.Assert.*;
 
@@ -18,12 +18,15 @@ import org.xml.sax.SAXException;
 
 import index.ConvertConfig;
 import index.IndexFiles;
+import query.DiceSimilarity;
 import query.MathQuery;
+import query.ParseQueries;
 import search.Search;
 import search.SearchResult;
 import testing.BaseTest;
 
-public class TestSearchSynonym extends BaseTest{
+public class TestMathqueryDice extends BaseTest{
+
     private Path folder;
     private Path index;
     private Path documents;
@@ -34,7 +37,7 @@ public class TestSearchSynonym extends BaseTest{
     public void setUp() throws Exception{
         // uncomment for debugging
         // this.debugLogger();
-        this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "index_test_1");
+        this.folder = Paths.get(System.getProperty("user.dir"), "resources", "test", "test_dice_similarity");
         this.documents = Paths.get(this.folder.toString(), "documents");
         this.index = Paths.get(this.folder.toString(), "index");
         this.queries = Paths.get(this.folder.toString(), "queries", "queries.xml");
@@ -42,17 +45,22 @@ public class TestSearchSynonym extends BaseTest{
         // attempt to create the directory here
         boolean successful = dir.mkdir();
         if (!successful){
-          // creating the directory failed
-          System.out.println("failed trying to create the directory");
-          throw new Exception("Failed to create directory");
+          this.deleteDirectory(this.index);
+          successful = dir.mkdir();
+          if (!successful) {
+              // creating the directory failed
+              System.out.println("failed trying to create the directory");
+              throw new Exception("Failed to create directory");
+          }
         }
         // create the index
+        IndexFiles indexer = new IndexFiles();
+        DiceSimilarity dice = new DiceSimilarity();
         ConvertConfig config = new ConvertConfig();
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
-        IndexFiles indexer = new IndexFiles();
-        indexer.indexDirectory(this.index, this.documents, true, config);
+        indexer.indexDirectory(this.index, this.documents, true, config, dice);
         // init the searching object
-        this.searcher = new Search(this.index, config);
+        this.searcher = new Search(this.index, dice, config, true);
     }
 
     @After
@@ -68,16 +76,20 @@ public class TestSearchSynonym extends BaseTest{
     }
 
     @Test
-    public void testSearchQueries() {
+    public void testSearchQuery() {
         try {
-            ArrayList<SearchResult> results = this.searcher.searchQueries(this.queries);
-            assertEquals(results.size(), 1);
-            ArrayList<String> expect = new ArrayList<String>();
-            expect.add("1303.3122_1_41");
-            expect.add("1301.6848_1_17");
-            expect.add("math-ph0607065_1_57");
-            expect.add("1307.6316_1_108");
-            assertEquals(this.compareResults(expect, results.get(0), this.searcher), true);
+            ParseQueries queryLoader = new ParseQueries(queries.toFile(), searcher.getConfig());
+            ArrayList<MathQuery> mathQueries;
+            mathQueries = queryLoader.getQueries();
+            queryLoader.deleteFile();
+            MathQuery query = mathQueries.get(0);
+            SearchResult result = this.searcher.searchQuery(query);
+            ArrayList<String> expect2 = new ArrayList<String>();
+            expect2.add("3");
+            expect2.add("2");
+            expect2.add("1");
+            result.explainResults(this.searcher.getSearcher());
+            assertEquals(this.compareResults(expect2, result, this.searcher), true);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Fail IO exception");
@@ -96,24 +108,4 @@ public class TestSearchSynonym extends BaseTest{
         }
     }
 
-    @Test
-    public void testSearchQuery() {
-        try {
-            MathQuery mq = new MathQuery("test1");
-            mq.addTerm("#('+','*','n')#");
-            SearchResult results = this.searcher.searchQuery(mq);
-            ArrayList<String> expect = new ArrayList<String>();
-            expect.add("1307.6316_1_108");
-            expect.add("math-ph0607065_1_57");
-            expect.add("1301.6848_1_17");
-            expect.add("1303.3122_1_41");
-            assertEquals(this.compareResults(expect, results, this.searcher), true);
-            System.out.println(results);
-            results.explainResults(this.searcher.getSearcher());
-            System.out.println("Done");
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Fail IO exception");
-        }
-    }
 }

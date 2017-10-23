@@ -48,6 +48,8 @@ public class ConvertConfig {
     private boolean symbol_pairs;
     private boolean query;
     private int window_size;
+    private boolean dice;
+    private boolean bags;
     /*
      * The possible features that Tangent can use
      */
@@ -60,6 +62,8 @@ public class ConvertConfig {
     public final static String LOCATION = "LOCATION";
     public final static String SYNONYMS = "SYNONYMS";
     public final static String SYMBOLS = "SYMBOL_PAIRS";
+    public final static String BAGS_OF_WORDS = "BAG_OF_WORDS";
+    public final static String DICE_COEFFICIENT = "DICE_COEFFICIENT";
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
@@ -84,6 +88,8 @@ public class ConvertConfig {
         this.synonyms = false;
         this.symbol_pairs = true;
         this.query = false;
+        this.dice = false;
+        this.bags = false;
     }
 
     public ConvertConfig getSearchConfig(){
@@ -150,6 +156,10 @@ public class ConvertConfig {
             this.synonyms = !this.synonyms;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
             this.symbol_pairs = !this.symbol_pairs;
+        }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
+            this.bags = !this.bags;
+        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
+            this.dice = !this.dice;
         }
     }
 
@@ -188,6 +198,10 @@ public class ConvertConfig {
             result = this.synonyms;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
             result = this.symbol_pairs;
+        }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
+            result = this.bags;
+        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
+            result = this.dice;
         }
         return result;
     }
@@ -224,6 +238,10 @@ public class ConvertConfig {
             this.synonyms = setting;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
             this.symbol_pairs = setting;
+        }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
+            this.bags = setting;
+        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
+            this.dice = setting;
         }
     }
 
@@ -299,6 +317,8 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.UNBOUNDED, this.unbounded);
         config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbol_pairs);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, this.synonyms);
+        config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, this.dice);
+        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, this.bags);
         config.setWindowSize(this.window_size);
         return config;
     }

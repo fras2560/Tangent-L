@@ -42,7 +42,8 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import query.MathSimilarity;
+
+import mathquery.MathSimilarity;
 import utilities.Constants;
 import utilities.ProjectLogger;
 

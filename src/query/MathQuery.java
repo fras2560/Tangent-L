@@ -20,15 +20,15 @@ import java.util.logging.Logger;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import mq.Mathquery;
 import utilities.Constants;
 import utilities.ProjectLogger;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BoostQuery;
-import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -40,8 +40,7 @@ public class MathQuery {
     private ArrayList<String> terms;
     private Logger logger;
     private String fieldName;
-    private static final String BOOSTSYMBOL = "^";
-    
+
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
@@ -122,7 +121,6 @@ public class MathQuery {
                     boostedTerms.get(pos).increment();
                 }
             }
-
         }
         return boostedTerms;
     }
@@ -130,9 +128,7 @@ public class MathQuery {
     public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym){
         return this.buildQuery(terms, field, bq, synonym, false);
     }
-    
-    
-    
+
     public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym, boolean dice){
         // check if synonyms were indexed or not
         BoostQuery booster;
@@ -143,7 +139,7 @@ public class MathQuery {
                 if (!termPair.getTerm().trim().equals("")){
                     tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        bq.add(new DiceQuery(tempQuery, uniqueTerms, termPair), BooleanClause.Occur.SHOULD);
+                        bq.add(tempQuery, BooleanClause.Occur.SHOULD);
                     }else{
                         booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
@@ -159,7 +155,7 @@ public class MathQuery {
                 if(!termPair.getTerm().trim().equals("")){
                     tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
                     if (dice){
-                        bq.add(new DiceQuery(tempQuery, uniqueTerms, termPair), BooleanClause.Occur.SHOULD);
+                        bq.add(tempQuery, BooleanClause.Occur.SHOULD);
                     }else{
                         booster = new BoostQuery(tempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
@@ -170,6 +166,10 @@ public class MathQuery {
                 bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
             }
         }
-        return bq.build();
+        Query result = bq.build();
+        if (dice){
+            result = new Mathquery(bq.build(), uniqueTerms, this.fieldName);
+        }
+        return result;
     }
 }

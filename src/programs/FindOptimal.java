@@ -39,6 +39,7 @@ import search.Judgements;
 import search.Search;
 import search.Search.SearchConfigException;
 import search.SearchResult;
+import query.DiceSimilarity;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
@@ -57,7 +58,7 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 10000;
+    private static int TOP_K = 10;
     private Path queries;
     private Logger logger;
     private boolean greedy;
@@ -343,7 +344,7 @@ public class FindOptimal {
 
         double found_mean = (double) 0.0;
         double reciprocal_mean = (double) 0.0;
-        Search searcher = new Search(index, config);
+        Search searcher = new Search(index, new DiceSimilarity(), config, true);
         SearchResult result;
         int count = 0;
         double reciprocal;
@@ -351,6 +352,7 @@ public class FindOptimal {
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+            result.explainResults(searcher.getSearcher());
             found = this.found_answer(searcher.getSearcher(), result);
             reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
             this.logger.log(Level.FINER,
@@ -361,7 +363,14 @@ public class FindOptimal {
                             reciprocal +
                             "Total Results:" +
                              result.hitsNumber());
-            this.output.write(mq.getQueryName() + "," + found + "," + reciprocal);
+            System.out.println(mq.getQueryName() +
+                               " found:" +
+                               found +
+                               " reciprocal:" +
+                               reciprocal +
+                               " Total Results:" +
+                               result.hitsNumber());
+            this.output.write(mq.getQueryName()+ "," + found + "," + reciprocal);
             this.output.newLine();
             found_mean += found;
             reciprocal_mean += reciprocal;
@@ -444,7 +453,7 @@ public class FindOptimal {
             System.exit(0);
         }
         // default arguments
-        boolean wiki = false;
+        boolean wiki = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         if (!wiki){
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
@@ -488,15 +497,16 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
+        config.flipBit(ConvertConfig.EOL);
         // only need to flip a certain number of features
-        features.add(ConvertConfig.SHORTENED);
-        features.add(ConvertConfig.LOCATION);
-        // start with these since they are compatible
-        config.flipBit(ConvertConfig.EDGE);
-        config.flipBit(ConvertConfig.COMPOUND);
-        config.flipBit(ConvertConfig.UNBOUNDED);
-        config.flipBit(ConvertConfig.TERMINAL);
-        config.flipBit(ConvertConfig.SYNONYMS);
+//        features.add(ConvertConfig.SHORTENED);
+//        features.add(ConvertConfig.LOCATION);
+//        // start with these since they are compatible
+//        config.flipBit(ConvertConfig.EDGE);
+//        config.flipBit(ConvertConfig.COMPOUND);
+//        config.flipBit(ConvertConfig.UNBOUNDED);
+//        config.flipBit(ConvertConfig.TERMINAL);
+//        config.flipBit(ConvertConfig.SYNONYMS);
         
         // this are all backwards compatible
         BufferedWriter outputWriter = null;

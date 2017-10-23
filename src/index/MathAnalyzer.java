@@ -114,6 +114,10 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
     if(!stemExclusionSet.isEmpty()){
         result = new SetKeywordMarkerFilter(result, stemExclusionSet);
     }
+    if (this.config.getAttribute(ConvertConfig.BAGS_OF_WORDS)){
+        result = new MathBagsFilter(result);
+    }
+    result = new MathRemoveTagsFilter(result);
     if (this.config.getSynonym()){
         result = new MathSynonymFilter(result);
     }

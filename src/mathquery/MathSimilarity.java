@@ -1,4 +1,4 @@
-package query;
+package mathquery;
 
 import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.BM25Similarity;
