@@ -108,7 +108,8 @@ def check_node(node):
 
 
 def check_wildcard(term):
-    """Returns True if term is a wildcard term"""
+    """Returns True if term is a wildcard term
+    """
     wildcard = True
     letters = "zxcvbnmasdfghjklqwertyuiop"
     letter = 0
@@ -144,7 +145,8 @@ def format_node(node):
 
 
 def determine_node(node):
-    """Returns the type of node"""
+    """Returns the type of node
+    """
     node_type = SYMBOL_PAIR_NODE
     if node[1] == "!0":
         if len(node) == 2:
@@ -159,7 +161,8 @@ def determine_node(node):
 
 
 def expand_node_with_wildcards(node):
-    """Returns a list of nodes that includes the expanded nodes"""
+    """Returns a list of nodes that includes the expanded nodes
+    """
     results = [node]
     node_type = determine_node(node)
     if node_type == SYMBOL_PAIR_NODE:
@@ -198,7 +201,7 @@ def expand_node_with_wildcards(node):
 
 def format_paragraph(paragraph, query):
     """Returns a formatted paragraph
-    
+
     Parameters:
         paragraph: the string paragraph to convert (str)
         query: a boolea that says whether it a query file or not (boolean)

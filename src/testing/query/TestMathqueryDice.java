@@ -60,7 +60,7 @@ public class TestMathqueryDice extends BaseTest{
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         indexer.indexDirectory(this.index, this.documents, true, config, dice);
         // init the searching object
-        this.searcher = new Search(this.index, dice, config, true);
+        this.searcher = new Search(this.index, dice, config);
     }
 
     @After

@@ -190,6 +190,19 @@ public class TestConfig extends BaseTest {
         assertEquals(compare.compatible(config), true);
         compare.setBooleanAttribute(ConvertConfig.SYMBOLS, false);
         assertEquals(compare.compatible(config), false);
+        compare.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
+        // test dice coefficient
+        config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, true);
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        assertEquals(config.compatible(compare), true);
+        assertEquals(compare.compatible(config), true);
+        
         
     }
 

@@ -203,12 +203,12 @@ public class IndexFiles {
         fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
         fieldType.setTokenized(true);
         fieldType.setStoreTermVectors(true);
+        fieldType.setStoreTermVectorPositions(true);
         doc.add(new Field(Constants.FIELD,
                           new InputStreamReader(stream, StandardCharsets.UTF_8),
                           fieldType
                           ));
         // keep some stats about the number of math formula sizes
-        System.out.println(fs.getFormulaCount() + " " + fs.getWordCount());
         if (fs != null){
             doc.add(new NumericDocValuesField(Constants.WORD_COUNT, (long) fs.getWordCount()));
             doc.add(new NumericDocValuesField(Constants.FORMULA_COUNT, (long) fs.getFormulaCount()));

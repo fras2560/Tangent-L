@@ -58,10 +58,11 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 10;
+    private static int TOP_K = 5;
     private Path queries;
     private Logger logger;
     private boolean greedy;
+
     /*
      * Class Constructor
      * @param documents path to the directory of documents
@@ -203,7 +204,6 @@ public class FindOptimal {
         for(String feature : features){
             config.flipBit(feature);
             this.output.newLine();
-            System.out.println(config + " " + feature);
             indexPath = this.createIndex(config);
             results = this.scoreIndex(indexPath, config);
             this.output.write(config + "," + results[0] + "," + results[1]);
@@ -284,6 +284,7 @@ public class FindOptimal {
             int count = 1;
             for (ScoreDoc hit : hits){
                 Document doc = searcher.doc(hit.doc);
+                System.out.println(this.parseTitle(doc.get("path")));
                 rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
                 if (rank > FindOptimal.RELEVANT_LOWER){
                     this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
@@ -344,7 +345,7 @@ public class FindOptimal {
 
         double found_mean = (double) 0.0;
         double reciprocal_mean = (double) 0.0;
-        Search searcher = new Search(index, new DiceSimilarity(), config, true);
+        Search searcher = new Search(index, config);
         SearchResult result;
         int count = 0;
         double reciprocal;
@@ -352,7 +353,6 @@ public class FindOptimal {
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
-            result.explainResults(searcher.getSearcher());
             found = this.found_answer(searcher.getSearcher(), result);
             reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
             this.logger.log(Level.FINER,
@@ -363,13 +363,6 @@ public class FindOptimal {
                             reciprocal +
                             "Total Results:" +
                              result.hitsNumber());
-            System.out.println(mq.getQueryName() +
-                               " found:" +
-                               found +
-                               " reciprocal:" +
-                               reciprocal +
-                               " Total Results:" +
-                               result.hitsNumber());
             this.output.write(mq.getQueryName()+ "," + found + "," + reciprocal);
             this.output.newLine();
             found_mean += found;
@@ -402,7 +395,6 @@ public class FindOptimal {
         // look for compatible index
         Path compatible = this.findCompatible(config);
         if (compatible != null){
-            System.out.println("Found compatible index " + compatible);
             return compatible;
         }
         if(!directory.mkdir()){
@@ -438,7 +430,6 @@ public class FindOptimal {
                }
                if (indexConfig.compatible(config)){
                    compatible = child.toPath();
-                   System.out.println("Two compatible config:" + indexConfig + " TO " + config);
                    break;
                }
             }
@@ -465,10 +456,10 @@ public class FindOptimal {
         }else{
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output.txt");
-            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output-33.txt");
+            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia-33.xml");
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal.log");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal33.log");
             
         }
         // check command line for override default methods

@@ -30,7 +30,7 @@ public class MathqueryProvider extends CustomScoreProvider{
         if (reader != null){
             for (TermCountPair term : this.terms){
                 PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
-                System.out.println("Term: " + term + " freq:" + posting.freq());
+                System.out.println("Term: " + term.getTerm() + " freq:" + posting.freq());
             }
         }
 //        System.out.println("Doc:" + doc +

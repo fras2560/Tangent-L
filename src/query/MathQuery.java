@@ -168,7 +168,7 @@ public class MathQuery {
         }
         Query result = bq.build();
         if (dice){
-            result = new Mathquery(bq.build(), uniqueTerms, this.fieldName);
+            result = new DiceQuery(bq.build(), uniqueTerms, this.fieldName);
         }
         return result;
     }

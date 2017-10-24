@@ -33,7 +33,6 @@ public class FileStatistics {
                         // add the math formula size
                         formulaSize = formulaSize  -2f; // do not include start and end tag
                         this.formulas.add(new Float(formulaSize));
-                        System.out.println("Formula size: " + formulaSize);
                         formulaSize = 0f;
                     }
                     // now not a previous math term

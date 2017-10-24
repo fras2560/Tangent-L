@@ -30,7 +30,6 @@ public class MathBagsFilter extends TokenFilter {
         String stoken = String.valueOf(token);
         if (stoken.equals(Constants.FORMULA_START_TAG)){
             this.openTag = true;
-            
         }else if (stoken.equals(Constants.FORMULA_END_TAG)){
             this.openTag = false;
         }else if (this.openTag){

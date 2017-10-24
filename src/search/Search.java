@@ -58,53 +58,41 @@ public class Search {
     private Analyzer analyzer;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
-    private boolean dice;
 
     public Search(Path index) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), new ConvertConfig(), MathSimilarity.getSimilarity(), false);
+        this(index, ProjectLogger.getLogger(), new ConvertConfig(), MathSimilarity.getSimilarity());
     }
 
     public Search(Path index, Similarity similarity)throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity, false);
+        this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity);
     }
 
-    public Search(Path index, Similarity similarity, boolean dice)throws IOException,
-                                                                         SearchConfigException,
-                                                                         ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity, dice);
-    }
 
     public Search(Path index, Similarity similarity, ConvertConfig config) throws IOException,
                                                                                   SearchConfigException,
                                                                                   ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), config, similarity, false);
+        this(index, ProjectLogger.getLogger(), config, similarity);
     }
 
-    public Search(Path index, Similarity similarity, ConvertConfig config, boolean dice) throws IOException,
-                                                                                                SearchConfigException,
-                                                                                                ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), config, similarity, dice);
-    }
 
     public Search(Path index, Logger logger) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, logger, new ConvertConfig(), MathSimilarity.getSimilarity(), false);
+        this(index, logger, new ConvertConfig(), MathSimilarity.getSimilarity());
     }
 
     public Search(Path index, ConvertConfig config) throws IOException, SearchConfigException, ConvertConfigException{
-        this(index, ProjectLogger.getLogger(), config, MathSimilarity.getSimilarity(), false);
+        this(index, ProjectLogger.getLogger(), config, MathSimilarity.getSimilarity());
     }
 
     public Search(Path index, Logger logger, ConvertConfig config)throws IOException,
                                                                           SearchConfigException,
                                                                           ConvertConfigException{
-        this(index, logger, config, MathSimilarity.getSimilarity(), false);
+        this(index, logger, config, MathSimilarity.getSimilarity());
     }
 
     public Search(Path index,
                   Logger logger,
                   ConvertConfig config,
-                  Similarity similarity,
-                  boolean dice) throws IOException, SearchConfigException, ConvertConfigException{
+                  Similarity similarity) throws IOException, SearchConfigException, ConvertConfigException{
         // increase the clause count since formulas can be a slight bit longer
         BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
         // remember if synonyms were used when indexing
@@ -124,7 +112,6 @@ public class Search {
         this.analyzer = new MathAnalyzer(config);
         this.config = config;
         this.logger = logger;
-        this.dice = dice;
     }
 
     public void close() throws IOException {
@@ -138,8 +125,6 @@ public class Search {
     public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
         this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
                 "Query: name: " + mathQuery.getQueryName());
-        System.out.println("Query: " + mathQuery.getQuery().replaceAll("//", "//") +
-                "Query: name: " + mathQuery.getQueryName());
         String queryString = String.join(" ", mathQuery.getTerms());
         String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
         ArrayList<String> files = new ArrayList<String>();
@@ -150,7 +135,7 @@ public class Search {
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
-                                                    this.dice);
+                                                    this.config.getAttribute(ConvertConfig.DICE_COEFFICIENT));
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
@@ -174,9 +159,7 @@ public class Search {
                         " Query: name: " +
                         mathQuery.getQueryName());
         String queryString = String.join(" ", mathQuery.getTerms());
-        System.out.println(queryString);
         String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
-        System.out.println("Tokens" + String.join(" ", tokens));
         SearchResult result = null;
         if (tokens.length <= 0){
             this.logger.log(Level.WARNING, "Query has no elements: " + mathQuery.getQueryName());
@@ -187,7 +170,7 @@ public class Search {
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
-                                                    this.dice);
+                                                    this.config.getAttribute(ConvertConfig.DICE_COEFFICIENT));
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);

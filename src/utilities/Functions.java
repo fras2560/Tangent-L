@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -31,6 +32,22 @@ public class Functions {
         
     }
 
+    public static void printMap(Map<Float, Float> map){
+        for (Map.Entry<Float, Float> entry : map.entrySet()) {
+            System.out.println(entry.getKey()+" : "+entry.getValue());
+        }
+    }
+
+    public static boolean containsWildcard(String term){
+        boolean wildcard = false;
+        if (term.contains("'" + Constants.WILDCARD + "'")){
+            // need to add quotes ' around Wildcard to make sure not to consider /*
+            // e.g. ('/*', '*', 'n') should be a wildcard
+            // but ('/*', 'v!x', 'n') should not be a wildcard
+            wildcard = true;
+        }
+        return wildcard;
+    }
     public static String[] analyzeTokens(Analyzer analyzer, String field, String queryText){
         // Use the analyzer to get all the tokens, and then build an appropriate
         // query based on the analysis chain.

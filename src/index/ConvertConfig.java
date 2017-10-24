@@ -339,7 +339,11 @@ public class ConvertConfig {
     public boolean compatible(ConvertConfig config){
         // assume compatible
         boolean result = true;
-        if (config.shortened != this.shortened || config.location != this.location){
+        if (this.dice == true && (config.synonyms == false || config.bags == false)){
+            // using dice requires bag of words and synonyms expansion
+            result = false;
+        }else if (config.shortened != this.shortened || config.location != this.location){
+            // neither is backwards compatible
             result = false;
         }else if(this.eol != true && this.eol != config.eol){
             // eol is backwards compatible
@@ -403,6 +407,10 @@ public class ConvertConfig {
         fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.window_size);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbol_pairs);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.BAGS_OF_WORDS + ConvertConfig.SEPERATOR + this.bags);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.DICE_COEFFICIENT + ConvertConfig.SEPERATOR + this.dice);
         fileWriter.newLine();
         fileWriter.close();
         

@@ -25,7 +25,6 @@ public class MathRemoveTagsFilter extends FilteringTokenFilter {
         if (stoken.equals(Constants.FORMULA_START_TAG) || stoken.equals(Constants.FORMULA_END_TAG)){
             keep = false;
         }
-        System.out.println("Token:" + stoken + "  Keep:" + keep);
         return keep;
     }
 }
