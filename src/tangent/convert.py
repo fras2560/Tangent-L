@@ -53,36 +53,39 @@ def convert_math_expression(mathml,
     tokens = MathExtractor.math_tokens(mathml)
     pmml = MathExtractor.isolate_pmml(tokens[0])
     tree_root = MathExtractor.convert_to_mathsymbol(pmml)
-    height = tree_root.get_height()
-    eol_check = False
-    if height <= 2:
-        eol_check = eol
-    pairs = tree_root.get_pairs("",
-                                window_size,
-                                eol=eol_check,
-                                symbol_pairs=symbol_pairs,
-                                compound_symbols=compound_symbols,
-                                terminal_symbols=terminal_symbols,
-                                edge_pairs=edge_pairs,
-                                unbounded=unbounded,
-                                shortened=shortened,
-                                include_location=location)
-#     for node in pairs:
-#         print("Node", node, format_node(node), type(node))
-    if not synonyms:
-        node_list = [format_node(node)
-                     for node in pairs
-                     if check_node(node)]
+    if tree_root is not None:
+        height = tree_root.get_height()
+        eol_check = False
+        if height <= 2:
+            eol_check = eol
+        pairs = tree_root.get_pairs("",
+                                    window_size,
+                                    eol=eol_check,
+                                    symbol_pairs=symbol_pairs,
+                                    compound_symbols=compound_symbols,
+                                    terminal_symbols=terminal_symbols,
+                                    edge_pairs=edge_pairs,
+                                    unbounded=unbounded,
+                                    shortened=shortened,
+                                    include_location=location)
+    #     for node in pairs:
+    #         print("Node", node, format_node(node), type(node))
+        if not synonyms:
+            node_list = [format_node(node)
+                         for node in pairs
+                         if check_node(node)]
+        else:
+            # loop through all kept nodes and their expanded nodes
+            node_list = [format_node(expanded_node)
+                         for node in pairs
+                         if check_node(node)
+                         for expanded_node in expand_node_with_wildcards(node)
+                         ]
+        # add start and end strings
+        node_list = [START_TAG] + node_list + [END_TAG]
+        return " ".join(node_list)
     else:
-        # loop through all kept nodes and their expanded nodes
-        node_list = [format_node(expanded_node)
-                     for node in pairs
-                     if check_node(node)
-                     for expanded_node in expand_node_with_wildcards(node)
-                     ]
-    # add start and end strings
-    node_list = [START_TAG] + node_list + [END_TAG]
-    return " ".join(node_list)
+        return ""
 
 
 def check_node(node):
