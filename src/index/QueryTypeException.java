@@ -20,6 +20,11 @@ package index;
  * @since 2017-11-06 
  */
 public class QueryTypeException extends Exception{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public QueryTypeException(String message){
         super(message);
     }
