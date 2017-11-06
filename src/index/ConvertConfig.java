@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 
-/*
+/**
  * This class contains a configuration that Tangent can use when
  * when converting MathML into tuples
  * @author Dallas Fraser
@@ -39,17 +39,18 @@ public class ConvertConfig {
      */
     private boolean shortened;
     private boolean eol;
-    private boolean compound_symbols;
-    private boolean terminal_symbols;
-    private boolean edge_pairs;
+    private boolean compoundSymbols;
+    private boolean terminalSymbols;
+    private boolean edgePairs;
     private boolean unbounded;
     private boolean location;
     private boolean synonyms;
-    private boolean symbol_pairs;
+    private boolean symbolPairs;
     private boolean query;
-    private int window_size;
-    private boolean dice;
+    private int windowSize;
     private boolean bags;
+    private String queryType;
+    private boolean boostedQueries;
     /*
      * The possible features that Tangent can use
      */
@@ -63,13 +64,17 @@ public class ConvertConfig {
     public final static String SYNONYMS = "SYNONYMS";
     public final static String SYMBOLS = "SYMBOL_PAIRS";
     public final static String BAGS_OF_WORDS = "BAG_OF_WORDS";
-    public final static String DICE_COEFFICIENT = "DICE_COEFFICIENT";
+    public final static String DICE_QUERY = "DICE_QUERY";
+    public final static String BM25TP_QUERY = "BM25TP_QUERY";
+    public final static String BM25_DISTANCE_QUERY = "BM25_DISTANCE_QUERY";
+    public final static String TERM_QUERY = "TERM_QUERY";
+    public final static String BOOST_QUERIES = "BOOST_QUERIES";
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
     private final static String QUERY = "QUERY";
     private static String FILENAME = "index.config";
-    /*
+    /**
      * Class constructor
      */
     public ConvertConfig(){
@@ -77,19 +82,20 @@ public class ConvertConfig {
     }
 
     private void initConfig(){
-        this.window_size = 1;
+        this.windowSize = 1;
         this.shortened = true;
         this.eol = false;
-        this.compound_symbols = false;
-        this.terminal_symbols = false;
-        this.edge_pairs = false;
+        this.compoundSymbols = false;
+        this.terminalSymbols = false;
+        this.edgePairs = false;
         this.unbounded = false;
         this.location = false;
         this.synonyms = false;
-        this.symbol_pairs = true;
+        this.symbolPairs = true;
         this.query = false;
-        this.dice = false;
         this.bags = false;
+        this.boostedQueries = false;
+        this.queryType = ConvertConfig.TERM_QUERY;
     }
 
     public ConvertConfig getSearchConfig(){
@@ -100,7 +106,7 @@ public class ConvertConfig {
     }
 
     @Override
-    /*
+    /**
      * Returns True if the two objects are equal False otherwise
      * @param o the object to check if it equal with
      * (non-Javadoc)
@@ -121,17 +127,17 @@ public class ConvertConfig {
         // Compare the data members and return accordingly
         return this.location == c.location
                 && this.unbounded == c.unbounded
-                && this.edge_pairs == c.edge_pairs
-                && this.terminal_symbols == c.terminal_symbols
-                && this.compound_symbols == c.compound_symbols
+                && this.edgePairs == c.edgePairs
+                && this.terminalSymbols == c.terminalSymbols
+                && this.compoundSymbols == c.compoundSymbols
                 && this.eol == c.eol
                 && this.shortened == c.shortened
-                && this.window_size == c.window_size
+                && this.windowSize == c.windowSize
                 && this.synonyms == c.synonyms
-                && this.symbol_pairs == c.symbol_pairs;
+                && this.symbolPairs == c.symbolPairs;
     }
 
-    /*
+    /**
      * Flips the current attributes setting.
      * Parameter attribute is one of the static String of ConvertConfig
      * (e.g. <code> ConvertConfig.UNBOUNDED </code>)
@@ -140,39 +146,62 @@ public class ConvertConfig {
     public void flipBit(String attribute){
         if (attribute.equals(ConvertConfig.SHORTENED)){
             this.shortened = !this.shortened;
-        }else if(attribute.equals(ConvertConfig.EOL)){
+        }else if (attribute.equals(ConvertConfig.EOL)){
             this.eol = !this.eol;
-        }else if(attribute.equals(ConvertConfig.COMPOUND)){
-            this.compound_symbols = !this.compound_symbols;
-        }else if(attribute.equals(ConvertConfig.TERMINAL)){
-            this.terminal_symbols = !this.terminal_symbols;
-        }else if(attribute.equals(ConvertConfig.EDGE)){
-            this.edge_pairs = !this.edge_pairs;
-        }else if(attribute.equals(ConvertConfig.UNBOUNDED)){
+        }else if (attribute.equals(ConvertConfig.COMPOUND)){
+            this.compoundSymbols = !this.compoundSymbols;
+        }else if (attribute.equals(ConvertConfig.TERMINAL)){
+            this.terminalSymbols = !this.terminalSymbols;
+        }else if (attribute.equals(ConvertConfig.EDGE)){
+            this.edgePairs = !this.edgePairs;
+        }else if (attribute.equals(ConvertConfig.UNBOUNDED)){
             this.unbounded = !this.unbounded;
-        }else if(attribute.equals(ConvertConfig.LOCATION)){
+        }else if (attribute.equals(ConvertConfig.LOCATION)){
             this.location = !this.location;
         }else if (attribute.equals(ConvertConfig.SYNONYMS)){
             this.synonyms = !this.synonyms;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
-            this.symbol_pairs = !this.symbol_pairs;
-        }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
+            this.symbolPairs = !this.symbolPairs;
+        }else if (attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
             this.bags = !this.bags;
-        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
-            this.dice = !this.dice;
+        }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
+            this.boostedQueries = !this.boostedQueries;
         }
     }
 
-    /*
+    /**
+     * sets the query type to be used
+     * @param queryType the type of query to use
+     */
+    public void setQueryType(String queryType) throws Exception{
+        if (queryType.equals(ConvertConfig.DICE_QUERY) ||
+            queryType.equals(ConvertConfig.BM25TP_QUERY) ||
+            queryType.equals(ConvertConfig.BM25_DISTANCE_QUERY) ||
+            queryType.equals(ConvertConfig.TERM_QUERY)){
+            this.queryType = queryType;
+        }else{
+            throw new Exception("Query type was not recgonized");
+        }
+    }
+
+    /**
+     * get the query type to be used
+     * @return the query type to be used
+     */
+    public String getQueryType(){
+        return this.queryType;
+    }
+
+    /**
      * Updates the window size that Tangent will use
      * @param n the size of the new window
      */
     public void setWindowSize(int n){
         if (n > 0){
-            this.window_size = n;
+            this.windowSize = n;
         }
     }
-    /*
+    /**
      * Getter for different attributes
      * @param attribute the Attribute to get
      * @return result the boolean value of the attribute
@@ -185,11 +214,11 @@ public class ConvertConfig {
         }else if(attribute.equals(ConvertConfig.EOL)){
             result = this.eol;
         }else if(attribute.equals(ConvertConfig.COMPOUND)){
-            result = this.compound_symbols;
+            result = this.compoundSymbols;
         }else if(attribute.equals(ConvertConfig.TERMINAL)){
-            result = this.terminal_symbols;
+            result = this.terminalSymbols;
         }else if(attribute.equals(ConvertConfig.EDGE)){
-            result = this.edge_pairs;
+            result = this.edgePairs;
         }else if(attribute.equals(ConvertConfig.UNBOUNDED)){
             result = this.unbounded;
         }else if(attribute.equals(ConvertConfig.LOCATION)){
@@ -197,24 +226,24 @@ public class ConvertConfig {
         }else if (attribute.equals(ConvertConfig.SYNONYMS)){
             result = this.synonyms;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
-            result = this.symbol_pairs;
+            result = this.symbolPairs;
         }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
             result = this.bags;
-        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
-            result = this.dice;
+        }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
+            result  = this.boostedQueries;
         }
         return result;
     }
 
-    /*
+    /**
      * Getter for window size
      * @return int the window size
      */
     public int getWindowsSize(){
-        return this.window_size;
+        return this.windowSize;
     }
 
-    /*
+    /**
      * Sets the attribute to some new value
      * @param attribute The attribute to change
      * @param settting The boolean value to change it to
@@ -225,11 +254,11 @@ public class ConvertConfig {
         }else if(attribute.equals(ConvertConfig.EOL)){
             this.eol = setting;
         }else if(attribute.equals(ConvertConfig.COMPOUND)){
-            this.compound_symbols = setting;
+            this.compoundSymbols = setting;
         }else if(attribute.equals(ConvertConfig.TERMINAL)){
-            this.terminal_symbols = setting;
+            this.terminalSymbols = setting;
         }else if(attribute.equals(ConvertConfig.EDGE)){
-            this.edge_pairs = setting;
+            this.edgePairs = setting;
         }else if(attribute.equals(ConvertConfig.UNBOUNDED)){
             this.unbounded = setting;
         }else if(attribute.equals(ConvertConfig.LOCATION)){
@@ -237,25 +266,25 @@ public class ConvertConfig {
         }else if(attribute.equals(ConvertConfig.SYNONYMS)){
             this.synonyms = setting;
         }else if (attribute.equals(ConvertConfig.SYMBOLS)){
-            this.symbol_pairs = setting;
+            this.symbolPairs = setting;
         }else if(attribute.equals(ConvertConfig.BAGS_OF_WORDS)){
             this.bags = setting;
-        }else if(attribute.equals(ConvertConfig.DICE_COEFFICIENT)){
-            this.dice = setting;
+        }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
+            this.boostedQueries = setting;
         }
     }
 
-    /*
+    /**
      * Updates the config to the optimal configuration
      */
     public void optimalConfig(){
-        this.compound_symbols = true;
-        this.edge_pairs = true;
+        this.compoundSymbols = true;
+        this.edgePairs = true;
         this.unbounded = true;
         return;
     }
 
-    /*
+    /**
      * Returns the an Array of Commands that can be used to pass parameters to Tangent
      * @return a list of commands
      */
@@ -270,13 +299,13 @@ public class ConvertConfig {
         if (this.eol){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.EOL.toLowerCase());
         }
-        if (this.compound_symbols){
+        if (this.compoundSymbols){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.COMPOUND.toLowerCase());
         }
-        if (this.terminal_symbols){
+        if (this.terminalSymbols){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.TERMINAL.toLowerCase());
         }
-        if (this.edge_pairs){
+        if (this.edgePairs){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.EDGE.toLowerCase());
         }
         if (this.unbounded){
@@ -285,12 +314,12 @@ public class ConvertConfig {
         if (this.synonyms){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS.toLowerCase());
         }
-        if (!this.symbol_pairs){
+        if (!this.symbolPairs){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYMBOLS.toLowerCase());
         }
-        if (this.window_size > 1){
+        if (this.windowSize > 1){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE.toLowerCase());
-            commands.add(Integer.toString(this.window_size));
+            commands.add(Integer.toString(this.windowSize));
         }
         if (this.query){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.QUERY.toLowerCase());
@@ -302,36 +331,34 @@ public class ConvertConfig {
         return result;
     }
 
-    /*
+    /**
      * Returns a copy of the ConvertConfig
      * @return a copy of the ConvertConfig
      */
     public ConvertConfig copy(){
         ConvertConfig config =  new ConvertConfig();
-        config.setBooleanAttribute(ConvertConfig.COMPOUND, this.compound_symbols);
+        config.setBooleanAttribute(ConvertConfig.COMPOUND, this.compoundSymbols);
         config.setBooleanAttribute(ConvertConfig.SHORTENED, this.shortened);
-        config.setBooleanAttribute(ConvertConfig.EDGE, this.edge_pairs);
+        config.setBooleanAttribute(ConvertConfig.EDGE, this.edgePairs);
         config.setBooleanAttribute(ConvertConfig.EOL, this.eol);
-        config.setBooleanAttribute(ConvertConfig.TERMINAL, this.terminal_symbols);
+        config.setBooleanAttribute(ConvertConfig.TERMINAL, this.terminalSymbols);
         config.setBooleanAttribute(ConvertConfig.LOCATION, this.location);
         config.setBooleanAttribute(ConvertConfig.UNBOUNDED, this.unbounded);
-        config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbol_pairs);
+        config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbolPairs);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, this.synonyms);
-        config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, this.dice);
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, this.bags);
-        config.setWindowSize(this.window_size);
+        config.setWindowSize(this.windowSize);
+        try {
+            config.setQueryType(this.queryType);
+        } catch (Exception e) {
+            // really this should never been thrown since it would have been thrown already
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return config;
     }
 
-    /*
-     * Getter for synonyms
-     * @returns boolean True if synonyms are to be used
-     */
-    public boolean getSynonym(){
-        return this.synonyms;
-    }
-
-    /*
+    /**
      * Checks if the this config file is compatible with the given config
      * @param config the configuration to check is compatible
      * @returns boolean True if this is compatible with config
@@ -339,7 +366,8 @@ public class ConvertConfig {
     public boolean compatible(ConvertConfig config){
         // assume compatible
         boolean result = true;
-        if (this.dice == true && (config.synonyms == false || config.bags == false)){
+        if ((this.queryType.equals(ConvertConfig.DICE_QUERY) == true) &&
+            (config.synonyms == false || config.bags == false)){
             // using dice requires bag of words and synonyms expansion
             result = false;
         }else if (config.shortened != this.shortened || config.location != this.location){
@@ -348,13 +376,13 @@ public class ConvertConfig {
         }else if(this.eol != true && this.eol != config.eol){
             // eol is backwards compatible
             result = false;
-        }else if(this.compound_symbols != true && this.compound_symbols != config.compound_symbols){
+        }else if(this.compoundSymbols != true && this.compoundSymbols != config.compoundSymbols){
             // compound symbol is backwards compatible
             result = false;
-        }else if(this.terminal_symbols != true && this.terminal_symbols != config.terminal_symbols){
+        }else if(this.terminalSymbols != true && this.terminalSymbols != config.terminalSymbols){
             // terminal symbol is backwards compatible
             result = false;
-        }else if(this.edge_pairs != true && this.edge_pairs != config.edge_pairs){
+        }else if(this.edgePairs != true && this.edgePairs != config.edgePairs){
             // edge pairs is backwards compatible
             result = false;
         }else if(this.synonyms != true && this.synonyms != config.synonyms){
@@ -363,18 +391,18 @@ public class ConvertConfig {
         }else if(this.unbounded != true && this.unbounded != config.unbounded){
             // unbounded is backwards compatible
             result = false;
-        }else if (this.window_size < config.window_size){
+        }else if (this.windowSize < config.windowSize){
             // window size should be bigger or same size
             // unbounded is not a substitute for this
             result = false;
-        }else if (this.symbol_pairs != true && this.symbol_pairs != config.symbol_pairs){
+        }else if (this.symbolPairs != true && this.symbolPairs != config.symbolPairs){
             // symbol pairs is backwards compatible
             result = false;
         }
         return result;
     }
 
-    /*
+    /**
      * Saves a config file in the directory given
      * @param directory the directory to save the config file
      */
@@ -388,9 +416,9 @@ public class ConvertConfig {
         // create the new file
         file.createNewFile();
         BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-        fileWriter.write(ConvertConfig.COMPOUND + ConvertConfig.SEPERATOR + this.compound_symbols);
+        fileWriter.write(ConvertConfig.COMPOUND + ConvertConfig.SEPERATOR + this.compoundSymbols);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.EDGE + ConvertConfig.SEPERATOR + this.edge_pairs);
+        fileWriter.write(ConvertConfig.EDGE + ConvertConfig.SEPERATOR + this.edgePairs);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.EOL + ConvertConfig.SEPERATOR + this.eol);
         fileWriter.newLine();
@@ -400,23 +428,20 @@ public class ConvertConfig {
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SYNONYMS + ConvertConfig.SEPERATOR + this.synonyms);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.TERMINAL + ConvertConfig.SEPERATOR + this.terminal_symbols);
+        fileWriter.write(ConvertConfig.TERMINAL + ConvertConfig.SEPERATOR + this.terminalSymbols);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.UNBOUNDED + ConvertConfig.SEPERATOR + this.unbounded);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.window_size);
+        fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.windowSize);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbol_pairs);
+        fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbolPairs);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.BAGS_OF_WORDS + ConvertConfig.SEPERATOR + this.bags);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.DICE_COEFFICIENT + ConvertConfig.SEPERATOR + this.dice);
-        fileWriter.newLine();
         fileWriter.close();
-        
     }
 
-    /*
+    /**
      * Loads a config file from the direcotyr given
      * @param directory the directory to save the config file
      */
@@ -445,7 +470,6 @@ public class ConvertConfig {
                     setting = Boolean.parseBoolean(parts[1].trim());
                     this.setBooleanAttribute(attribute, setting);
                 }
-                
             }
             fileReader.close();
         }else{
@@ -464,7 +488,7 @@ public class ConvertConfig {
         }
     }
 
-    /*
+    /**
      * Returns a String representation of the object
      * @return a String representation
      * (non-Javadoc)
@@ -475,7 +499,7 @@ public class ConvertConfig {
         if (!this.shortened){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SHORTENED;
         }
-        if (!this.symbol_pairs){
+        if (!this.symbolPairs){
             result = result + " " + ConvertConfig.DELIMINTER + "!" +ConvertConfig.SYMBOLS;
         }
         if (this.location){
@@ -484,13 +508,13 @@ public class ConvertConfig {
         if (this.eol){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.EOL;
         }
-        if (this.compound_symbols){
+        if (this.compoundSymbols){
             result = result +  " " + ConvertConfig.DELIMINTER + ConvertConfig.COMPOUND;
         }
-        if (this.terminal_symbols){
+        if (this.terminalSymbols){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.TERMINAL;
         }
-        if (this.edge_pairs){
+        if (this.edgePairs){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.EDGE;
         }
         if (this.unbounded){
@@ -499,10 +523,18 @@ public class ConvertConfig {
         if (this.synonyms){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS;
         }
-        if (this.window_size > 1){
-            result = (result + " "+ ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR +
-                      Integer.toString(this.window_size));
+        if (this.query){
+            if (this.boostedQueries){
+                result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.BOOST_QUERIES;
+            }
+            result = result + " " + ConvertConfig.DELIMINTER + this.queryType; 
         }
+        
+        if (this.windowSize > 1){
+            result = (result + " "+ ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR +
+                      Integer.toString(this.windowSize));
+        }
+        
         if (result.equals("")){
             result = "base";
         }

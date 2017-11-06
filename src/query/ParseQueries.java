@@ -37,22 +37,57 @@ import index.ConvertMathML;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
-
+/**
+ * A class used to parse queries from a file
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
 public class ParseQueries{
     private File f;
     private ArrayList<MathQuery> queries;
     private Logger logger;
+    /**
+     * Class Constructor
+     * @param f the file (NTCIR - MathIR file format)
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public ParseQueries(File f) throws IOException, InterruptedException{
         // always uses the optimal config file
         this(f, new ConvertConfig(), ProjectLogger.getLogger());
     }
+
+    /**
+     * Class Constructor
+     * @param f the file (NTCIR - MathIR file format)
+     * @param logger the logger to use
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public ParseQueries(File f, Logger logger) throws IOException, InterruptedException{
         // always uses the optimal config file
         this(f, new ConvertConfig(), logger);
     }
+
+    /**
+     * 
+     * @param f the file (NTCIR - MathIR file format)
+     * @param config the config to use to convert the math formula
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public ParseQueries(File f, ConvertConfig config) throws IOException, InterruptedException{
         this(f, config, ProjectLogger.getLogger());
     }
+    
+    /**
+     * 
+     * @param f the file (NTCIR - MathIR file format)
+     * @param config the config to use to convert the math formula
+     * @param logger the loger to use
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public ParseQueries(File f, ConvertConfig config, Logger logger) throws IOException, InterruptedException{
         this.logger = logger;
         this.logger = ProjectLogger.getLogger();
@@ -60,6 +95,15 @@ public class ParseQueries{
         this.f = new File(new_file.toString());
         this.queries = new ArrayList<MathQuery>();
     }
+
+    /**
+     * Returns a list of queries parsed from the file
+     * @return ArrayList<MathQuery> a list of math queries parsed
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws XPathExpressionException
+     */
     public ArrayList<MathQuery> getQueries() throws ParserConfigurationException,
                                                     SAXException,
                                                     IOException,
@@ -84,6 +128,9 @@ public class ParseQueries{
         return this.queries;
     }
 
+    /**
+     * Deletes the temporary file used when converting the MathML
+     */
     public void deleteFile(){
         this.f.delete();
     }

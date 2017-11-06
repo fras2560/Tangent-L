@@ -28,7 +28,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import query.MathQuery;
 
-
+/**
+ * 
+ * @author d6fraser
+ *
+ */
 public class ScoreResults {
     Judgements answers;
     HashMap<String, ArrayList<Result>> results;

@@ -28,7 +28,7 @@ import utilities.Functions;
 import utilities.ProjectLogger;
 
 
-/*
+/**
  * This class converts a File's MathML to Tangent Tuples
  * 
  * @author Dallas Fraser
@@ -36,21 +36,21 @@ import utilities.ProjectLogger;
  * @since 2017-09-06
  */
 public class ConvertMathML {
-    /*
+    /**
      * file holds the path to the file to convert
      * app holds the path to the tangent app
      */
     private Path file;
     private Path app;
     private Logger logger;
-    /*
+    /**
      * Class constructor
      * @param f the path to the file to convert
      */
     public ConvertMathML(Path f){
         this(f, ProjectLogger.getLogger());
     }
-    /*
+    /**
      * Class constructor with a specified logger
      * @param f the path to the file to convert
      * @param logger the 
@@ -62,7 +62,7 @@ public class ConvertMathML {
         this.logger.log(Level.FINEST, "Path:" + this.file.toFile().getAbsolutePath());
         
     }
-    /*
+    /**
      * Converts a file and returns a path to the converted file path
      * @exception IOException
      * @exception InterruptedException
@@ -73,7 +73,7 @@ public class ConvertMathML {
         config.optimalConfig();
         return this.convert(config);
     }
-    /*
+    /**
      * Converts a file using the specified config and returns a path to the converted file path
      * @see ConvertConfig
      * @param config the configuration of features to be used when converting
@@ -121,5 +121,5 @@ public class ConvertMathML {
         }
         proc.waitFor();
         return new_file;
-	}
+    }
 }

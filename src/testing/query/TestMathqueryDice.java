@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import index.ConvertConfig;
 import index.IndexFiles;
-import query.DiceSimilarity;
 import query.MathQuery;
 import query.ParseQueries;
 import search.Search;
@@ -26,7 +25,6 @@ import search.SearchResult;
 import testing.BaseTest;
 
 public class TestMathqueryDice extends BaseTest{
-
     private Path folder;
     private Path index;
     private Path documents;
@@ -55,12 +53,11 @@ public class TestMathqueryDice extends BaseTest{
         }
         // create the index
         IndexFiles indexer = new IndexFiles();
-        DiceSimilarity dice = new DiceSimilarity();
         ConvertConfig config = new ConvertConfig();
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
-        indexer.indexDirectory(this.index, this.documents, true, config, dice);
+        indexer.indexDirectory(this.index, this.documents, true, config);
         // init the searching object
-        this.searcher = new Search(this.index, dice, config);
+        this.searcher = new Search(this.index, config);
     }
 
     @After
@@ -107,5 +104,4 @@ public class TestMathqueryDice extends BaseTest{
             fail("SAX exception");
         }
     }
-
 }

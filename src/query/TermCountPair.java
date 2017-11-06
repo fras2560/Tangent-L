@@ -1,24 +1,61 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package query;
 
+/**
+ * A Class that holds a term and a count
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class TermCountPair {
     private String term;
     private float count;
+    /**
+     * Class Constructor
+     * @param term the term
+     */
     public TermCountPair(String term){
         this.term = term;
         this.count = 1f;
     }
 
+    /**
+     * Increases the count
+     */
     public void increment(){
         this.count += 1f;
     }
 
+    /**
+     * Returns the term
+     * @return String the term
+     */
     public String getTerm(){
         return this.term;
     }
 
+    /**
+     * Returns the number of count
+     * @return float the count
+     */
     public float getCount(){
         return this.count;
     }
+
     /*
      * Returns a String representation of the object
      * @return a String representation
@@ -28,6 +65,7 @@ public class TermCountPair {
     public String toString(){
         return this.term + ":" + this.count;
     }
+
     @Override
     /*
      * Returns True if the two objects are equal False otherwise

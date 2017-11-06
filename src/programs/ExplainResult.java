@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package programs;
 
 import java.io.BufferedWriter;
@@ -16,7 +31,12 @@ import index.ConvertConfig.ConvertConfigException;
 import search.Search;
 import search.Search.SearchConfigException;
 import utilities.ProjectLogger;
-
+/**
+ * A program to explain the results of a running queries on a index with the expect results
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class ExplainResult {
     public static void main(String[] args) throws IOException{
         String usage = "Usage:\tjava program.ExplainResult [-indexDirectory dir] [-queries file] [-results file] [-logFile file]";

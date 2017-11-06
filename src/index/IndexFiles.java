@@ -43,7 +43,7 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import mathquery.MathSimilarity;
+import query.MathSimilarity;
 import utilities.Constants;
 import utilities.ProjectLogger;
 
@@ -52,21 +52,49 @@ import utilities.ProjectLogger;
  * <p>
  * This is a command-line application demonstrating simple Lucene indexing.
  * Run it with no command-line arguments for usage information.
+ * @author Dallas Fraser
+ * @since 2017-11-06
  */
 public class IndexFiles {
   private Logger logger;
+  /**
+   * Class constructor
+   */
   public IndexFiles(){
       this.logger = ProjectLogger.getLogger();
   }
+
+  /**
+   * Class constructor with a specified logger
+   * @param logger the logger to use
+   */
   public IndexFiles(Logger logger){
       this.logger = logger;
   }
+
+  /**
+   * Index a directory using the default similarity
+   * @param indexPath the path to the index
+   * @param docsPath the path to the documents
+   * @param create whether to create the index versus just appending to one
+   * @param config the config file to use when indexing
+   * @throws IOException
+   */
   public void indexDirectory(Path indexPath,
                              Path docsPath,
                              boolean create,
                              ConvertConfig config) throws IOException{
       this.indexDirectory(indexPath, docsPath, create, config, MathSimilarity.getSimilarity());
   }
+  /**
+   * Index a directory
+   * @param indexPath the path to the index
+   * @param docsPath the path to the documents
+   * @param create whether to create the index versus just appending to one
+   * @param config the config file to use when indexing
+   * @param simlarity the similarity to be used when indexing
+   * @throws IOException
+   */
   public void indexDirectory(Path indexPath,
                              Path docsPath,
                              boolean create,

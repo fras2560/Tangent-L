@@ -41,14 +41,18 @@ import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
 import index.ConvertConfig.ConvertConfigException;
-import mathquery.MathSimilarity;
 import index.MathAnalyzer;
 import query.ParseQueries;
 import query.MathQuery;
+import query.MathSimilarity;
 import utilities.Functions;
 import utilities.ProjectLogger;
 
-
+/**
+ * A class used to search the index
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
 public class Search {
     private Logger logger ;
     private IndexSearcher searcher;
@@ -59,36 +63,93 @@ public class Search {
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
 
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index) throws IOException, SearchConfigException, ConvertConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig(), MathSimilarity.getSimilarity());
     }
 
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param similarity the similarity to use when searching
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index, Similarity similarity)throws IOException, SearchConfigException, ConvertConfigException{
         this(index, ProjectLogger.getLogger(), new ConvertConfig(), similarity);
     }
 
-
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param config the config to convert MathML and determine Query Type
+     * @param similarity the similarity to use when searching
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index, Similarity similarity, ConvertConfig config) throws IOException,
                                                                                   SearchConfigException,
                                                                                   ConvertConfigException{
         this(index, ProjectLogger.getLogger(), config, similarity);
     }
 
-
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param logger the logger to use
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index, Logger logger) throws IOException, SearchConfigException, ConvertConfigException{
         this(index, logger, new ConvertConfig(), MathSimilarity.getSimilarity());
     }
 
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param config the config to convert MathML and determine Query Type
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index, ConvertConfig config) throws IOException, SearchConfigException, ConvertConfigException{
         this(index, ProjectLogger.getLogger(), config, MathSimilarity.getSimilarity());
     }
 
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param logger the logger to use
+     * @param config the config to convert MathML and determine Query Type
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index, Logger logger, ConvertConfig config)throws IOException,
                                                                           SearchConfigException,
                                                                           ConvertConfigException{
         this(index, logger, config, MathSimilarity.getSimilarity());
     }
 
+    /**
+     * Class Constructor
+     * @param index path to the Lucene index
+     * @param logger the logger to use
+     * @param config the config to convert MathML and determine Query Type
+     * @param similarity the similarity to use when searching
+     * @throws IOException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public Search(Path index,
                   Logger logger,
                   ConvertConfig config,
@@ -96,7 +157,7 @@ public class Search {
         // increase the clause count since formulas can be a slight bit longer
         BooleanQuery.setMaxClauseCount(Search.MAX_CLUASES);
         // remember if synonyms were used when indexing
-        this.synonym = config.getSynonym();
+        this.synonym = config.getAttribute(ConvertConfig.SYNONYMS);
         this.config = config.getSearchConfig();
         // make sure the config and index are compatible
         ConvertConfig indexConfig = new ConvertConfig();
@@ -114,14 +175,31 @@ public class Search {
         this.logger = logger;
     }
 
+    /**
+     * Closes the reader of the index
+     * @throws IOException
+     */
     public void close() throws IOException {
         this.reader.close();
     }
 
+    /**
+     * Search using the query and return a list of the documents file paths
+     * @param mathQuery the query to search
+     * @return ArrayList<String> the list of files returned by the query
+     * @throws IOException
+     */
     public ArrayList<String> searchQueryFiles(MathQuery mathQuery) throws IOException{
         return this.searchQueryFiles(mathQuery, Search.DEFAULT_K);
     }
 
+    /**
+     * Search using the query and return a list of the documents file paths
+     * @param mathQuery the query to search
+     * @param k the number of documents to return
+     * @return ArrayList<String> the list of files returned by the query
+     * @throws IOException
+     */
     public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
         this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
                 "Query: name: " + mathQuery.getQueryName());
@@ -135,7 +213,7 @@ public class Search {
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
-                                                    this.config.getAttribute(ConvertConfig.DICE_COEFFICIENT));
+                                                    this.config);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
@@ -148,10 +226,23 @@ public class Search {
         return files;
     }
 
+    /**
+     * Returns search results of a query
+     * @param mathQuery the query to search
+     * @return SearchResult the results of the search
+     * @throws IOException
+     */
     public SearchResult searchQuery(MathQuery mathQuery) throws IOException{
         return this.searchQuery(mathQuery, Search.DEFAULT_K);
     }
 
+    /**
+     * Returns search results of a query
+     * @param mathQuery the query to search
+     * @param k the number of documents to return
+     * @return SearchResult the results of the search
+     * @throws IOException
+     */
     public SearchResult searchQuery(MathQuery mathQuery, int k) throws IOException{
         this.logger.log(Level.FINER,
                         "Query: " +
@@ -170,7 +261,7 @@ public class Search {
                                                     mathQuery.getFieldName(),
                                                     bq,
                                                     this.synonym,
-                                                    this.config.getAttribute(ConvertConfig.DICE_COEFFICIENT));
+                                                    this.config);
             this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
@@ -179,6 +270,16 @@ public class Search {
         return result;
     }
 
+    /**
+     * Returns a list of search results for queries found in a file
+     * @param queries the path to the file of queries
+     * @return ArrayList<SearchResult> a list of search results
+     * @throws XPathExpressionException
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public ArrayList<SearchResult> searchQueries(Path queries) throws XPathExpressionException,
                                                                       IOException,
                                                                       InterruptedException,
@@ -187,6 +288,17 @@ public class Search {
         return this.searchQueries(queries, Search.DEFAULT_K);
     }
 
+    /**
+     * Returns a list of search results for queries found in a file
+     * @param queries the path to the file of queries
+     * @param k the number of documents to return for each query
+     * @return ArrayList<SearchResult> a list of search results
+     * @throws XPathExpressionException
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public ArrayList<SearchResult> searchQueries(Path queries, int k) throws IOException,
                                                                              InterruptedException,
                                                                              XPathExpressionException,
@@ -204,6 +316,15 @@ public class Search {
         return results;
     }
 
+    /**
+     * Explains the queries results and the scoring of each document
+     * @param queries the path to the queries
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void explainQueries(Path queries) throws IOException,
                                                     XPathExpressionException,
                                                     InterruptedException,
@@ -211,7 +332,17 @@ public class Search {
                                                     SAXException{
         this.explainQueries(queries, Search.DEFAULT_K);
     }
-    
+
+    /**
+     * Explains the queries results and the scoring of each document
+     * @param queries the path to the queries
+     * @param k the number of documents for each query
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void explainQueries(Path queries, int k) throws IOException,
                                                     XPathExpressionException,
                                                     InterruptedException,
@@ -225,6 +356,16 @@ public class Search {
         }
     }
 
+    /**
+     * Explains the queries results and the scoring of each document and outputs to a file
+     * @param queries the path to the queries
+     * @param output the file to output to
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void explainQueries(Path queries, Path output)throws IOException,
                                                                 XPathExpressionException,
                                                                 InterruptedException,
@@ -233,6 +374,17 @@ public class Search {
         this.explainQueries(queries, output, Search.DEFAULT_K);
     }
 
+    /**
+     * Explains the queries results and the scoring of each document and outputs to a file
+     * @param queries the path to the queries
+     * @param output the file to output to
+     * @param k the number of documents for each query
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void explainQueries(Path queries, Path output, int k)throws IOException,
                                                                 XPathExpressionException,
                                                                 InterruptedException,
@@ -252,7 +404,17 @@ public class Search {
         bw.close();
         fos.close();
     }
-    
+
+    /**
+     * Records the results of the queries
+     * @param queries path to the queries
+     * @param queryWriter the file to output the query results to
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void recordQueries(Path queries, BufferedWriter queryWriter) throws IOException,
                                                                                XPathExpressionException,
                                                                                InterruptedException,
@@ -261,6 +423,17 @@ public class Search {
         this.recordQueries(queries, queryWriter, Search.DEFAULT_K);
     }
 
+    /**
+     * Record the results of the queries
+     * @param queries path to the queries
+     * @param queryWriter the file to output the query results to
+     * @param k the number of documents to return for each query
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws InterruptedException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void recordQueries(Path queries, BufferedWriter queryWriter, int k) throws IOException,
                                                                                       XPathExpressionException,
                                                                                       InterruptedException,
@@ -286,6 +459,18 @@ public class Search {
         }
     }
 
+    /**
+     * runs the ntcir test scoring precision for P5, P10, P15, P20 on relevant and partially relevant documents
+     * @param queries path to the queries to run
+     * @param results the expected results used to check relevance
+     * @param resultsWriter the file to output to
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     */
     public void ntcirTest(Path queries, Path results, BufferedWriter resultsWriter) throws IOException,
                                                                                            XPathExpressionException,
                                                                                            ParserConfigurationException,
@@ -316,6 +501,11 @@ public class Search {
         }
     }
 
+    /**
+     * Checks if the two results are the same
+     * @param tp1 first set of results
+     * @param tp2 second set of results
+     */
     public void differentResults(TopDocs tp1, TopDocs tp2){
         ScoreDoc[] sd1 = tp1.scoreDocs;
         ScoreDoc[] sd2 = tp2.scoreDocs;
@@ -332,6 +522,11 @@ public class Search {
         this.logger.log(Level.FINEST, "Both queries are the same:" + same);
     }
 
+    /**
+     * Returns the mean of the results
+     * @param hits the results returned by a query
+     * @return float the mean score
+     */
     public float getMean(ScoreDoc[] hits){
         float total = 0;
         for (ScoreDoc hit : hits){
@@ -340,6 +535,12 @@ public class Search {
         return total / hits.length;
     }
 
+    /**
+     * Determines the standard deviation of the results
+     * @param hits the results returned by a query
+     * @param mean the mean score of the query
+     * @return float the standard deviation
+     */
     public float getStandardDeviation(ScoreDoc[] hits, float mean){
         float std = 0;
         for (ScoreDoc hit: hits){
@@ -348,6 +549,14 @@ public class Search {
         return std / hits.length;
     }
 
+    /**
+     * Scores the query based upon the number of deviations the relevant vs non-relevant documents
+     * @param searchResults
+     * @param query
+     * @param judgements
+     * @param scoreWriter the file to output to
+     * @throws IOException
+     */
     public void scoreDeviations(TopDocs searchResults,
                                 MathQuery query,
                                 Judgements judgements,
@@ -374,6 +583,14 @@ public class Search {
         scoreWriter.newLine();
     }
 
+    /**
+     * Returns arxiv score for partially relevant and relevant with Precision at K for K in {5,10,15,20}
+     * @param searchResults the documents return by the query
+     * @param query the query to score
+     * @param judgements the judgements of the query
+     * @return ArrayList<ArrayList<Double>>
+     * @throws IOException
+     */
     public ArrayList<ArrayList<Double>> arxivScore(TopDocs searchResults,
                                                    MathQuery query,
                                                    Judgements judgements) throws IOException{
@@ -437,15 +654,27 @@ public class Search {
     }
 
 
-
+    /**
+     * Returns the config used when searching
+     * @return ConvertConfig
+     */
     public ConvertConfig getConfig(){
         return this.config;
     }
 
+    /**
+     * Returns the IndexSearcher
+     * @return IndexSearcher
+     */
     public IndexSearcher getSearcher(){
         return this.searcher;
     }
 
+    /**
+     * An Exception that is thrown when the Search Config does not match the Index Config used when indexing
+     * @author Dallas Fraser
+     * @since 2017-11-06
+     */
     public class SearchConfigException extends Exception{
         /**
          * 

@@ -24,17 +24,35 @@ import java.util.logging.Logger;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
-
+/**
+ * A class to hold the judgements for the expected results
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class Judgements {
     private ArrayList<Judgement> resultsList;
     private Logger logger;
     public static final Float rLower = new Float(2.0);
     public static final Float pLower = new Float(0.0);
+    /**
+     * Class Constructor
+     * @param f the file of the expected results
+     */
     public Judgements(File f){
         this.logger = ProjectLogger.getLogger();
         this.resultsList = this.parseFile(f);
     }
 
+    /**
+     * Returns a [num of relevant docs,
+     *            num of relevant found,
+     *            num of partially relevant docs,
+     *            num of partially relevant found]
+     * @param query the query
+     * @param files the list of files returned from the query
+     * @return int[]
+     */
     public int[] recallResult(MathQuery query, ArrayList<String> files){
         int r_docs = 0;
         int pr_docs = 0;
@@ -63,6 +81,12 @@ public class Judgements {
         return new int[]{r_docs,r_found, pr_docs, pr_found};
     }
 
+    /**
+     * Returns whether the result is in the list of files
+     * @param result the result to check
+     * @param files the list of files
+     * @return boolean True if files contain result
+     */
     public boolean containsResults(Judgement result, ArrayList<String> files){
         boolean contained = false;
         for (String file: files){
@@ -74,6 +98,12 @@ public class Judgements {
         return contained;
     }
 
+    /**
+     * Returns the ranking of the query and file
+     * @param query the query used
+     * @param file the name of the file
+     * @return Float Ranking if found, -1 otherwise 
+     */
     public Float findResult(MathQuery query, String file){
         Float result = new Float(-1.0);
         for (Judgement entry : this.resultsList){
@@ -86,10 +116,19 @@ public class Judgements {
         return result;
     }
 
+    /**
+     * Returns the number of results
+     * @return int the number of judgements
+     */
     public int length(){
         return this.resultsList.size();
     }
 
+    /**
+     * parses a file 
+     * @param f
+     * @return
+     */
     private ArrayList<Judgement> parseFile(File f){
         ArrayList<Judgement> records = new ArrayList<Judgement>();
         try {
@@ -108,11 +147,20 @@ public class Judgements {
         }
     }
 
+    /**
+     * A private class that holds query name, file name and its corresponding rank 
+     * @author Dallas Fraser
+     *
+     */
     private class Judgement {
         private String queryName;
         private Float rank;
         private String fileName;
-
+        /**
+         * Class Constructor
+         * @param line a line of the expect results line in a certain format
+         * @throws Exception
+         */
         public Judgement(String line) throws Exception{
             String[] parts = line.split(" ");
             if (parts.length < 4){
@@ -123,23 +171,49 @@ public class Judgements {
             this.rank = Float.parseFloat(parts[3]);
         }
 
+        /**
+         * Returns the rank of the judgement
+         * @return Float the rank
+         */
         public Float getRank(){
             return this.rank;
         }
 
+        /**
+         * Checks if Judgement is equal to the query
+         * @param q the query to compare to 
+         * @return boolean
+         */
         public boolean equals(MathQuery q){
             return this.queryName.equals(q.getQueryName());
         }
 
+        /**
+         * Checks if a judgement is equal to a file name
+         * @param f the filename to compare to
+         * @return boolean
+         */
         public boolean equals(String f){
             return this.fileName.equals(f);
         }
 
+        /*
+         * Prints a query to a String, with <code>field</code> assumed to be the
+         * default field and omitted
+         * (non-Javadoc)
+         * @see org.apache.lucene.search.Query#toString(java.lang.String)
+         * @return the string representation
+         */
         public String toString(){
             return "Query Name: " + this.queryName + " Filename:" + this.fileName;
         }
     }
 
+    /**
+     * An exception thrown when parsing a file
+     * @author Dallas Fraser
+     *
+     */
     private class JudgementException extends Exception{
         private static final long serialVersionUID = 1L;
         public JudgementException(String string) {

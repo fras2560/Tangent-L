@@ -51,7 +51,6 @@ public class TestIndexTermSamePosition extends BaseTest{
         try {
             ConvertConfig config = new ConvertConfig();
             config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-            config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, true);
             indexer.indexDirectory(this.index, this.documents, true, config);
             // make sure some files were created
             String[]entries = this.index.toFile().list();

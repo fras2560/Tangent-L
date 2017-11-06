@@ -118,7 +118,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
         result = new MathBagsFilter(result);
     }
     result = new MathRemoveTagsFilter(result);
-    if (this.config.getSynonym()){
+    if (this.config.getAttribute(ConvertConfig.SYNONYMS)){
         result = new MathSynonymFilter(result);
     }
     result = new PorterStemFilter(result);

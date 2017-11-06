@@ -7,10 +7,20 @@ import java.util.List;
 
 import utilities.Constants;
 
+/**
+ * This class converts a File's MathML to Tangent Tuples
+ * 
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
 public class FileStatistics {
     private List<Float> formulas;
     private float words;
-
+    /**
+     * A class to determine the filestatistics of a file
+     * @param is the input stream reader of the file
+     * @throws IOException
+     */
     public FileStatistics(InputStreamReader is) throws IOException{
         int character;
         String token = "";
@@ -55,10 +65,18 @@ public class FileStatistics {
         }
     }
 
+    /**
+     * Returns the number of words for the file
+     * @return float The total number of words
+     */
     public float getWordCount(){
         return this.words;
     }
 
+    /**
+     * Get the number of tuples in all the formulas
+     * @return float the total number of tuples
+     */
     public float getFormulaCount(){
         Float total = new Float(0);
         for (Float formula : this.formulas){
@@ -67,6 +85,10 @@ public class FileStatistics {
         return total.floatValue(); 
     }
 
+    /**
+     * Returns the average formula size of the file
+     * @return float the average formula size
+     */
     public float averageFormulaSize(){
         Float total = new Float(0);
         for (Float formula : this.formulas){
@@ -76,6 +98,10 @@ public class FileStatistics {
         return average.floatValue(); 
     }
 
+    /**
+     * Returns the max formula size of the file
+     * @return float the max formula size
+     */
     public float maxFormulaSize(){
         Float maxFormula = new Float(0);
         for (Float formula : this.formulas){

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package programs;
 
 import java.io.IOException;
@@ -18,8 +33,27 @@ import search.Search;
 import search.Search.SearchConfigException;
 import query.MathQuery;
 import utilities.ProjectLogger;
-
+/**
+ * A program to time the amount time used for search
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class TimeSearch{
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param size the number of documents to return for each query
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public TimeSearch(Path index, Path queries, int size) throws IOException,
                                                                   XPathExpressionException,
                                                                   ParserConfigurationException,
@@ -31,6 +65,21 @@ public class TimeSearch{
         this(index, queries, new ConvertConfig(), size, ProjectLogger.getLogger());
     }
 
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param config the convert config to use
+     * @param size the number of documents to return for each query
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public TimeSearch(Path index,
                        Path queries,
                        ConvertConfig config,
@@ -45,6 +94,22 @@ public class TimeSearch{
         this(index, queries, config, size, ProjectLogger.getLogger());
     }
 
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param config the convert config to use
+     * @param size the number of documents to return for each query
+     * @param logger the logger to use
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public TimeSearch(Path index,
                       Path queries,
                       ConvertConfig config,

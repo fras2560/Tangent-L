@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import mq.Mathquery;
+import index.ConvertConfig;
 import utilities.Constants;
 import utilities.ProjectLogger;
 
@@ -34,13 +34,21 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
 import org.w3c.dom.Element;
 
-
+/**
+ * A class to use to create a math query
+ * @author Dallas Fraser
+ * @since 2017-11-07
+ */
 public class MathQuery {
     private String queryName;
     private ArrayList<String> terms;
     private Logger logger;
     private String fieldName;
 
+    /**
+     * Class Constructor
+     * @param queryName the name of query
+     */
     public MathQuery(String queryName){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
@@ -48,6 +56,10 @@ public class MathQuery {
         this.fieldName = Constants.FIELD;
     }
 
+    /**
+     * Class Constructor
+     * @param node the xml node of the query used to parse the query terms and the math formula tuples
+     */
     public MathQuery(Node node){
         this.fieldName = Constants.FIELD;
         this.logger = ProjectLogger.getLogger();
@@ -71,22 +83,42 @@ public class MathQuery {
         }
     }
 
+    /**
+     * Adds a term to the query
+     * @param term the term to add
+     */
     public void addTerm(String term){
         this.terms.add(term);
     }
 
+    /**
+     * Get the field name of the query
+     * @return String the field name
+     */
     public String getFieldName(){
         return this.fieldName;
     }
 
+    /**
+     * Returns a list of terms
+     * @return ArrayList<String> the list of terms
+     */
     public ArrayList<String> getTerms(){
         return this.terms;
     }
 
+    /**
+     * Returns the name of the query
+     * @return String the name of the query
+     */
     public String getQueryName(){
         return this.queryName;
     }
 
+    /**
+     * Returns a String representation of the query
+     * @return String the query
+     */
     public String getQuery(){
         return String.join(" ", this.terms);
     }
@@ -102,6 +134,11 @@ public class MathQuery {
         return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
     }
 
+    /**
+     * Returns a list of uniqueTerms and their counts
+     * @param terms the terms to check
+     * @return ArrayList<TermCountPair> the unique terms and their counts
+     */
     public ArrayList<TermCountPair> uniqueTerms(String[] terms){
         ArrayList<TermCountPair> boostedTerms = new ArrayList<TermCountPair>();
         for (String term : terms){
@@ -125,36 +162,44 @@ public class MathQuery {
         return boostedTerms;
     }
 
-    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym){
-        return this.buildQuery(terms, field, bq, synonym, false);
-    }
-
-    public Query buildQuery(String[] terms, String field, BooleanQuery.Builder bq, boolean synonym, boolean dice){
+    /**
+     * Returns a Lucene Query
+     * @param terms the terms of the query
+     * @param field the field to search
+     * @param bq build a boolean query
+     * @param synonym whether the index includes synonym or not
+     * @param config the config file to use
+     * @return Query the to be used for Lucene
+     */
+    public Query buildQuery(String[] terms,
+                            String field,
+                            BooleanQuery.Builder bq,
+                            boolean synonym,
+                            ConvertConfig config){
         // check if synonyms were indexed or not
         BoostQuery booster;
         ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(terms);
+        TermQuery tempQuery = null;
+        WildcardQuery wTempQuery = null;
         if (!synonym){
-            WildcardQuery tempQuery = null;
+            wTempQuery = null;
             for (TermCountPair termPair : uniqueTerms){
                 if (!termPair.getTerm().trim().equals("")){
-                    tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
-                    if (dice){
-                        bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+                    wTempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
+                    if (!config.getAttribute(ConvertConfig.BOOST_QUERIES)){
+                        bq.add(wTempQuery, BooleanClause.Occur.SHOULD);
                     }else{
-                        booster = new BoostQuery(tempQuery, termPair.getCount());
+                        booster = new BoostQuery(wTempQuery, termPair.getCount());
                         bq.add(booster, BooleanClause.Occur.SHOULD);
                     }
                 }
             }
-            if (tempQuery == null){
-                bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
-            }
         }else{
-            TermQuery tempQuery = null;
+            tempQuery = null;
             for(TermCountPair termPair : uniqueTerms){
                 if(!termPair.getTerm().trim().equals("")){
                     tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
-                    if (dice){
+                    if (!config.getAttribute(ConvertConfig.BOOST_QUERIES)){
                         bq.add(tempQuery, BooleanClause.Occur.SHOULD);
                     }else{
                         booster = new BoostQuery(tempQuery, termPair.getCount());
@@ -162,14 +207,11 @@ public class MathQuery {
                     }
                 }
             }
-            if (tempQuery == null){
-                bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
-            }
+        }
+        if (tempQuery ==  null || wTempQuery == null){
+            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
         }
         Query result = bq.build();
-        if (dice){
-            result = new DiceQuery(bq.build(), uniqueTerms, this.fieldName);
-        }
-        return result;
+        return (Query) (new MathScoreQuery(result, uniqueTerms, field, config));
     }
 }

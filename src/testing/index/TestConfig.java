@@ -191,8 +191,20 @@ public class TestConfig extends BaseTest {
         compare.setBooleanAttribute(ConvertConfig.SYMBOLS, false);
         assertEquals(compare.compatible(config), false);
         compare.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
+    }
+
+    @Test
+    public void testQueryType(){
         // test dice coefficient
-        config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, true);
+        ConvertConfig config = new ConvertConfig();
+        ConvertConfig compare = new ConvertConfig();
+        try {
+            config.setQueryType(ConvertConfig.DICE_QUERY);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Expceiton raised");
+        }
         assertEquals(config.compatible(compare), false);
         assertEquals(compare.compatible(config), true);
         compare.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
@@ -202,8 +214,6 @@ public class TestConfig extends BaseTest {
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         assertEquals(config.compatible(compare), true);
         assertEquals(compare.compatible(config), true);
-        
-        
     }
 
     @Test

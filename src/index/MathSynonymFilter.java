@@ -9,12 +9,21 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 
 import utilities.Constants;
-
+/**
+ * Filters all math synonyms to be at the same position
+ * 
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class MathSynonymFilter extends TokenFilter {
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
     private boolean mathTag = true;
-
+    /**
+     * Class Constructor
+     * @param in the token stream
+     */
     public MathSynonymFilter(TokenStream in){
         super(in);
         this.mathTag = true;

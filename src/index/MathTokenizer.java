@@ -21,10 +21,11 @@ import org.apache.lucene.util.AttributeFactory;
 
 /**
  * A tokenizer that divides text at whitespace characters as defined by
- * {@link Character#isWhitespace(int)}.  Note: That definition explicitly excludes the non-breaking space.
+ * {@link Character#isWhitespace(int)}. Note: That definition explicitly excludes the non-breaking space.
  * Adjacent sequences of non-Whitespace characters form tokens.
- *
+ * @author Dallas Fraser
  * @see UnicodeWhitespaceTokenizer
+ * @since 2017-09-06
  */
 public final class MathTokenizer extends CharTokenizer {
   private boolean mathToken;

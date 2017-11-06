@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import index.ConvertConfig;
 import index.IndexFiles;
-import query.DiceSimilarity;
 import query.MathQuery;
 import query.ParseQueries;
 import search.Search;
@@ -54,13 +53,12 @@ public class TestDiceSimilarity extends BaseTest{
         }
         // create the index
         IndexFiles indexer = new IndexFiles();
-        DiceSimilarity dice = new DiceSimilarity();
         ConvertConfig config = new ConvertConfig();
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-        config.setBooleanAttribute(ConvertConfig.DICE_COEFFICIENT, true);
-        indexer.indexDirectory(this.index, this.documents, true, config, dice);
+        config.setQueryType(ConvertConfig.DICE_QUERY);
+        indexer.indexDirectory(this.index, this.documents, true, config);
         // init the searching object
-        this.searcher = new Search(this.index, dice, config);
+        this.searcher = new Search(this.index, config);
     }
 
     @After

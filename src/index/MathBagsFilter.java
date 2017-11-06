@@ -10,11 +10,21 @@ import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 
 import utilities.Constants;
 
+/**
+ * Filters all math tuples for the same formula to be in the same position
+ * 
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ *
+ */
 public class MathBagsFilter extends TokenFilter {
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
     private boolean openTag;
-
+    /**
+     * Class Constructor
+     * @param in the stream of tokens
+     */
     public MathBagsFilter(TokenStream in){
         super(in);
         this.openTag = false;

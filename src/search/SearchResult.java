@@ -23,12 +23,24 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import query.MathQuery;
 
+/**
+ * A class to hold the search results for a query
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
 public class SearchResult {
     public TopDocs results;
     public MathQuery mathQuery;
     public Query query;
     public int size;
 
+    /**
+     * Class Constructor
+     * @param results the documents returned by the query
+     * @param mathQuery the Math Query
+     * @param size the number of documents returned by the query
+     * @param query the Lucene Query
+     */
     public SearchResult(TopDocs results, MathQuery mathQuery, int size, Query query){
         this.results = results;
         this.mathQuery = mathQuery;
@@ -36,22 +48,42 @@ public class SearchResult {
         this.query = query;
     }
 
+    /**
+     * Returns the maximum number of documents that could be returned by the search
+     * @return int
+     */
     public int getSize(){
         return this.size;
     }
 
+    /**
+     * Returns the results
+     * @return TopDocs
+     */
     public TopDocs getResults(){
         return this.results;
     }
 
+    /**
+     * Returns the Math Query
+     * @return MathQuery
+     */
     public MathQuery getMathQuery(){
         return this.mathQuery;
     }
 
+    /**
+     * Returns the Lucene Query
+     * @return Query
+     */
     public Query getQuery(){
         return this.query;
     }
 
+    /**
+     * Returns the number of documents returned by the search
+     * @return
+     */
     public int hitsNumber(){
         int hits = 0;
         if (this.results != null){
@@ -77,6 +109,11 @@ public class SearchResult {
         return result;
     }
 
+    /**
+     * Explain the results
+     * @param searcher the searcher used
+     * @throws IOException
+     */
     public void explainResults(IndexSearcher searcher) throws IOException{
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;
@@ -88,6 +125,12 @@ public class SearchResult {
         }
     }
 
+    /**
+     * Explains the results and outputs the explanation to a file
+     * @param searcher the searcher used
+     * @param output the file to output to
+     * @throws IOException
+     */
     public void explainResults(IndexSearcher searcher, BufferedWriter output) throws IOException{
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;
@@ -99,5 +142,4 @@ public class SearchResult {
             output.write("Query had no terms or results");
         }
     }
-
 }

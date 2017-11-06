@@ -39,7 +39,6 @@ import search.Judgements;
 import search.Search;
 import search.Search.SearchConfigException;
 import search.SearchResult;
-import query.DiceSimilarity;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
@@ -58,7 +57,7 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 5;
+    private static int TOP_K = 3;
     private Path queries;
     private Logger logger;
     private boolean greedy;
@@ -284,7 +283,6 @@ public class FindOptimal {
             int count = 1;
             for (ScoreDoc hit : hits){
                 Document doc = searcher.doc(hit.doc);
-                System.out.println(this.parseTitle(doc.get("path")));
                 rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
                 if (rank > FindOptimal.RELEVANT_LOWER){
                     this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
@@ -314,6 +312,7 @@ public class FindOptimal {
             for (ScoreDoc hit : hits){
                 // build the list of filenames to check against the answers
                 Document doc = searcher.doc(hit.doc);
+                System.out.println(doc.get("path"));
                 filenames.add(this.parseTitle(doc.get("path")));
             }
             int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
@@ -322,6 +321,7 @@ public class FindOptimal {
             }
             this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Answer found: " + found);
         }
+        System.out.println("");
         return found;
     }
 
@@ -352,6 +352,7 @@ public class FindOptimal {
         double found;
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
+            System.out.println(mq.getQueryName());
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
             found = this.found_answer(searcher.getSearcher(), result);
             reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
@@ -456,10 +457,10 @@ public class FindOptimal {
         }else{
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output-33.txt");
-            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia-33.xml");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output.txt");
+            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal33.log");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal.log");
             
         }
         // check command line for override default methods
@@ -498,7 +499,6 @@ public class FindOptimal {
 //        config.flipBit(ConvertConfig.UNBOUNDED);
 //        config.flipBit(ConvertConfig.TERMINAL);
 //        config.flipBit(ConvertConfig.SYNONYMS);
-        
         // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {

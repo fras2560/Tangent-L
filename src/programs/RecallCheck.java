@@ -33,10 +33,27 @@ import search.Search.SearchConfigException;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
-
+/**
+ * A program to check the recall of an index for the given queries and results
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
 public class RecallCheck {
     private Logger logger;
-
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param results the path to the expected results
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public RecallCheck(Path index, Path queries, Path results) throws IOException,
                                                                       XPathExpressionException,
                                                                       ParserConfigurationException,
@@ -48,6 +65,21 @@ public class RecallCheck {
         this(index, queries, results, new ConvertConfig(), ProjectLogger.getLogger());
     }
 
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param results the path to the expect results
+     * @param config
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public RecallCheck(Path index, Path queries, Path results, ConvertConfig config) throws IOException,
                                                                       XPathExpressionException,
                                                                       ParserConfigurationException,
@@ -59,6 +91,22 @@ public class RecallCheck {
         this(index, queries, results, config, ProjectLogger.getLogger());
     }
 
+    /**
+     * Class Constructor
+     * @param index the path to the index
+     * @param queries the path to the queries
+     * @param results the path to the results
+     * @param config the config to use
+     * @param logger the logger to use
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws SearchConfigException
+     * @throws ConvertConfigException
+     */
     public RecallCheck(Path index, Path queries, Path results, ConvertConfig config, Logger logger) throws IOException,
                                                                                      XPathExpressionException,
                                                                                      ParserConfigurationException,
