@@ -180,6 +180,13 @@ public class Search {
     }
 
     /**
+     * Returns whether Indexer used synonyms or not
+     * @return boolean True if indexer used synonyms
+     */
+    public boolean getSynonym(){
+        return this.synonym;
+    }
+    /**
      * Search using the query and return a list of the documents file paths
      * @param mathQuery the query to search
      * @return ArrayList the list of files returned by the query
@@ -201,7 +208,11 @@ public class Search {
                 "Query: name: " + mathQuery.getQueryName());
         ArrayList<String> files = new ArrayList<String>();
         BooleanQuery.Builder bq = new BooleanQuery.Builder();
-        Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(), bq, this.synonym, this.config);
+        Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
+                                                bq,
+                                                this.synonym,
+                                                this.config,
+                                                this.searcher.collectionStatistics(mathQuery.getFieldName()));
         this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
         TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
         ScoreDoc[] hits = searchResultsWild.scoreDocs;
@@ -241,7 +252,11 @@ public class Search {
             result = new SearchResult(null, mathQuery, k, null);
         }else{
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(), bq, this.synonym, this.config);
+            Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
+                                                    bq,
+                                                    this.synonym,
+                                                    this.config,
+                                                    this.searcher.collectionStatistics(mathQuery.getFieldName()));
             this.logger.log(Level.FINEST, "Boolean Query Size:" + mathQuery.getTerms().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);

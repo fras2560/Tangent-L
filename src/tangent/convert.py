@@ -265,7 +265,6 @@ def parse_file(filename,
                 # now move the content further along
                 content = content[end:]
 
-
 if __name__ == "__main__":
     logging.basicConfig(filename="convert.log",
                         level=logging.INFO,
@@ -362,4 +361,5 @@ if __name__ == "__main__":
                synonyms=args.synonyms,
                query=args.query
                )
+    print(args)
     logger.info("Done")

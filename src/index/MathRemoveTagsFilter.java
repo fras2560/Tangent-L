@@ -32,6 +32,7 @@ public class MathRemoveTagsFilter extends FilteringTokenFilter {
         final char[] token = Arrays.copyOfRange(this.termAtt.buffer(), 0, this.termAtt.length());
         String stoken = String.valueOf(token);
         boolean keep = true;
+        System.out.println("Token: " + stoken);
         if (stoken.equals(Constants.FORMULA_START_TAG) || stoken.equals(Constants.FORMULA_END_TAG)){
             keep = false;
         }

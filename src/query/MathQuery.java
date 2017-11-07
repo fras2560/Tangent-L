@@ -34,6 +34,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BoostQuery;
+import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -170,6 +171,18 @@ public class MathQuery {
         return result;
     }
 
+    /*
+     * Prints a query to a String, with <code>field</code> assumed to be the
+     * default field and omitted
+     * (non-Javadoc)
+     * @see org.apache.lucene.search.Query#toString(java.lang.String)
+     * @return the string representation
+     */
+    public String toString(){
+        String result;
+        result = "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
+        return result;
+    }
     /**
      * Returns a list of uniqueTerms and their counts
      * @param terms the terms to check
@@ -228,7 +241,8 @@ public class MathQuery {
     public Query buildQuery(String field,
                             BooleanQuery.Builder bq,
                             boolean synonym,
-                            ConvertConfig config) throws IOException{
+                            ConvertConfig config,
+                            CollectionStatistics stats) throws IOException{
         BoostQuery booster;
         ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
         TermQuery tempQuery = null;
@@ -264,6 +278,6 @@ public class MathQuery {
             bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
         }
         Query result = bq.build();
-        return (Query) (new MathScoreQuery(result, uniqueTerms, field, config));
+        return (Query) (new MathScoreQuery(result, uniqueTerms, field, config, stats));
     }
 }

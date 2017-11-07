@@ -32,7 +32,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongPoint;
-import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
@@ -200,11 +199,6 @@ public class IndexFiles {
                        ConvertConfig config) throws IOException, InterruptedException {
     Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
-    FileStatistics fs = null;
-    try (InputStream stream = Files.newInputStream(new_file)){
-        // get the statistics of the file
-        fs = new FileStatistics(new InputStreamReader(stream, StandardCharsets.UTF_8));
-    }
     try (InputStream stream = Files.newInputStream(new_file)) {
         // make a new, empty document
         Document doc = new Document();
@@ -236,14 +230,6 @@ public class IndexFiles {
                           new InputStreamReader(stream, StandardCharsets.UTF_8),
                           fieldType
                           ));
-        // keep some stats about the number of math formula sizes
-        if (fs != null){
-            doc.add(new NumericDocValuesField(Constants.WORD_COUNT, (long) fs.getWordCount()));
-            doc.add(new NumericDocValuesField(Constants.FORMULA_COUNT, (long) fs.getFormulaCount()));
-            doc.add(new NumericDocValuesField(Constants.MAX_FORMULA_SIZE, (long) fs.maxFormulaSize()));
-            doc.add(new NumericDocValuesField(Constants.AVERAGE_FORMULA_SIZE, (long) fs.averageFormulaSize()));
-            
-        }
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());
@@ -257,7 +243,7 @@ public class IndexFiles {
         }
     }
     // remove the file
-    new_file.toFile().delete();
+    // new_file.toFile().delete();
   }
 
   /** Index all text files under a directory. */

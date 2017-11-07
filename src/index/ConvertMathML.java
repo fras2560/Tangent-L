@@ -95,7 +95,6 @@ public class ConvertMathML {
         this.logger.log(Level.FINEST, "Command");
         for (String s : command){
             this.logger.log(Level.FINEST, s);
-            
         }
         Process proc;
         try {
@@ -108,6 +107,7 @@ public class ConvertMathML {
         }
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+        
         // read the output from the command
         this.logger.log(Level.FINEST, "Here is the standard output of the command:\n");
         String s = null;
@@ -117,7 +117,7 @@ public class ConvertMathML {
         // read any errors from the attempted command
         this.logger.log(Level.FINEST, "Here is the standard error of the command:\n");
         while ((s = stdError.readLine()) != null) {
-            // this.logger.log(Level.SEVERE, s);
+            this.logger.log(Level.SEVERE, s);
         }
         proc.waitFor();
         return new_file;

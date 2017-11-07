@@ -16,9 +16,13 @@
 package query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
@@ -41,6 +45,14 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
     private LeafReaderContext context;
     private List<TermCountPair> terms;
     private ConvertConfig config;
+    private float avgDL;
+    private float numDocs;
+    // all are discussed in the papers
+    private final static float ALPHA = (float) 0.3;
+    private final static float K_1 = (float) 1.2;
+    private final static float K_3 = (float) 1000;
+    private final static float K = (float) 2;
+    private final static float B = (float) 0.9;
 
     /**
      * Class constructor
@@ -52,16 +64,24 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
     public MathScoreQueryProvider(String field,
                                  LeafReaderContext context,
                                  List<TermCountPair> terms,
-                                 ConvertConfig config) {
+                                 ConvertConfig config,
+                                 float avgDL,
+                                 float numDoc) {
         super(context);
         this._field = field;
         this.context = context;
         this.terms = terms;
         this.config = config;
+        this.avgDL = avgDL;
+        this.numDocs = numDoc;
     }
 
     /**
-     * Returns the custom score
+     * Returns the Custom Score
+     * @param doc the doc number id
+     * @param subQueryScore the score the subquery gave it
+     * @param valSrcScores an array of scores from src
+     * @return float a the update custom score which is calculated based upon config
      */
     public float customScore(int doc, float subQueryScore, float valSrcScores [])  throws IOException {
         // subQueryScore is term frequency of the term
@@ -78,6 +98,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
             // default scoring to use
             newScore = subQueryScore;
         }
+        System.out.println("Before: " + subQueryScore + "  After:" + newScore);
         return newScore; // New Score
     }
 
@@ -92,7 +113,78 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      */
     public float bm25DistanceCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
         float newScore = 1f;
+        newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-this.minDistancePair(doc))));
         return newScore;
+    }
+
+    /**
+     * Returns the minimum distance between pairs of terms
+     * @param doc the doc id number
+     * @return float the minimum distance
+     * @throws IOException 
+     */
+    public float minDistancePair(int doc) throws IOException{
+        float distance = 0f;
+        SortedSet<Integer> pos = new TreeSet<Integer>();
+        LeafReader reader = this.context.reader();
+        if (reader != null){
+            // get a sorted list of positions
+            for (TermCountPair term: this.terms){
+                PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
+                if (posting != null){
+                    // move to the document currently looking at
+                    posting.advance(doc);
+                    int count = 0;
+                    int freq = posting.freq();
+                    // make sure to add them all
+                    while (count < freq){
+                        pos.add(new Integer(posting.nextPosition()));
+                        count += 1;
+                    }
+                }
+            }
+            // now find the closest pairs
+            Integer dist = Math.abs(pos.first() - pos.last());
+            Iterator<Integer> it = pos.iterator();
+            Integer prev = pos.last();
+            Integer current;
+            while (it.hasNext()){
+                current = it.next();
+                if (Math.abs(current - prev) < dist){
+                    dist = Math.abs(current - prev);
+                }
+                prev = current;
+            }
+            distance = (float) dist.intValue();
+        }
+        return distance;
+    }
+
+    /**
+     * Calculate the terp pair instance weight
+     * @param i
+     * @param j
+     * @return
+     */
+    public float calculateTPI(float i, float j){
+        return (float) (1f / Math.pow(Math.abs(i - j), 2));
+    }
+
+    /**
+     * Calculates the weight  for a given term pair i and j
+     * @param iPos The positions that Term i appear in
+     * @param jPos The positions that Term j appear in
+     * @param K Okapi document length consideration
+     * @return
+     */
+    public float termWeight(List<Integer> iPos, List<Integer> jPos, float K){
+        float sumTPI = 0;
+        for (int i = 0; i < iPos.size(); i++){
+            for (int j = 0; j < jPos.size(); j++){
+                sumTPI += this.calculateTPI(iPos.get(i), jPos.get(j));
+            }
+        }
+        return (MathScoreQueryProvider.K_1 + 1) * (sumTPI / (K + sumTPI)); 
     }
 
     /**
@@ -105,10 +197,70 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      * @throws IOException
      */
     public float bm25tpCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
-        float newScore = 1f;
-        return newScore;
+        float newScore = subQueryScore;
+        Map<String, List<Integer>> pos = this.termsPositions(doc);
+        float docLength = this.getDocLength(doc);
+        float K = MathScoreQueryProvider.K * ((1 - MathScoreQueryProvider.B) + 
+                                               MathScoreQueryProvider.B * (docLength / this.avgDL));
+        int qtfi, qtfj;
+        List<Integer> iPos, jPos;
+        float qwi, qwj;
+        float score = 0;
+        for (int i = 0; i < this.terms.size(); i++){
+            iPos = pos.get(this.terms.get(i).getTerm());
+            qtfi = (int) this.terms.get(i).getCount();
+            qwi = (float) ((qtfi / (MathScoreQueryProvider.K_3 + qtfi)) *
+                                         Math.log((this.numDocs - iPos.size()) / iPos.size()));
+            for (int j = i + 1; j < this.terms.size(); j++){
+                jPos = pos.get(this.terms.get(j).getTerm());
+                qtfj = (int) this.terms.get(j).getCount();
+                qwj = (float) ((qtfj / (MathScoreQueryProvider.K_3 + qtfj)) *
+                               Math.log((this.numDocs - jPos.size()) / jPos.size()));
+                
+                score += this.termWeight(iPos, jPos, K) * Math.min(qwi, qwj); 
+            }
+        }
+        return newScore + score;
     }
 
+    /**
+     * Returns the doc length
+     * @param doc the doc number if
+     * @return long the doc id
+     * @throws IOException
+     */
+    public long getDocLength(int doc) throws IOException{
+        long docLength = 1;
+        LeafReader reader = this.context.reader();
+        if (reader != null){
+            Terms termVector = reader.getTermVector(doc, this._field);
+            docLength = termVector.size();
+        }
+        return docLength;
+    }
+
+    public Map<String, List<Integer>> termsPositions(int doc) throws IOException{
+        LeafReader reader = this.context.reader();
+        Map<String, List<Integer>> positions = new HashMap<String, List<Integer>>();
+        if (reader != null){
+            // get a list of map and their pairs
+            for (TermCountPair term : this.terms){
+                PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
+                if (posting != null){
+                    // move to the document currently looking at
+                    posting.advance(doc);
+                    int count = 0;
+                    int freq = posting.freq();
+                    List<Integer> pos = new ArrayList<Integer>();
+                    while (count < freq){
+                        pos.add(new Integer(posting.nextPosition()));
+                    }
+                    positions.put(term.getTerm(), pos);
+                }
+            }
+        }
+        return positions;
+    }
     /**
      * Returns a mapping of positions and count for the term given
      * @param reader the leaf reader of the document
@@ -149,7 +301,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      */
     public Map<Float, Float> calculateFormulaSizes(LeafReader reader, int doc, Map<Float, Float> formulaSizes) throws IOException{
      // now determine the size of each formula
-        Terms termVector = reader.getTermVector(doc, _field);
+        Terms termVector = reader.getTermVector(doc, this._field);
         TermsEnum termsEnum = null;
         termsEnum = termVector.iterator();
         Map<String, Boolean> termsCalculated = new HashMap<String, Boolean>();

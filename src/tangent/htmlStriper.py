@@ -29,11 +29,15 @@ class MLStripper(HTMLParser):
 def strip_tags(html):
     """Returns a string stripped of all html tags
     """
-    parser = HTMLParser()
-    html = parser.unescape(html)
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
+    if "<" in html:
+        parser = HTMLParser()
+        html = parser.unescape(html)
+        s = MLStripper()
+        s.feed(html)
+        result = s.get_data()
+    else:
+        result = html
+    return result
 
 
 if __name__ == "__main__":
