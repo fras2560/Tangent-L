@@ -243,7 +243,7 @@ public class IndexFiles {
         }
     }
     // remove the file
-    // new_file.toFile().delete();
+    new_file.toFile().delete();
   }
 
   /** Index all text files under a directory. */
