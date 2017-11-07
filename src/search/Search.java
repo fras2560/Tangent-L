@@ -203,25 +203,15 @@ public class Search {
     public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
         this.logger.log(Level.FINER, "Query: " + mathQuery.getQuery().replaceAll("//", "//") +
                 "Query: name: " + mathQuery.getQueryName());
-        String queryString = String.join(" ", mathQuery.getTerms());
-        String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
         ArrayList<String> files = new ArrayList<String>();
-        if (tokens.length > 0){
-            this.logger.log(Level.FINEST, "Tokens: " + String.join(" " , tokens));
-            BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mathQuery.buildQuery(tokens,
-                                                    mathQuery.getFieldName(),
-                                                    bq,
-                                                    this.synonym,
-                                                    this.config);
-            this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
-            this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
-            TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
-            ScoreDoc[] hits = searchResultsWild.scoreDocs;
-            for (ScoreDoc hit: hits){
-                Document doc = searcher.doc(hit.doc);
-                files.add(Functions.parseTitle(doc.get("path")));
-            }
+        BooleanQuery.Builder bq = new BooleanQuery.Builder();
+        Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(), bq, this.synonym, this.config);
+        this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
+        TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
+        ScoreDoc[] hits = searchResultsWild.scoreDocs;
+        for (ScoreDoc hit: hits){
+            Document doc = searcher.doc(hit.doc);
+            files.add(Functions.parseTitle(doc.get("path")));
         }
         return files;
     }
@@ -249,20 +239,14 @@ public class Search {
                         mathQuery.getQuery().replaceAll("//", "//") +
                         " Query: name: " +
                         mathQuery.getQueryName());
-        String queryString = String.join(" ", mathQuery.getTerms());
-        String[] tokens = Functions.analyzeTokens(this.analyzer, mathQuery.getFieldName(), queryString);
         SearchResult result = null;
-        if (tokens.length <= 0){
+        if (mathQuery.getTerms().size() <= 0){
             this.logger.log(Level.WARNING, "Query has no elements: " + mathQuery.getQueryName());
             result = new SearchResult(null, mathQuery, k, null);
         }else{
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query buildQuery = mathQuery.buildQuery(tokens,
-                                                    mathQuery.getFieldName(),
-                                                    bq,
-                                                    this.synonym,
-                                                    this.config);
-            this.logger.log(Level.FINEST, "Boolean Query Size:" + bq.build().clauses().size());
+            Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(), bq, this.synonym, this.config);
+            this.logger.log(Level.FINEST, "Boolean Query Size:" + mathQuery.getTerms().size());
             this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
             TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
             result = new SearchResult(searchResultsWild, mathQuery, k, buildQuery);

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 package query;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,9 +24,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import index.ConvertConfig;
+import index.MathAnalyzer;
 import utilities.Constants;
+import utilities.Functions;
 import utilities.ProjectLogger;
 
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -42,25 +48,39 @@ import org.w3c.dom.Element;
 public class MathQuery {
     private String queryName;
     private ArrayList<String> terms;
+    private ArrayList<String> analyzedTerms;
     private Logger logger;
     private String fieldName;
+    private ConvertConfig config;
+    /**
+     * Class Constructor
+     * @param queryName the name of the query
+     * 
+     */
+    public MathQuery(String queryName){
+        this(queryName, new ConvertConfig());
+    }
 
     /**
      * Class Constructor
      * @param queryName the name of query
+     * @param config the name of the config file
      */
-    public MathQuery(String queryName){
+    public MathQuery(String queryName, ConvertConfig config){
         this.terms = new ArrayList<String>();
         this.queryName = queryName;
         this.logger = ProjectLogger.getLogger();
         this.fieldName = Constants.FIELD;
+        this.config = config;
     }
 
     /**
      * Class Constructor
      * @param node the xml node of the query used to parse the query terms and the math formula tuples
+     * @param config the config to use
      */
-    public MathQuery(Node node){
+    public MathQuery(Node node, ConvertConfig config){
+        this.config = config;
         this.fieldName = Constants.FIELD;
         this.logger = ProjectLogger.getLogger();
         this.terms = new ArrayList<String>();
@@ -69,6 +89,7 @@ public class MathQuery {
         this.queryName = element.getElementsByTagName("num").item(0).getTextContent();
         NodeList termList =  element.getElementsByTagName("query").item(0).getChildNodes();
         this.logger.log(Level.FINEST, "Term List: " + termList.getLength());
+        MathAnalyzer analyzer = new MathAnalyzer(this.config);
         for (int j = 0; j < termList.getLength(); j++){
             this.logger.log(Level.FINEST, "Term List Element: " + j);
             Node nNode = termList.item(j);
@@ -76,21 +97,35 @@ public class MathQuery {
                 Element e = (Element) nNode;
                 String term = e.getTextContent().replaceAll("\n", "").replaceAll("\t", "").trim();
                 this.logger.log(Level.FINEST, "Text Content:" + term);
-                this.terms.add(term);
+                for (String t : Functions.analyzeTokens(analyzer, Constants.FIELD, term)){
+                    this.terms.add(t);
+                }
             }else{
                 this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
         }
     }
 
+
     /**
-     * Adds a term to the query
+     * Adds a term to the query parses the term using MathAnalyzer.
      * @param term the term to add
      */
     public void addTerm(String term){
-        this.terms.add(term);
+        this.addTerm(term, Constants.FIELD);
+        
     }
 
+    /**
+     * Adds a term to the query parses the term using MathAnalyzer.
+     * @param term the term to add
+     * @param the field of the term
+     */
+    public void addTerm(String term, String field){
+        for(String t: Functions.analyzeTokens(new MathAnalyzer(this.config), field, term)){
+            this.terms.add(t);
+        }
+    }
     /**
      * Get the field name of the query
      * @return String the field name
@@ -131,7 +166,9 @@ public class MathQuery {
      * @return the string representation
      */
     public String toString(String field){
-        return "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
+        String result;
+        result = "Name:" + this.queryName + "\nSearch Terms: \n" + String.join("\n", this.terms);
+        return result;
     }
 
     /**
@@ -139,7 +176,7 @@ public class MathQuery {
      * @param terms the terms to check
      * @return ArrayList<TermCountPair> the unique terms and their counts
      */
-    public ArrayList<TermCountPair> uniqueTerms(String[] terms){
+    public ArrayList<TermCountPair> uniqueTerms(ArrayList<String> terms){
         ArrayList<TermCountPair> boostedTerms = new ArrayList<TermCountPair>();
         for (String term : terms){
             if (!term.trim().equals("")){
@@ -163,6 +200,24 @@ public class MathQuery {
     }
 
     /**
+     * Use the analyzer to parse the query terms
+     * @param field the field to query
+     * @param config the config to use
+     * @throws IOException
+     */
+    public void setAnalyzedTerms(String field, ConvertConfig config) throws IOException{
+        String queryText = String.join(" ", this.terms);
+        MathAnalyzer analyzer = new MathAnalyzer(config);
+        try (TokenStream source = analyzer.tokenStream(field, queryText)) {
+            TermToBytesRefAttribute termAtt = source.getAttribute(TermToBytesRefAttribute.class);
+            source.reset();
+            while (source.incrementToken()) {
+              this.analyzedTerms.add(termAtt.getBytesRef().utf8ToString());
+            }
+        }
+        analyzer.close();
+    }
+    /**
      * Returns a Lucene Query
      * @param terms the terms of the query
      * @param field the field to search
@@ -170,15 +225,14 @@ public class MathQuery {
      * @param synonym whether the index includes synonym or not
      * @param config the config file to use
      * @return Query the to be used for Lucene
+     * @throws IOException 
      */
-    public Query buildQuery(String[] terms,
-                            String field,
+    public Query buildQuery(String field,
                             BooleanQuery.Builder bq,
                             boolean synonym,
-                            ConvertConfig config){
-        // check if synonyms were indexed or not
+                            ConvertConfig config) throws IOException{
         BoostQuery booster;
-        ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(terms);
+        ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
         TermQuery tempQuery = null;
         WildcardQuery wTempQuery = null;
         if (!synonym){

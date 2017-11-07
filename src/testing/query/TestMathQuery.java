@@ -23,7 +23,10 @@ public class TestMathQuery {
     @Test
     public void testUniqueTerms() {
         MathQuery mq = new MathQuery("test");
-        String[] terms = {"hello", "hello", "there"};
+        ArrayList<String> terms = new ArrayList<String>();
+        terms.add("hello");
+        terms.add("hello");
+        terms.add("there");
         ArrayList<TermCountPair> result = mq.uniqueTerms(terms);
         assertEquals(result.get(0) , "hello");
         assertEquals(result.get(0).getCount() == 2f, true);

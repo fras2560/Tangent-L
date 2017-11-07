@@ -48,10 +48,10 @@ public class Functions {
         }
         return wildcard;
     }
-    public static String[] analyzeTokens(Analyzer analyzer, String field, String queryText){
+    public static ArrayList<String> analyzeTokens(Analyzer analyzer, String field, String queryText){
         // Use the analyzer to get all the tokens, and then build an appropriate
         // query based on the analysis chain.
-        List<String> tokens = new ArrayList<String>();
+        ArrayList<String> tokens = new ArrayList<String>();
         char[]  token;
         try (TokenStream source = analyzer.tokenStream(field, queryText)) {
             CharTermAttribute charAtt = source.getAttribute(CharTermAttribute.class);
@@ -63,6 +63,6 @@ public class Functions {
         } catch (IOException e) {
           throw new RuntimeException("Error analyzing query text", e);
         }
-        return tokens.toArray(new String[tokens.size()]);
+        return tokens;
     }
 }

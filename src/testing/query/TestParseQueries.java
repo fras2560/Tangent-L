@@ -41,9 +41,11 @@ public class TestParseQueries {
             ArrayList<MathQuery> queries = pq.getQueries();
             MathQuery mq = queries.get(0);
             assertEquals(mq.getQueryName(), "NTCIR12-MathIR-1");
-            assertEquals(mq.getTerms().get(0), "#('v!x','+','n')# #('+','*','n')#");
-            assertEquals(mq.getTerms().get(1), "Mean");
-            assertEquals(mq.getTerms().get(2), "Arithmetic");
+            assertEquals(mq.getTerms().size(), 4);
+            assertEquals(mq.getTerms().get(0), "('v!x','+','n')");
+            assertEquals(mq.getTerms().get(1), "('+','*','n')");
+            assertEquals(mq.getTerms().get(2), "mean");
+            assertEquals(mq.getTerms().get(3), "arithmet");
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

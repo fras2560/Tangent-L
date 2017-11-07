@@ -46,6 +46,7 @@ public class ParseQueries{
     private File f;
     private ArrayList<MathQuery> queries;
     private Logger logger;
+    private ConvertConfig config;
     /**
      * Class Constructor
      * @param f the file (NTCIR - MathIR file format)
@@ -94,6 +95,7 @@ public class ParseQueries{
         Path new_file = new ConvertMathML(f.toPath()).convert(config.getSearchConfig());
         this.f = new File(new_file.toString());
         this.queries = new ArrayList<MathQuery>();
+        this.config = config;
     }
 
     /**
@@ -121,7 +123,7 @@ public class ParseQueries{
         for (int i = 0; i < nodeList.getLength(); i++){
             Node node = nodeList.item(i);
             this.logger.log(Level.FINEST, "Node: " + node);
-            MathQuery q = new MathQuery(node);
+            MathQuery q = new MathQuery(node, this.config);
             this.logger.log(Level.FINEST, "Query:" + q);
             this.queries.add(q);
         }
