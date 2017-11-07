@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -41,7 +40,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
 import index.ConvertConfig.ConvertConfigException;
-import index.MathAnalyzer;
 import query.ParseQueries;
 import query.MathQuery;
 import query.MathSimilarity;
@@ -59,7 +57,6 @@ public class Search {
     private ConvertConfig config;
     private boolean synonym;
     private IndexReader reader;
-    private Analyzer analyzer;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
 
@@ -170,7 +167,6 @@ public class Search {
         this.reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
         this.searcher.setSimilarity(similarity);
-        this.analyzer = new MathAnalyzer(config);
         this.config = config;
         this.logger = logger;
     }
@@ -186,7 +182,7 @@ public class Search {
     /**
      * Search using the query and return a list of the documents file paths
      * @param mathQuery the query to search
-     * @return ArrayList<String> the list of files returned by the query
+     * @return ArrayList the list of files returned by the query
      * @throws IOException
      */
     public ArrayList<String> searchQueryFiles(MathQuery mathQuery) throws IOException{
@@ -197,7 +193,7 @@ public class Search {
      * Search using the query and return a list of the documents file paths
      * @param mathQuery the query to search
      * @param k the number of documents to return
-     * @return ArrayList<String> the list of files returned by the query
+     * @return ArrayList the list of files returned by the query
      * @throws IOException
      */
     public ArrayList<String>searchQueryFiles(MathQuery mathQuery, int k) throws IOException{
@@ -257,7 +253,7 @@ public class Search {
     /**
      * Returns a list of search results for queries found in a file
      * @param queries the path to the file of queries
-     * @return ArrayList<SearchResult> a list of search results
+     * @return ArrayList a list of search results
      * @throws XPathExpressionException
      * @throws IOException
      * @throws InterruptedException
@@ -276,7 +272,7 @@ public class Search {
      * Returns a list of search results for queries found in a file
      * @param queries the path to the file of queries
      * @param k the number of documents to return for each query
-     * @return ArrayList<SearchResult> a list of search results
+     * @return ArrayList a list of search results
      * @throws XPathExpressionException
      * @throws IOException
      * @throws InterruptedException
@@ -572,7 +568,7 @@ public class Search {
      * @param searchResults the documents return by the query
      * @param query the query to score
      * @param judgements the judgements of the query
-     * @return ArrayList<ArrayList<Double>>
+     * @return ArrayList
      * @throws IOException
      */
     public ArrayList<ArrayList<Double>> arxivScore(TopDocs searchResults,

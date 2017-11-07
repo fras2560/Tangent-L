@@ -100,7 +100,7 @@ public class ParseQueries{
 
     /**
      * Returns a list of queries parsed from the file
-     * @return ArrayList<MathQuery> a list of math queries parsed
+     * @return ArrayList a list of math queries parsed
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException

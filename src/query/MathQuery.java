@@ -16,7 +16,6 @@
 package query;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,7 +118,7 @@ public class MathQuery {
     /**
      * Adds a term to the query parses the term using MathAnalyzer.
      * @param term the term to add
-     * @param the field of the term
+     * @param field of the term
      */
     public void addTerm(String term, String field){
         for(String t: Functions.analyzeTokens(new MathAnalyzer(this.config), field, term)){
@@ -136,7 +135,7 @@ public class MathQuery {
 
     /**
      * Returns a list of terms
-     * @return ArrayList<String> the list of terms
+     * @return ArrayList the list of terms
      */
     public ArrayList<String> getTerms(){
         return this.terms;
@@ -174,7 +173,7 @@ public class MathQuery {
     /**
      * Returns a list of uniqueTerms and their counts
      * @param terms the terms to check
-     * @return ArrayList<TermCountPair> the unique terms and their counts
+     * @return ArrayList the unique terms and their counts
      */
     public ArrayList<TermCountPair> uniqueTerms(ArrayList<String> terms){
         ArrayList<TermCountPair> boostedTerms = new ArrayList<TermCountPair>();
@@ -219,7 +218,6 @@ public class MathQuery {
     }
     /**
      * Returns a Lucene Query
-     * @param terms the terms of the query
      * @param field the field to search
      * @param bq build a boolean query
      * @param synonym whether the index includes synonym or not

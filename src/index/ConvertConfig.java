@@ -246,7 +246,7 @@ public class ConvertConfig {
     /**
      * Sets the attribute to some new value
      * @param attribute The attribute to change
-     * @param settting The boolean value to change it to
+     * @param setting The boolean value to change it to
      */
     public void setBooleanAttribute(String attribute, boolean setting){
         if (attribute.equals(ConvertConfig.SHORTENED)){
@@ -361,7 +361,7 @@ public class ConvertConfig {
     /**
      * Checks if the this config file is compatible with the given config
      * @param config the configuration to check is compatible
-     * @returns boolean True if this is compatible with config
+     * @return boolean True if this is compatible with config
      */
     public boolean compatible(ConvertConfig config){
         // assume compatible

@@ -114,7 +114,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      * @param reader the leaf reader of the document
      * @param doc the doc id number
      * @param term the term to lookup
-     * @return Map<Float, Float> the mapping for positions and counts
+     * @return Map the mapping for positions and counts
      * @throws IOException
      */
     public Map<Float, Float> lookupTermPosition(LeafReader reader, int doc, BytesRef term) throws IOException{
@@ -144,7 +144,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      * @param reader the leaf reader of the document
      * @param doc the doc id number
      * @param formulaSizes 
-     * @return Map<Float, Float> the mapping for formula positions to the size of the formula
+     * @return Map the mapping for formula positions to the size of the formula
      * @throws IOException
      */
     public Map<Float, Float> calculateFormulaSizes(LeafReader reader, int doc, Map<Float, Float> formulaSizes) throws IOException{

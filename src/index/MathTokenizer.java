@@ -24,7 +24,6 @@ import org.apache.lucene.util.AttributeFactory;
  * {@link Character#isWhitespace(int)}. Note: That definition explicitly excludes the non-breaking space.
  * Adjacent sequences of non-Whitespace characters form tokens.
  * @author Dallas Fraser
- * @see UnicodeWhitespaceTokenizer
  * @since 2017-09-06
  */
 public final class MathTokenizer extends CharTokenizer {
