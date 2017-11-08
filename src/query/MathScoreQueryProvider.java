@@ -112,8 +112,11 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      * @throws IOException
      */
     public float bm25DistanceCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
-        float newScore = 1f;
-        newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-this.minDistancePair(doc))));
+        float newScore = subQueryScore;
+        float minDistance = this.minDistancePair(doc);
+        System.out.println("Min Distance:" + minDistance);
+        System.out.println("pi(Q,D) = " + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-minDistance)));
+        newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-minDistance)));
         return newScore;
     }
 
@@ -179,12 +182,17 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      */
     public float termWeight(List<Integer> iPos, List<Integer> jPos, float K){
         float sumTPI = 0;
+        float weight;
         for (int i = 0; i < iPos.size(); i++){
             for (int j = 0; j < jPos.size(); j++){
+                System.out.println("    TPI: " + this.calculateTPI(iPos.get(i), jPos.get(j)));
                 sumTPI += this.calculateTPI(iPos.get(i), jPos.get(j));
             }
         }
-        return (MathScoreQueryProvider.K_1 + 1) * (sumTPI / (K + sumTPI)); 
+        System.out.println("sumTPI:" + sumTPI + " K:" + K);
+        weight =  (MathScoreQueryProvider.K_1 + 1) * (sumTPI / (K + sumTPI));
+        System.out.println("Weight: " + weight);
+        return weight; 
     }
 
     /**
@@ -200,6 +208,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         float newScore = subQueryScore;
         Map<String, List<Integer>> pos = this.termsPositions(doc);
         float docLength = this.getDocLength(doc);
+        System.out.println("DocLength:" + docLength  + " avgdl:" + this.avgDL);
         float K = MathScoreQueryProvider.K * ((1 - MathScoreQueryProvider.B) + 
                                                MathScoreQueryProvider.B * (docLength / this.avgDL));
         int qtfi, qtfj;
@@ -212,12 +221,15 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
             qwi = (float) ((qtfi / (MathScoreQueryProvider.K_3 + qtfi)) *
                                          Math.log((this.numDocs - iPos.size()) / iPos.size()));
             for (int j = i + 1; j < this.terms.size(); j++){
+                System.out.println("Term i: " + this.terms.get(i) + " Term j: " + this.terms.get(j));
                 jPos = pos.get(this.terms.get(j).getTerm());
                 qtfj = (int) this.terms.get(j).getCount();
                 qwj = (float) ((qtfj / (MathScoreQueryProvider.K_3 + qtfj)) *
                                Math.log((this.numDocs - jPos.size()) / jPos.size()));
                 
                 score += this.termWeight(iPos, jPos, K) * Math.min(qwi, qwj); 
+                System.out.println("qwi:" + qwi + " qwj:" + qwj +
+                                   " score:" + this.termWeight(iPos, jPos, K) * Math.min(qwi, qwj));
             }
         }
         return newScore + score;
@@ -234,7 +246,8 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         LeafReader reader = this.context.reader();
         if (reader != null){
             Terms termVector = reader.getTermVector(doc, this._field);
-            docLength = termVector.size();
+            docLength = termVector.getSumTotalTermFreq();
+            System.out.println(termVector.getStats());
         }
         return docLength;
     }
@@ -254,8 +267,10 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
                     List<Integer> pos = new ArrayList<Integer>();
                     while (count < freq){
                         pos.add(new Integer(posting.nextPosition()));
+                        count += 1;
                     }
                     positions.put(term.getTerm(), pos);
+                    System.out.println(term.getTerm() + ":" + pos);
                 }
             }
         }
