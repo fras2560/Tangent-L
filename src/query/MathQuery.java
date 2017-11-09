@@ -16,6 +16,7 @@
 package query;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -138,7 +139,7 @@ public class MathQuery {
      * Returns a list of terms
      * @return ArrayList the list of terms
      */
-    public ArrayList<String> getTerms(){
+    public List<String> getTerms(){
         return this.terms;
     }
 
@@ -188,7 +189,7 @@ public class MathQuery {
      * @param terms the terms to check
      * @return ArrayList the unique terms and their counts
      */
-    public ArrayList<TermCountPair> uniqueTerms(ArrayList<String> terms){
+    public List<TermCountPair> uniqueTerms(ArrayList<String> terms){
         ArrayList<TermCountPair> boostedTerms = new ArrayList<TermCountPair>();
         for (String term : terms){
             if (!term.trim().equals("")){
@@ -244,7 +245,7 @@ public class MathQuery {
                             ConvertConfig config,
                             CollectionStatistics stats) throws IOException{
         BoostQuery booster;
-        ArrayList<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
+        List<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
         TermQuery tempQuery = null;
         WildcardQuery wTempQuery = null;
         if (!synonym){

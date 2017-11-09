@@ -121,6 +121,8 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
     if (this.config.getAttribute(ConvertConfig.SYNONYMS)){
         result = new MathSynonymFilter(result);
     }
+    // parse out any payloads that are added
+    result = new PayloadFilter(result);
     result = new PorterStemFilter(result);
     return new TokenStreamComponents(source, result);
   }

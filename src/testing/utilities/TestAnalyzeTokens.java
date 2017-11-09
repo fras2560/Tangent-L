@@ -3,6 +3,7 @@ package testing.utilities;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import index.MathAnalyzer;
@@ -12,7 +13,7 @@ public class TestAnalyzeTokens {
 
     @Test
     public void test() {
-        ArrayList<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents",
+        List<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents",
                                                   "arthmetic #('m!()1x2','v!x','w')#"+
                                                   " #('v!x','comma','n')# #('v!x','v!σ','e')#");
         assertEquals(result.size(), 4);
@@ -24,7 +25,7 @@ public class TestAnalyzeTokens {
 
     @Test
     public void test2() {
-        ArrayList<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents",
+        List<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents",
                                                   "#('n!1','+','n')# #('+','*','n')# " + 
                                                   "Progression Geometric"); 
         assertEquals(result.size(), 4);
@@ -37,7 +38,7 @@ public class TestAnalyzeTokens {
     @Test
     public void test3() {
         String t = "#(start)# #('v!x','+','n')# #('+','*','n')# #(end)# Mean Arithmetic";
-        ArrayList<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents", t); 
+        List<String> result = Functions.analyzeTokens(new MathAnalyzer(), "contents", t); 
         assertEquals(result.size(), 4);
         assertEquals(result.get(0), "('v!x','+','n')");
         assertEquals(result.get(1), "('+','*','n')");

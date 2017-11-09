@@ -16,7 +16,7 @@
 package query;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.queries.CustomScoreProvider;
@@ -32,7 +32,7 @@ import utilities.Constants;
  * @since 2017-11-06
  */
 public class MathScoreQuery extends CustomScoreQuery{
-    private ArrayList<TermCountPair> termCounts;
+    private List<TermCountPair> termCounts;
     private String field;
     private ConvertConfig config;
     private float avgDL;
@@ -44,7 +44,7 @@ public class MathScoreQuery extends CustomScoreQuery{
      * @param config the config file
      */
     public MathScoreQuery(Query subQuery,
-                          ArrayList<TermCountPair> terms,
+                          List<TermCountPair> terms,
                           ConvertConfig config,
                           CollectionStatistics stats){
         super(subQuery);
@@ -59,7 +59,7 @@ public class MathScoreQuery extends CustomScoreQuery{
      * @param config the config file
      */
     public MathScoreQuery(Query subQuery,
-                          ArrayList<TermCountPair> terms,
+                          List<TermCountPair> terms,
                           String field,
                           ConvertConfig config,
                           CollectionStatistics stats) {
@@ -76,7 +76,7 @@ public class MathScoreQuery extends CustomScoreQuery{
      * @param stats
      */
     public void init(Query subQuery,
-                     ArrayList<TermCountPair> terms,
+                     List<TermCountPair> terms,
                      String field,
                      ConvertConfig config,
                      CollectionStatistics stats){

@@ -15,6 +15,11 @@
  */
 package query;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import utilities.Payload;
+
 /**
  * A Class that holds a term and a count
  * @author Dallas Fraser
@@ -24,12 +29,14 @@ package query;
 public class TermCountPair {
     private String term;
     private float count;
+    private List<Payload> payloads;
     /**
      * Class Constructor
      * @param term the term
      */
     public TermCountPair(String term){
         this.term = term;
+        this.payloads = new ArrayList<Payload>();
         this.count = 1f;
     }
 
@@ -46,6 +53,32 @@ public class TermCountPair {
      */
     public String getTerm(){
         return this.term;
+    }
+
+
+    /**
+     * Adds a payload to the term 
+     * @param payload
+     */
+    public void addPayload(Payload payload){
+        this.payloads.add(payload);
+    }
+
+    public int[] payloadFormulaSizes(){
+        int[] fs = new int[this.payloads.size()];
+        int i = 0;
+        for (Payload pl : this.payloads){
+            fs[i] = pl.getFormulaSize();
+        }
+        return fs;
+    }
+
+    public List<String> payloadLocations(){
+        List<String> locations = new ArrayList<String>();
+        for (Payload pl : this.payloads){
+            locations.add(pl.getLocation());
+        }
+        return locations;
     }
 
     /**

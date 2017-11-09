@@ -11,6 +11,10 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+
+import query.TermCountPair;
+import utilities.Payload.PayloadException;
 
 public class Functions {
 
@@ -48,10 +52,10 @@ public class Functions {
         }
         return wildcard;
     }
-    public static ArrayList<String> analyzeTokens(Analyzer analyzer, String field, String queryText){
+    public static List<String> analyzeTokens(Analyzer analyzer, String field, String queryText){
         // Use the analyzer to get all the tokens, and then build an appropriate
         // query based on the analysis chain.
-        ArrayList<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<String>();
         char[]  token;
         try (TokenStream source = analyzer.tokenStream(field, queryText)) {
             CharTermAttribute charAtt = source.getAttribute(CharTermAttribute.class);
@@ -62,6 +66,37 @@ public class Functions {
             }
         } catch (IOException e) {
           throw new RuntimeException("Error analyzing query text", e);
+        }
+        return tokens;
+    }
+
+    public static List<TermCountPair> getTermCountPair(Analyzer analyzer, String field, String queryText) throws IOException{
+        List<TermCountPair> tokens = new ArrayList<TermCountPair>();
+        String token;
+        int index;
+        try (TokenStream source = analyzer.tokenStream(field, queryText)){
+            CharTermAttribute charAtt = source.getAttribute(CharTermAttribute.class);
+            PayloadAttribute payloadAtt = source.getAttribute(PayloadAttribute.class);
+            source.reset();
+            while(source.incrementToken()){
+                token = String.valueOf(Arrays.copyOfRange(charAtt.buffer(), 0, charAtt.length()));
+                index = tokens.indexOf(new TermCountPair(token));
+                if(index != -1){
+                    tokens.get(index).increment();
+                }else{
+                    index = tokens.size();
+                    tokens.add(new TermCountPair(token.toString()));
+                }
+                // check for the payload
+                try {
+                    if(payloadAtt.getPayload() != null){
+                        tokens.get(index).addPayload(new Payload(payloadAtt.getPayload()));
+                    }
+                } catch (PayloadException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
         }
         return tokens;
     }

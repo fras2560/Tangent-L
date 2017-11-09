@@ -3,6 +3,7 @@ package testing.query;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class TestMathQuery {
         terms.add("hello");
         terms.add("hello");
         terms.add("there");
-        ArrayList<TermCountPair> result = mq.uniqueTerms(terms);
+        List<TermCountPair> result = mq.uniqueTerms(terms);
         assertEquals(result.get(0) , "hello");
         assertEquals(result.get(0).getCount() == 2f, true);
         assertEquals(result.get(1), "there");
