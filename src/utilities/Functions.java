@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 Dallas Fraser
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package utilities;
 
 import java.io.IOException;
@@ -16,8 +31,17 @@ import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import query.TermCountPair;
 import utilities.Payload.PayloadException;
 
+/**
+ * Holds some common functions for the project
+ * @author Dallas Fraser
+ * @since 2017-11-09
+ */
 public class Functions {
-
+    /**
+     * Parses a title
+     * @param title the title which may include the filepath
+     * @return String the name of the document
+     */
     public static String parseTitle(String title){
         String[] parts = title.split("/|\\\\");
         String filename = parts[parts.length -1];
@@ -26,6 +50,11 @@ public class Functions {
         return String.join(".", nameparts);
     }
 
+    /**
+     * Creates a temp file path used when converting the MathML with Tangent 
+     * @param file the file path
+     * @return Path a path to the temp file
+     */
     public static Path createtempFile(Path file){
         String title = parseTitle(file.getFileName().toString());
         String[] fn = file.getFileName().toString().split("\\.");
@@ -36,12 +65,21 @@ public class Functions {
         
     }
 
+    /**
+     * Prints the map
+     * @param map the map to print
+     */
     public static void printMap(Map<Float, Float> map){
         for (Map.Entry<Float, Float> entry : map.entrySet()) {
             System.out.println(entry.getKey()+" : "+entry.getValue());
         }
     }
 
+    /**
+     * Check whether the term contains a wildcard
+     * @param term the term to check
+     * @return boolean True if term contains a wildcard, False otherwise
+     */
     public static boolean containsWildcard(String term){
         boolean wildcard = false;
         if (term.contains("'" + Constants.WILDCARD + "'")){
@@ -52,6 +90,14 @@ public class Functions {
         }
         return wildcard;
     }
+
+    /**
+     * Returns a list of tokens using a the given Analyzer
+     * @param analyzer the analyzer to use
+     * @param field the field used by analyzer when parsing the tokens
+     * @param queryText the query to analyze
+     * @return List the list of tokens
+     */
     public static List<String> analyzeTokens(Analyzer analyzer, String field, String queryText){
         // Use the analyzer to get all the tokens, and then build an appropriate
         // query based on the analysis chain.
@@ -70,6 +116,14 @@ public class Functions {
         return tokens;
     }
 
+    /**
+     * Returns a list of TermCountPair based upon analyzing the query string with the given analyzer 
+     * @param analyzer the analyzer to use
+     * @param field the field used by analyzer when parsing the tokens
+     * @param queryText the query to analyze
+     * @return List a list of TermCountPair
+     * @throws IOException
+     */
     public static List<TermCountPair> getTermCountPair(Analyzer analyzer, String field, String queryText) throws IOException{
         List<TermCountPair> tokens = new ArrayList<TermCountPair>();
         String token;
@@ -81,6 +135,7 @@ public class Functions {
             while(source.incrementToken()){
                 token = String.valueOf(Arrays.copyOfRange(charAtt.buffer(), 0, charAtt.length()));
                 index = tokens.indexOf(new TermCountPair(token));
+                // in not found then need to add it other just increment it
                 if(index != -1){
                     tokens.get(index).increment();
                 }else{
