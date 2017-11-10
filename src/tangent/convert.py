@@ -5,6 +5,8 @@ import os
 from math_extractor import MathExtractor
 from mathdocument import MathDocument
 from htmlStriper import strip_tags
+PAYLOAD_DELIMITER = "||"
+PAYLOAD_SEPARATOR = ":"
 START_TAG = "#(start)#"
 END_TAG = "#(end)#"
 TERMINAL_NODE = "terminal_node"
@@ -66,21 +68,25 @@ def convert_math_expression(mathml,
                                     terminal_symbols=terminal_symbols,
                                     edge_pairs=edge_pairs,
                                     unbounded=unbounded,
-                                    shortened=shortened,
-                                    include_location=location)
-    #     for node in pairs:
-    #         print("Node", node, format_node(node), type(node))
+                                    shortened=shortened)
         if not synonyms:
-            node_list = [format_node(node)
+            node_list = [node
                          for node in pairs
                          if check_node(node)]
         else:
             # loop through all kept nodes and their expanded nodes
-            node_list = [format_node(expanded_node)
+            node_list = [expanded_node
                          for node in pairs
                          if check_node(node)
                          for expanded_node in expand_node_with_wildcards(node)
                          ]
+        # create a list of nodes and their payloads
+        formula_size = len(node_list)
+        nodes_payloads = [pop_location(node, formula_size, location)
+                          for node in node_list]
+        # now format the nodes
+        node_list = [format_node(node[0], payload=node[1])
+                     for node in nodes_payloads]
         # add start and end strings
         node_list = [START_TAG] + node_list + [END_TAG]
         return " ".join(node_list)
@@ -99,15 +105,35 @@ def check_node(node):
     elif node_type == SYMBOL_PAIR_NODE:
         # does it make sense to keep pairs of symbols with no path
         # if one of those symbols is a wildcard
-        if len(node) == 2:
+        if len(node) == 3:
             # if one is a wildcard the dont want to keep it
             check = not(check_wildcard(node[0]) or check_wildcard(node[1]))
         else:
+            # then both need to be a wildcard
             check = not(check_wildcard(node[0]) and check_wildcard(node[1]))
     elif node_type == EDGE_PAIR_NODE or node_type == COMPOUND_NODE:
         # keep them regardless at this point
         pass
     return check
+
+
+def pop_location(node, formula_size, include_location):
+    """Returns the node along with the payload
+
+    Parameters:
+        node: the math tuple
+        formula_size: the total size of the math formula
+        include_location: whether to include the location in the tuple
+    Returns:
+        : a tuple with (node, payload)
+    """
+    location = node[-1]
+    if not include_location:
+        # need to remove the location from the tuple
+        node = list(node)
+        node.pop()
+        node = tuple(node)
+    return (node, location + PAYLOAD_SEPARATOR + str(formula_size))
 
 
 def check_wildcard(term):
@@ -124,7 +150,7 @@ def check_wildcard(term):
     return wildcard
 
 
-def format_node(node):
+def format_node(node, payload=None):
     """Returns the formatted node
     """
     new_node = []
@@ -136,6 +162,8 @@ def format_node(node):
             new_node[-1] = WILDCARD
     node = tuple(new_node)
     node = str(node).lower()
+    if payload is not None:
+        node = node + PAYLOAD_DELIMITER + payload
     return ("#" + (str(node)
                    .replace(" ", "")
                    .replace("&comma;", "comma")
@@ -154,8 +182,10 @@ def determine_node(node):
     if node[1] == "!0":
         if len(node) == 2:
             node_type = TERMINAL_NODE
-        else:
+        elif node[2] == "n":
             node_type = EOL_NODE
+        else:
+            node_type = TERMINAL_NODE
     elif ("[" in node[1] and "]" in node[1]) or isinstance(node[1], list):
         node_type = COMPOUND_NODE
     elif node[0] in EDGES:
@@ -170,7 +200,7 @@ def expand_node_with_wildcards(node):
     node_type = determine_node(node)
     if node_type == SYMBOL_PAIR_NODE:
         # if just two symbols (no path) then no point in expanding
-        if len(node) > 2:
+        if len(node) > 3:
             # expands to two nodes
             # one with first tag as wc and second tag as wc
             temp = list(node)
@@ -192,9 +222,9 @@ def expand_node_with_wildcards(node):
             results.append(tuple(temp))
     elif node_type == EDGE_PAIR_NODE:
         # replace tag with a wildcard
-        if (not check_wildcard(node[-1])):
+        if (not check_wildcard(node[-2])):
             temp = list(node)
-            temp[-1] = WILDCARD_MOCK
+            temp[-2] = WILDCARD_MOCK
             results.append(tuple(temp))
     elif node_type == TERMINAL_NODE or EOL_NODE:
         # no expansion for them

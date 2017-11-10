@@ -52,10 +52,8 @@ public class PayloadFilter extends TokenFilter {
         final char[] token = Arrays.copyOfRange(this.termAtt.buffer(), 0, this.termAtt.length());
         String stoken = String.valueOf(token);
         String[] parts = stoken.split(Constants.PAYLOAD_DELIMITER);
-        System.out.println(stoken + ": " + parts.length);
         if (parts.length > 1 && parts.length == 2){
             termAtt.copyBuffer(parts[0].toCharArray(), 0, parts[0].length());
-            System.out.println(parts[0]);
             // the rest is the payload
             payloadAtt.setPayload(new BytesRef(parts[1].getBytes()));
         }else if (parts.length > 1){

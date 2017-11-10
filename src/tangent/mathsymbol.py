@@ -80,8 +80,7 @@ class MathSymbol:
                   edge_pairs=False,
                   eol=False,
                   unbounded=False,
-                  shortened=False,
-                  include_location=False):
+                  shortened=False):
         """
         Return the pairs in the symbol tree
 
@@ -99,8 +98,6 @@ class MathSymbol:
         :type unbounded: boolean
         :param shortened: If True will shorten the path for various pairs
         :type shortened: boolean
-        :param include_location: If True symbol_pairs will include location
-        :type include_location: boolean
 
         :return list of tuples
         :rtype list
@@ -113,18 +110,13 @@ class MathSymbol:
                 if unbounded and len(rel_path) > window:
                     if shortened:
                         # super liberal for now
-                        return (self.tag, right.tag)
+                        return (self.tag, right.tag, location)
                     else:
                         # little less liberal for now
                         path = rel_path[0] + rel_path[-1]
-                        return (self.tag, right.tag, path)
+                        return (self.tag, right.tag, path, location)
                 else:
-                    if include_location:
-                        # this is the tuple format for Version 0.3
-                        # removed due to discussion on June 7
-                        return (self.tag, right.tag, rel_path, location)
-                    else:
-                        return (self.tag, right.tag, rel_path)
+                    return (self.tag, right.tag, rel_path, location)
             return helper
 
         if len(prefix) == 0:
@@ -146,7 +138,7 @@ class MathSymbol:
             if len(available_edges) > 1:
                 # if less than one then information captured
                 # by symbol pairs
-                ret.append((self.tag, str(available_edges)))
+                ret.append((self.tag, str(available_edges), loc))
         for child, label in children:
             if child:
                 if symbol_pairs:
@@ -164,17 +156,16 @@ class MathSymbol:
                                            terminal_symbols=terminal_symbols,
                                            edge_pairs=edge_pairs,
                                            unbounded=unbounded,
-                                           shortened=shortened,
-                                           include_location=include_location))
+                                           shortened=shortened))
         if terminal_symbols and len(ret) == 0:
             # add the terminal symbols
-            ret.append((self.tag, "!0"))
+            ret.append((self.tag, "!0", loc))
         if eol and len(ret) == 0:
             # then we have a small expression and adding eol
-            ret.append((self.tag, "!0", "n"))
+            ret.append((self.tag, "!0", "n", loc))
         if edge_pairs and len(prefix) > 0:
             # add the pairs of edges on this node
-            ret.extend([(prefix[-1], label, self.tag)
+            ret.extend([(prefix[-1], label, self.tag, loc)
                         for child, label in children
                         if child and label != "w"])
         return ret
