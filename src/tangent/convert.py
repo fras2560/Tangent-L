@@ -267,7 +267,8 @@ def convert_file_to_words(filename,
                           shortened=True,
                           location=False,
                           synonyms=False,
-                          query=False):
+                          query=False,
+                          no_payload=True):
     """Parses a file and returns a of words
     Parameters:
         filename: the name of the file to parse
@@ -296,7 +297,8 @@ def convert_file_to_words(filename,
                                          unbounded=unbounded,
                                          shortened=shortened,
                                          location=location,
-                                         synonyms=synonyms)
+                                         synonyms=synonyms,
+                                         no_payload=no_payload)
             tokens += " " + paragraph + " " + ex
             # now move the content further along
             content = content[end:]
