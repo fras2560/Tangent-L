@@ -29,14 +29,16 @@ class MLStripper(HTMLParser):
 def strip_tags(html):
     """Returns a string stripped of all html tags
     """
-    if "<" in html:
-        parser = HTMLParser()
-        html = parser.unescape(html)
-        s = MLStripper()
-        s.feed(html)
-        result = s.get_data()
-    else:
-        result = html
+    parser = HTMLParser()
+    html = parser.unescape(html)
+    s = MLStripper()
+    s.feed(html)
+    result = s.get_data()
+    if result.strip() == "":
+        words = re.sub(r'<.*?>', ' ', html)
+        words = words.replace("  ", " ")
+        print("Words:" + words)
+        result = BeautifulSoup(words).text
     return result
 
 

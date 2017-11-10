@@ -6,7 +6,10 @@ Project: Tangent GT
 Purpose: Tests html stripper
 '''
 import unittest
-from tangent.htmlStriper import strip_tags
+try:
+    from htmlStriper import strip_tags
+except ImportError:
+    from tangent.htmlStriper import strip_tags
 
 
 class TestStriper(unittest.TestCase):
@@ -32,15 +35,13 @@ Willick, J.A., Courteau, S., Faber, S.M., Burstein, D., Dekel, A., &amp; Strauss
         self.assertEqual(result.strip(), expect)
 
     def testTextDoc(self):
-        test = """
-               dallas lies lies fraser
-               sdf
-               sdf
-               ds
-               dfs
-               dsf
-               """
+        test = """dallas lies lies fraser"""
         self.assertEqual(strip_tags(test), test)
+
+    def testPartHtml(self):
+        test = """<p class="ltx_p" id="S2.p1.1">We first explain formulation of full conformal quantum field theory on the"""
+        expect = """ We first explain formulation of full conformal quantum field theory on the"""
+        self.assertEqual(strip_tags(test), expect)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

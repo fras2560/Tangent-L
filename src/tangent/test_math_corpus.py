@@ -5,9 +5,14 @@ Date: 2017-07-27
 Project: Tangent GT
 Purpose: Tests the math corpus file
 '''
-from tangent.math_corpus import MathCorpus, ParseDocument,\
-                                format_paragraph, keep_word,\
-                                convert_math_expression
+try:
+    from math_corpus import MathCorpus, ParseDocument,\
+                            format_paragraph, keep_word,\
+                            convert_math_expression
+except ImportError:
+    from tangent.math_corpus import MathCorpus, ParseDocument,\
+                                    format_paragraph, keep_word,\
+                                    convert_math_expression
 from nltk.stem.porter import PorterStemmer
 import unittest
 import os
@@ -31,13 +36,6 @@ class TestMathCorpus(unittest.TestCase):
             print(vector)
             self.assertEqual(expected[index], vector)
 
-    def testTutorial(self):
-        mc = MathCorpus(self.corpus)
-        expect = ['human', 'time', 'minor', 'comput', 'survey', 'user',
-                  'system', 'interfac', 'respons', 'graph', 'tree', 'ep']
-        for key in expect:
-            self.assertEqual(key in mc.dictionary.token2id.keys(), True)
-
 
 class TestMathDocument(unittest.TestCase):
     def setUp(self):
@@ -46,41 +44,6 @@ class TestMathDocument(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-    def test1(self):
-        md = ParseDocument(os.path.join(self.fp, "1.xhtml"))
-        expect = ["mathemat",
-                  "rigor",
-                  "approach",
-                  "quantum",
-                  "field",
-                  "theori",
-                  "oper",
-                  "algebra",
-                  "in",
-                  "case",
-                  "('n!1','+','n')",
-                  "('n!1','n!1')",
-                  "('+','n!1','n')"]
-        self.assertEqual(md.get_words().strip(), " ".join(expect))
-
-    def test2(self):
-        md = ParseDocument(os.path.join(self.fp, "2.xhtml"))
-        expect = ["we",
-                  "first",
-                  "explain",
-                  "formul",
-                  "full",
-                  "conform",
-                  "theori",
-                  "('n!1','+','n')",
-                  "('n!1','n!1')",
-                  "('+','n!1','n')",
-                  "minkowski",
-                  "algebra",
-                  "quantum",
-                  "field"]
-        self.assertEqual(md.get_words().strip(), " ".join(expect))
 
 
 class TestFunctions(unittest.TestCase):
@@ -113,8 +76,8 @@ class TestFunctions(unittest.TestCase):
                     </annotation>
                   </semantics></math>
                """
-        result = convert_math_expression(test)
-        self.assertEqual(result, "('v!i','!0','n')")
+        result = convert_math_expression(test, eol=True, no_payload=True)
+        self.assertEqual(result, "#(start)# #('v!i','!0','n')# #(end)#")
 
     def testKeepWord(self):
         self.assertEqual(keep_word("they"), False)

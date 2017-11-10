@@ -4,10 +4,14 @@ import csv
 import os
 from sys import argv
 from bs4 import BeautifulSoup
-
-from control import Control
-from latex_mml import LatexToMathML
-from math_extractor import MathExtractor
+try:
+    from control import Control
+    from latex_mml import LatexToMathML
+    from math_extractor import MathExtractor
+except ImportError:
+    from tangent.control import Control
+    from tangent.latex_mml import LatexToMathML
+    from tangent.math_extractor import MathExtractor
 
 __author__ = 'Nidhin, FWTompa'
 

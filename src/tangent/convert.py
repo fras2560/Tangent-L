@@ -2,9 +2,14 @@ import argparse
 import logging
 import sys
 import os
-from math_extractor import MathExtractor
-from mathdocument import MathDocument
-from htmlStriper import strip_tags
+try:
+    from math_extractor import MathExtractor
+    from mathdocument import MathDocument
+    from htmlStriper import strip_tags
+except ImportError:
+    from tangent.math_extractor import MathExtractor
+    from tangent.mathdocument import MathDocument
+    from tangent.htmlStriper import strip_tags
 PAYLOAD_DELIMITER = "||"
 PAYLOAD_SEPARATOR = ":"
 START_TAG = "#(start)#"
@@ -34,7 +39,8 @@ def convert_math_expression(mathml,
                             unbounded=False,
                             shortened=True,
                             location=False,
-                            synonyms=False):
+                            synonyms=False,
+                            no_payload=False):
     """Returns the math tuples for a given math expression
 
     Parameters:
@@ -84,9 +90,12 @@ def convert_math_expression(mathml,
         formula_size = len(node_list)
         nodes_payloads = [pop_location(node, formula_size, location)
                           for node in node_list]
-        # now format the nodes
-        node_list = [format_node(node[0], payload=node[1])
-                     for node in nodes_payloads]
+        if no_payload:
+            node_list = [format_node(node[0]) for node in nodes_payloads]
+        else:
+            # now format the nodes
+            node_list = [format_node(node[0], payload=node[1])
+                         for node in nodes_payloads]
         # add start and end strings
         node_list = [START_TAG] + node_list + [END_TAG]
         return " ".join(node_list)
@@ -245,6 +254,53 @@ def format_paragraph(paragraph, query):
     if not query:
         striped = strip_tags(paragraph)
     return striped
+
+
+def convert_file_to_words(filename,
+                          window_size=1,
+                          symbol_pairs=True,
+                          eol=False,
+                          compound_symbols=False,
+                          terminal_symbols=False,
+                          edge_pairs=False,
+                          unbounded=False,
+                          shortened=True,
+                          location=False,
+                          synonyms=False,
+                          query=False):
+    """Parses a file and returns a of words
+    Parameters:
+        filename: the name of the file to parse
+        file_id: the file id
+        output_file: the name of the file to output to
+    Returns:
+        result: the list of words and math tuples
+    """
+    (ext, content) = MathDocument.read_doc_file(filename)
+    tokens = ""
+    while len(content) != 0:
+        (start, end) = MathExtractor.next_math_token(content)
+        if start == -1:
+            # can just print the rest
+            tokens += " " + format_paragraph(content, query)
+            content = ""
+        else:
+            paragraph = format_paragraph(content[0:start], query)
+            ex = convert_math_expression(content[start:end],
+                                         window_size=1,
+                                         symbol_pairs=symbol_pairs,
+                                         eol=eol,
+                                         compound_symbols=compound_symbols,
+                                         terminal_symbols=terminal_symbols,
+                                         edge_pairs=edge_pairs,
+                                         unbounded=unbounded,
+                                         shortened=shortened,
+                                         location=location,
+                                         synonyms=synonyms)
+            tokens += " " + paragraph + " " + ex
+            # now move the content further along
+            content = content[end:]
+    return tokens
 
 
 def parse_file(filename,

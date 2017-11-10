@@ -8,11 +8,18 @@ import codecs
 import platform
 from bs4 import BeautifulSoup
 from xml.parsers import expat
-from mathsymbol import MathSymbol
-from symboltree import SymbolTree
-from latex_mml import LatexToMathML
-from exceptions import UnknownTagException
-from utility import uprint
+try:
+    from mathsymbol import MathSymbol
+    from symboltree import SymbolTree
+    from latex_mml import LatexToMathML
+    from exceptions import UnknownTagException
+    from utility import uprint
+except ImportError:
+    from tangent.mathsymbol import MathSymbol
+    from tangent.symboltree import SymbolTree
+    from tangent.latex_mml import LatexToMathML
+    from tangent.exceptions import UnknownTagException
+    from tangent.utility import uprint
 __author__ = 'Nidhin, FWTompa'
 
 ## TODO: produce cleaned_file_content for text indexing on a separate pass (called separately in Version 0.2)

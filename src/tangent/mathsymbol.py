@@ -1,6 +1,10 @@
 from collections import deque
-from exceptions import UnknownTagException
-from mathml import MathML
+try:
+    from exceptions import UnknownTagException
+    from mathml import MathML
+except ImportError:
+    from tangent.exceptions import UnknownTagException
+    from tangent.mathml import MathML
 import string
 import sys
 import re

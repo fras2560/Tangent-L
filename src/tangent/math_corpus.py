@@ -10,35 +10,17 @@ from six import iteritems
 from tangent.htmlStriper import strip_tags
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
-from tangent.math_extractor import MathExtractor
-from tangent.mathdocument import MathDocument
+try:
+    from math_extractor import MathExtractor
+    from mathdocument import MathDocument
+    from convert import convert_math_expression
+except ImportError:
+    from tangent.math_extractor import MathExtractor
+    from tangent.mathdocument import MathDocument
+    from tangent.convert import convert_math_expression
 import os
 
 STOP_WORDS = set(stopwords.words('english'))
-
-
-def convert_math_expression(mathml):
-    """Returns the math tuples for a given math expression
-
-    Parameters:
-        mathml: the math expression (string)
-    Returns:
-        : a string of the math tuples
-    """
-    try:
-        tokens = MathExtractor.math_tokens(mathml)
-        pmml = MathExtractor.isolate_pmml(tokens[0])
-        tree_root = MathExtractor.convert_to_mathsymbol(pmml)
-        height = tree_root.get_height()
-        eol = False
-        if height <= 2:
-            eol = True
-        pairs = tree_root.get_pairs("", 1, eol=eol, unbounded=True)
-        node_list = [format_node(node)
-                     for node in pairs]
-        return " ".join(node_list)
-    except AttributeError:
-        return ""
 
 
 def format_node(node):
@@ -85,6 +67,7 @@ def format_paragraph(paragraph, stemmer):
         : a list of words (list)
     """
     result = strip_tags(paragraph)
+    print("Result of striping tags" + result)
     words = result.split(" ")
     return [stemmer.stem(word.lower().strip()) for word in words
             if keep_word(word.strip())]
@@ -192,10 +175,19 @@ class ParseDocument(object):
                 self.text += words
                 content = ""
             else:
+                print(content[0:start])
                 words = format_paragraph(content[0:start], stemmer)
+                print("Words:" + str(words))
                 self.lines.append(" ".join(words))
                 self.text += words
-                maths = convert_math_expression(content[start:end])
+                maths = convert_math_expression(content[start:end],
+                                                eol=True,
+                                                no_payload=True)
+                print(maths)
+                maths = (maths.replace("#(start)#", "")
+                         .replace("#(end)#", "")
+                         .strip())
+                print(maths)
                 self.lines.append(maths)
                 self.formulas.append(maths)
                 # now move the content further along
