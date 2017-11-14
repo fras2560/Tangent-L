@@ -17,7 +17,6 @@ package query;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import utilities.Payload;
 
 /**
@@ -55,6 +54,21 @@ public class TermCountPair {
         return this.term;
     }
 
+    /**
+     * Check whether this term contains the given location of another payload
+     * @param payload the payload with the location to check
+     * @return boolean True if location is contained in the term payload
+     */
+    public boolean containLocation(Payload payload){
+        boolean found = false;
+        for(Payload check : this.payloads){
+            if (check.getLocation().equals(payload.getLocation())){
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
 
     /**
      * Adds a payload to the term 
