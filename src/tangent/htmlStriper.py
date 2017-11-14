@@ -37,7 +37,6 @@ def strip_tags(html):
     if result.strip() == "":
         words = re.sub(r'<.*?>', ' ', html)
         words = words.replace("  ", " ")
-        print("Words:" + words)
         result = BeautifulSoup(words).text
     return result
 

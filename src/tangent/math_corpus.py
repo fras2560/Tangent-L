@@ -67,7 +67,6 @@ def format_paragraph(paragraph, stemmer):
         : a list of words (list)
     """
     result = strip_tags(paragraph)
-    print("Result of striping tags" + result)
     words = result.split(" ")
     return [stemmer.stem(word.lower().strip()) for word in words
             if keep_word(word.strip())]
@@ -175,19 +174,15 @@ class ParseDocument(object):
                 self.text += words
                 content = ""
             else:
-                print(content[0:start])
                 words = format_paragraph(content[0:start], stemmer)
-                print("Words:" + str(words))
                 self.lines.append(" ".join(words))
                 self.text += words
                 maths = convert_math_expression(content[start:end],
                                                 eol=True,
                                                 no_payload=True)
-                print(maths)
                 maths = (maths.replace("#(start)#", "")
                          .replace("#(end)#", "")
                          .strip())
-                print(maths)
                 self.lines.append(maths)
                 self.formulas.append(maths)
                 # now move the content further along

@@ -88,6 +88,7 @@ def convert_math_expression(mathml,
                          ]
         # create a list of nodes and their payloads
         formula_size = len(node_list)
+        # remove the location if not wanted and create payloads
         nodes_payloads = [pop_location(node, formula_size, location)
                           for node in node_list]
         if no_payload:
