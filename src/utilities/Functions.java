@@ -16,6 +16,7 @@
 package utilities;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -114,6 +115,26 @@ public class Functions {
           throw new RuntimeException("Error analyzing query text", e);
         }
         return tokens;
+    }
+
+    /**
+     * Returns the length of the document
+     * @param analyzer the analyzer to use
+     * @param field the field used for indexing
+     * @param reader the file reader to calculate length of
+     * @return
+     */
+    public static int documentLength(Analyzer analyzer, String field, Reader reader){
+        int length = 0;
+        try(TokenStream source = analyzer.tokenStream(field, reader)){
+            source.reset();
+            while (source.incrementToken()){
+                length += 1;
+            }
+        }catch (IOException e){
+            throw new RuntimeException("Error analyzing file", e);
+        }
+        return length;
     }
 
     /**

@@ -17,15 +17,21 @@ package testing.query;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.CollectionStatistics;
+import org.apache.lucene.search.Query;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import index.ConvertConfig;
 import query.MathQuery;
 import query.TermCountPair;
+import utilities.Constants;
 
 public class TestMathQuery {
     @Before
@@ -51,4 +57,52 @@ public class TestMathQuery {
         assertEquals(result.size(), 2);
     }
 
+    @Test
+    public void testBuildQuery(){
+        MathQuery mq = new MathQuery("test");
+        ConvertConfig config =  new ConvertConfig();
+        CollectionStatistics stats = new CollectionStatistics(Constants.FIELD, 0l, 0l, 0l, 0l);
+        mq.addTerm(" #('m!()1x1','n!1','n')# #('v!t','*','b')#", Constants.FIELD);
+        try {
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            assertEquals(q.toString(), "custom(contents:('m!()1x1','n!1','n') contents:('v!t','*','b'))");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("IOException raised");
+        }
+        config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, true);
+        try {
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            assertEquals(q.toString(), "custom((contents:('m!()1x1','n!1','n'))^1.0 (contents:('v!t','*','b'))^1.0)");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("IOException raised");
+        }
+        config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, true);
+        try {
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            assertEquals(q.toString(),
+                         "custom(custom((contents:('m!()1x1','n!1','n'))^1.0) custom((contents:('v!t','*','b'))^1.0))");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("IOException raised");
+        }
+    }
+
+    @Test
+    public void testBuildEmptyQuery(){
+        MathQuery mq =  new MathQuery("test");
+        ConvertConfig config =  new ConvertConfig();
+        CollectionStatistics stats = new CollectionStatistics(Constants.FIELD, 0l, 0l, 0l, 0l);
+        try {
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            assertEquals(q.toString(), "custom(contents:)");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }

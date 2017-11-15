@@ -124,11 +124,7 @@ public class TestSearch extends BaseTest{
             for (LeafReaderContext lrc : reader.leaves()){
                 LeafReader lr = lrc.reader();
                 // this may not be a consistent tests across platforms
-                System.out.println(lr.getNumericDocValues(Constants.FORMULA_COUNT).get(docId));
-                assertEquals(lr.getNumericDocValues(Constants.WORD_COUNT).get(docId) == 10, true);
-                assertEquals(lr.getNumericDocValues(Constants.FORMULA_COUNT).get(docId) == 37, true);
-                assertEquals(lr.getNumericDocValues(Constants.AVERAGE_FORMULA_SIZE).get(docId) == 12, true);
-                assertEquals(lr.getNumericDocValues(Constants.MAX_FORMULA_SIZE).get(docId) == 23, true);
+                assertEquals(lr.getNumericDocValues(Constants.DOCUMENT_LENGTH).get(docId) == 44, true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -158,15 +154,17 @@ public class TestSearch extends BaseTest{
             ArrayList<SearchResult> results = this.searcher.searchQueries(this.queries);
             assertEquals(results.size(), 1);
             ArrayList<String> expect = new ArrayList<String>();
+            expect.add("math-ph0607065_1_57");
+            expect.add("1303.3122_1_41");
             expect.add("1301.6848_1_17");
             expect.add("1307.6316_1_108");
-            expect.add("1303.3122_1_41");
-            expect.add("math-ph0607065_1_57");
             ArrayList<String> expect2 = new ArrayList<String>();
             expect2.add("1301.6848_1_17");
-            expect2.add("1303.3122_1_41");
-            expect2.add("1307.6316_1_108");
             expect2.add("math-ph0607065_1_57");
+            
+            expect2.add("1303.3122_1_41");
+            
+            expect2.add("1307.6316_1_108");
             assertEquals(this.compareResults(expect, results.get(0), this.searcher) ||
                          this.compareResults(expect2, results.get(0), this.searcher), true);
         } catch (IOException e) {
@@ -198,15 +196,17 @@ public class TestSearch extends BaseTest{
             SearchResult result = this.searcher.searchQuery(query);
             System.out.println(result);
             ArrayList<String> expect2 = new ArrayList<String>();
-            expect2.add("1301.6848_1_17");
-            expect2.add("1303.3122_1_41");
-            expect2.add("1307.6316_1_108");
             expect2.add("math-ph0607065_1_57");
+            expect2.add("1303.3122_1_41");
+            expect2.add("1301.6848_1_17");
+            expect2.add("1307.6316_1_108");
             ArrayList<String> expect = new ArrayList<String>();
+            expect.add("math-ph0607065_1_57");
+            expect.add("1303.3122_1_41");
             expect.add("1301.6848_1_17");
             expect.add("1307.6316_1_108");
-            expect.add("1303.3122_1_41");
-            expect.add("math-ph0607065_1_57");
+            
+            
             System.out.println(result);
             result.explainResults(this.searcher.getSearcher());
             assertEquals(this.compareResults(expect, result, this.searcher) ||
@@ -239,12 +239,12 @@ public class TestSearch extends BaseTest{
             MathQuery query = mathQueries.get(0);
             ArrayList<String> results = this.searcher.searchQueryFiles(query);
             
-            assertEquals(results.get(0) , "1301.6848_1_17");
-            assertEquals(results.get(1).equals("1307.6316_1_108") ||
+            assertEquals(results.get(0) , "math-ph0607065_1_57");
+            assertEquals(results.get(1).equals("1301.6848_1_17") ||
                          results.get(1).equals("1303.3122_1_41"),  true);
-            assertEquals(results.get(1).equals("1307.6316_1_108") ||
+            assertEquals(results.get(1).equals("1301.6848_1_17") ||
                     results.get(1).equals("1303.3122_1_41"),  true);
-            assertEquals(results.get(3) , "math-ph0607065_1_57");
+            assertEquals(results.get(3), "1307.6316_1_108");
         } catch (IOException e) {
             e.printStackTrace();
             fail("Fail IO exception");

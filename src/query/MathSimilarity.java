@@ -28,6 +28,7 @@ public class MathSimilarity {
     private static int CLASSIC = 0;
     private static int BM25 = 1;
     private static int BOOLEAN = 2;
+    private static int MATH = 3;
     /**
      * Class constructor
      * @param type the similarity type to use
@@ -41,6 +42,8 @@ public class MathSimilarity {
             sim =  new BM25Similarity();
         }else if(type == MathSimilarity.BOOLEAN){
             sim = new BooleanSimilarity();
+        }else if(type == MathSimilarity.MATH){
+            sim = new MathSimilarityImpl();
         }
         return sim;
     }

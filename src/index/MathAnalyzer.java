@@ -25,6 +25,7 @@ import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
+import org.apache.lucene.analysis.payloads.IdentityEncoder;
 import org.apache.lucene.analysis.standard.ClassicFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
@@ -122,7 +123,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
         result = new MathSynonymFilter(result);
     }
     // parse out any payloads that are added
-    result = new PayloadFilter(result);
+    result = new PayloadFilter(result, new IdentityEncoder());
     result = new PorterStemFilter(result);
     return new TokenStreamComponents(source, result);
   }

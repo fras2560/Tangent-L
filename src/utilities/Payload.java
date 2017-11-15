@@ -66,6 +66,19 @@ public class Payload {
         return this.location;
     }
 
+    /*
+     * Prints a Payload to a String, with <code>field</code> assumed to be the
+     * default field and omitted
+     * (non-Javadoc)
+     * @see org.apache.lucene.search.Query#toString(java.lang.String)
+     * @return the string representation
+     */
+    public String toString(){
+        String result;
+        result = "Payload " + this.location + ":" + this.formulaSize;
+        return result;
+    }
+
     /**
      * An exception raised by the payload when parsing the BytesRef
      * @author Dallas Fraser

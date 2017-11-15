@@ -51,9 +51,11 @@ public class ConvertConfig {
     private boolean bags;
     private String queryType;
     private boolean boostedQueries;
+    private boolean boostLocation;
     /*
      * The possible features that Tangent can use
      */
+    public final static String BOOST_LOCATION = "BOOST_LOCATION";
     public final static String SHORTENED = "SHORTENED";
     public final static String EOL = "EOL";
     public final static String COMPOUND = "COMPOUND_SYMBOLS";
@@ -95,6 +97,7 @@ public class ConvertConfig {
         this.query = false;
         this.bags = false;
         this.boostedQueries = false;
+        this.boostLocation = false;
         this.queryType = ConvertConfig.TERM_QUERY;
     }
 
@@ -166,6 +169,8 @@ public class ConvertConfig {
             this.bags = !this.bags;
         }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
             this.boostedQueries = !this.boostedQueries;
+        }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
+            this.boostLocation = !this.boostLocation;
         }
     }
 
@@ -231,6 +236,8 @@ public class ConvertConfig {
             result = this.bags;
         }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
             result  = this.boostedQueries;
+        }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
+            result = this.boostLocation;
         }
         return result;
     }
@@ -271,6 +278,8 @@ public class ConvertConfig {
             this.bags = setting;
         }else if (attribute.equals(ConvertConfig.BOOST_QUERIES)){
             this.boostedQueries = setting;
+        }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
+            this.boostLocation = setting;
         }
     }
 
@@ -347,6 +356,8 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbolPairs);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, this.synonyms);
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, this.bags);
+        config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, this.boostedQueries);
+        config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, this.boostLocation);
         config.setWindowSize(this.windowSize);
         try {
             config.setQueryType(this.queryType);

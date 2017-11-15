@@ -25,6 +25,7 @@ import org.apache.lucene.queries.CustomScoreQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.BytesRef;
 
+import utilities.Constants;
 import utilities.Payload;
 import utilities.Payload.PayloadException;
 
@@ -37,6 +38,7 @@ public class LocationBoostedQuery extends CustomScoreQuery{
     private TermCountPair term;
     private static float DEFAULT_BOOST = 1.5f;
     private float boost;
+    private String field;
     /**
      * Class constructor
      * @param subQuery the Term Query
@@ -46,6 +48,20 @@ public class LocationBoostedQuery extends CustomScoreQuery{
         super(subQuery);
         this.term = term;
         this.boost = LocationBoostedQuery.DEFAULT_BOOST;
+        this.field = Constants.FIELD;
+    }
+
+    /**
+     * Class constructor
+     * @param subQuery the Term Query
+     * @param term the term of the Query
+     * @param field the field of the query
+     */
+    public LocationBoostedQuery(Query subQuery, TermCountPair term, String field){
+        super(subQuery);
+        this.term = term;
+        this.boost = LocationBoostedQuery.DEFAULT_BOOST;
+        this.field = field;
     }
 
     /**
@@ -58,6 +74,21 @@ public class LocationBoostedQuery extends CustomScoreQuery{
         super(subQuery);
         this.term = term;
         this.boost = boost;
+        this.field = Constants.FIELD;
+    }
+
+    /**
+     * Class Constructor
+     * @param subQuery the Term Query
+     * @param term the term of the Query
+     * @param boost the factor to boost by
+     * @param field the field of the query
+     */
+    public LocationBoostedQuery(Query subQuery, TermCountPair term, float boost, String field){
+        super(subQuery);
+        this.term = term;
+        this.boost = boost;
+        this.field = field;
     }
 
     /**
@@ -66,7 +97,7 @@ public class LocationBoostedQuery extends CustomScoreQuery{
      * @return CustomScoreProvider the score provider to use
      */
     protected CustomScoreProvider getCustomScoreProvider(LeafReaderContext context) throws IOException{
-        return new LocationBoostedProvider(context, this.term, this.boost);
+        return new LocationBoostedProvider(context, this.term, this.boost, this.field);
     }
 
     /**
@@ -85,10 +116,12 @@ public class LocationBoostedQuery extends CustomScoreQuery{
          * @param term the term of the query
          * @param boost the factor to boost when location is matched
          */
-        public LocationBoostedProvider(LeafReaderContext context, TermCountPair term, float boost) {
+        public LocationBoostedProvider(LeafReaderContext context, TermCountPair term, float boost, String field) {
             super(context);
+            this.context = context;
             this.term = term;
             this.boost = boost;
+            this.field = field;
         }
 
        /**
@@ -100,15 +133,22 @@ public class LocationBoostedQuery extends CustomScoreQuery{
        public float determineBoost(int doc) throws IOException{
            float boost = 1f;
            LeafReader reader = this.context.reader();
+           System.out.println("Has payloads:" + reader.getFieldInfos().hasPayloads());
            // loop through each location of the term and boost if location matches the payload
            if (reader != null){
-               PostingsEnum posting = reader.postings(new Term(this.field, term.getTerm()), PostingsEnum.PAYLOADS);
+               PostingsEnum posting = reader.postings(new Term(this.field, term.getTerm()), PostingsEnum.ALL);
+               System.out.println("Term: " + term.getTerm());
                if (posting != null){
                    // move to the document currently looking at
                    posting.advance(doc);
                    int count = 0;
                    while (count < posting.freq()){
                        BytesRef load = posting.getPayload();
+                       System.out.println(posting);
+                       System.out.println(posting.getClass());
+                       System.out.println(posting.attributes());
+                       System.out.println("Load: " + load);
+                       System.out.println(posting.nextPosition());
                        // if the location matches in the term location than boos the term by the boost factor
                        try {
                             if(load != null && term.containLocation(new Payload(load))){
@@ -118,7 +158,7 @@ public class LocationBoostedQuery extends CustomScoreQuery{
                             // do not care too much, the payload is unrecognized
                             // this is not going to change the  boost factor
                         }
-                       posting.nextPosition();
+                       
                        count += 1;
                    }
                }

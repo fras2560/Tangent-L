@@ -17,13 +17,12 @@ package index;
 
 import java.io.IOException;
 import java.util.Arrays;
-
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.payloads.PayloadEncoder;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.util.BytesRef;
-
 import utilities.Constants;
 /**
  * Filter adds a payload to appropriate terms
@@ -33,14 +32,17 @@ import utilities.Constants;
  *
  */
 public class PayloadFilter extends TokenFilter {
-    private final PayloadAttribute payloadAtt = addAttribute(PayloadAttribute.class);
+    private PayloadAttribute payloadAtt;
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+    private PayloadEncoder encoder;
     /**
      * Class Constructor
      * @param in the token stream
      */
-    public PayloadFilter(TokenStream in){
+    public PayloadFilter(TokenStream in, PayloadEncoder encoder){
         super(in);
+        this.encoder = encoder;
+        this.payloadAtt = addAttribute(PayloadAttribute.class);
     }
 
     @Override
@@ -53,13 +55,16 @@ public class PayloadFilter extends TokenFilter {
         String stoken = String.valueOf(token);
         String[] parts = stoken.split(Constants.PAYLOAD_DELIMITER);
         if (parts.length > 1 && parts.length == 2){
-            termAtt.copyBuffer(parts[0].toCharArray(), 0, parts[0].length());
+            termAtt.setLength(parts[0].length());
             // the rest is the payload
-            payloadAtt.setPayload(new BytesRef(parts[1].getBytes()));
+            payloadAtt.setPayload(this.encoder.encode(parts[1].toCharArray()));
+            System.out.println(payloadAtt.getPayload() + " vs " + new BytesRef(parts[1].getBytes()).toString() + " vs " + parts[1]);
         }else if (parts.length > 1){
+            payloadAtt.setPayload(new BytesRef("Fuck".getBytes()));
             System.out.println("Not sure what to do");
+        }else{
+            payloadAtt.setPayload(null);
         }
-
         return true;
     }
 }

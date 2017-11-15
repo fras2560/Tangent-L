@@ -244,38 +244,27 @@ public class MathQuery {
                             boolean synonym,
                             ConvertConfig config,
                             CollectionStatistics stats) throws IOException{
-        BoostQuery booster;
         List<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
-        TermQuery tempQuery = null;
-        WildcardQuery wTempQuery = null;
-        if (!synonym){
-            wTempQuery = null;
-            for (TermCountPair termPair : uniqueTerms){
-                if (!termPair.getTerm().trim().equals("")){
-                    wTempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
-                    if (!config.getAttribute(ConvertConfig.BOOST_QUERIES)){
-                        bq.add(wTempQuery, BooleanClause.Occur.SHOULD);
-                    }else{
-                        booster = new BoostQuery(wTempQuery, termPair.getCount());
-                        bq.add(booster, BooleanClause.Occur.SHOULD);
-                    }
-                }
+        Query tempQuery = null;
+        for (TermCountPair termPair : uniqueTerms){
+            tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
+            if (!synonym && Functions.containsWildcard(termPair.getTerm())){
+                // do not have synonyms indexed so use wildcard query
+                // this term has a wildcard so need it for match wildcard
+                tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
             }
-        }else{
-            tempQuery = null;
-            for(TermCountPair termPair : uniqueTerms){
-                if(!termPair.getTerm().trim().equals("")){
-                    tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
-                    if (!config.getAttribute(ConvertConfig.BOOST_QUERIES)){
-                        bq.add(tempQuery, BooleanClause.Occur.SHOULD);
-                    }else{
-                        booster = new BoostQuery(tempQuery, termPair.getCount());
-                        bq.add(booster, BooleanClause.Occur.SHOULD);
-                    }
-                }
+            if (config.getAttribute(ConvertConfig.BOOST_QUERIES)){
+                // boost the term by the number of times it appears in the query
+                tempQuery =  new BoostQuery(tempQuery, termPair.getCount());
             }
+            if (config.getAttribute(ConvertConfig.BOOST_LOCATION)){
+                // boost the term if location matches
+                tempQuery = new LocationBoostedQuery(tempQuery, termPair, field); 
+            }
+            // add the query
+            bq.add(tempQuery, BooleanClause.Occur.SHOULD);
         }
-        if (tempQuery ==  null || wTempQuery == null){
+        if (tempQuery ==  null){
             bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
         }
         Query result = bq.build();

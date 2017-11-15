@@ -17,6 +17,7 @@ package index;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -32,6 +33,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
@@ -44,6 +46,7 @@ import org.apache.lucene.store.FSDirectory;
 
 import query.MathSimilarity;
 import utilities.Constants;
+import utilities.Functions;
 import utilities.ProjectLogger;
 
 
@@ -199,7 +202,14 @@ public class IndexFiles {
                        ConvertConfig config) throws IOException, InterruptedException {
     Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
+    int docLength = 1;
+    try (InputStream stream = Files.newInputStream(new_file)){
+        // get the statistics of the file
+        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        docLength = Functions.documentLength(writer.getAnalyzer(), Constants.FIELD, reader);
+    }
     try (InputStream stream = Files.newInputStream(new_file)) {
+        
         // make a new, empty document
         Document doc = new Document();
         // Add the path of the file as a field named "path".  Use a
@@ -209,6 +219,8 @@ public class IndexFiles {
         logger.log(Level.INFO, "Working on file " + file.toString());
         Field pathField = new StringField("path", file.toString(), Field.Store.YES);
         doc.add(pathField);
+        // a field to keep track of the doc length
+        doc.add(new NumericDocValuesField(Constants.DOCUMENT_LENGTH, (long) docLength));
         // Add the last modified date of the file a field named "modified".
         // Use a LongPoint that is indexed (i.e. efficiently filterable with
         // PointRangeQuery).  This indexes to milli-second resolution, which
@@ -226,6 +238,8 @@ public class IndexFiles {
         fieldType.setTokenized(true);
         fieldType.setStoreTermVectors(true);
         fieldType.setStoreTermVectorPositions(true);
+        fieldType.setStoreTermVectorPayloads(true);
+        fieldType.setStoreTermVectorOffsets(true);
         doc.add(new Field(Constants.FIELD,
                           new InputStreamReader(stream, StandardCharsets.UTF_8),
                           fieldType
