@@ -34,6 +34,7 @@ import org.apache.lucene.queries.CustomScoreProvider;
 import org.apache.lucene.util.BytesRef;
 
 import index.ConvertConfig;
+import utilities.Constants;
 import utilities.Functions;
 /**
  * A class for calculating the score using a few different methods determined by the {@link ConvertConfig}
@@ -245,9 +246,8 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         long docLength = 1;
         LeafReader reader = this.context.reader();
         if (reader != null){
-            Terms termVector = reader.getTermVector(doc, this._field);
-            docLength = termVector.getSumTotalTermFreq();
-            System.out.println(termVector.getStats());
+            docLength = reader.getNumericDocValues(Constants.DOCUMENT_LENGTH).get(doc);
+            System.out.println(docLength);
         }
         return docLength;
     }

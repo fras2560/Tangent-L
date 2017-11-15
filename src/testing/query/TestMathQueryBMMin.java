@@ -50,6 +50,7 @@ public class TestMathQueryBMMin extends TestMathQueryBase {
         this.index = Paths.get(this.folder.toString(), "index");
         this.queries = Paths.get(this.folder.toString(), "queries.xml");
         this.config = new ConvertConfig();
+        this.config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         this.config.setQueryType(ConvertConfig.BM25_DISTANCE_QUERY);
     }
 
@@ -101,9 +102,9 @@ public class TestMathQueryBMMin extends TestMathQueryBase {
             e.printStackTrace();
         }
         Map<String, Float> expect = new HashMap<String, Float>();
-        expect.put("text_1", 0.94956934f);
-        expect.put("text_2", 1.5963525f);
-        expect.put("text_3", 1.5963525f);
+        expect.put("text_1", -0.7833679f);
+        expect.put("text_2", -0.1365848f);
+        expect.put("text_3", -0.1365848f);
         for (String doc : results.keySet()) {
             assertEquals(expect.get(doc), results.get(doc));
         }

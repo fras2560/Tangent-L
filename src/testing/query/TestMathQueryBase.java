@@ -82,6 +82,7 @@ public class TestMathQueryBase extends BaseTest{
         System.out.println("Query: " + mq.toString());
         System.out.println("Documents Returned: " + hits.length);
         for (ScoreDoc hit: hits){
+            System.out.println(searcher.getSearcher().explain(buildQuery, hit.doc));
             Document doc = searcher.getSearcher().doc(hit.doc);
             results.put(Functions.parseTitle(doc.get("path")), hit.score);
         }
