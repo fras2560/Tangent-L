@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topics xmlns="http://ntcir-math.nii.ac.jp/" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <topic>
+    <num>NTCIR12-MathIR-1</num>
+    <query>
+      <formula id="f.0">
+        <m:math>
+          <m:semantics xml:id="m1.1a">
+            <m:apply xml:id="m1.1.4" xref="m1.1.4.pmml">
+              <m:plus xml:id="m1.1.2" xref="m1.1.2.pmml"/>
+              <m:ci xml:id="m1.1.1" xref="m1.1.1.pmml">x</m:ci>
+              <m:ci xml:id="m1.1.3" xref="m1.1.13.pmml">y</m:ci>
+            </m:apply>
+            <m:annotation-xml encoding="MathML-Presentation" xml:id="m1.1b">
+              <m:mrow xml:id="m1.1.4.pmml" xref="m1.1.4">
+                <m:mi xml:id="m1.1.1.pmml" xref="m1.1.1">x</m:mi>
+                <m:mo xml:id="m1.1.2.pmml" xref="m1.1.2">+</m:mo>
+                <m:mi xml:id="m1.1.3.pmml" xref="m1.1.3">y</m:mi>
+              </m:mrow>
+            </m:annotation-xml>
+            <m:annotation encoding="application/x-tex" xml:id="m1.1c">x+y</m:annotation>
+          </m:semantics>
+        </m:math>
+      </formula>
+    </query>
+  </topic>
+</topics>
