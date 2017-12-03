@@ -24,6 +24,8 @@ public class Constants {
     public final static String WILDCARD = "*";
     public final static String ESCAPED_WILDCARD = "/*";
     public final static String FIELD = "contents";
+    public final static String MATHFIELD = "math-contents";
+    public final static String TEXTFIElD = "text-contents";
     public final static String DOCUMENT_LENGTH = "documentLength";
     public final static String FORMULA_COUNT = "numberOfFormulas";
     public final static String WORD_COUNT = "numberOfWords";

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -57,7 +58,7 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 3;
+    private static int TOP_K = 10000;
     private Path queries;
     private Logger logger;
     private boolean greedy;
@@ -312,7 +313,6 @@ public class FindOptimal {
             for (ScoreDoc hit : hits){
                 // build the list of filenames to check against the answers
                 Document doc = searcher.doc(hit.doc);
-                System.out.println(doc.get("path"));
                 filenames.add(this.parseTitle(doc.get("path")));
             }
             int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
@@ -321,7 +321,6 @@ public class FindOptimal {
             }
             this.logger.log(Level.FINEST, result.getMathQuery().getQueryName()  + " Answer found: " + found);
         }
-        System.out.println("");
         return found;
     }
 
@@ -352,8 +351,8 @@ public class FindOptimal {
         double found;
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
-            System.out.println(mq.getQueryName());
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+            System.out.println(mq.getQueryName());
             found = this.found_answer(searcher.getSearcher(), result);
             reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
             this.logger.log(Level.FINER,
@@ -447,20 +446,21 @@ public class FindOptimal {
         // default arguments
         boolean wiki = true;
         Path documents, indexDirectory, output,queries, results, logFile;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "output.txt");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "output.txt");
             queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "findOptimal.log");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "findOptimal.log");
         }else{
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "output.txt");
+            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "output.txt");
             queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", "findOptimal.log");
+            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "findOptimal.log");
             
         }
         // check command line for override default methods
@@ -489,7 +489,16 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.EOL);
+        config.flipBit(ConvertConfig.TERMINAL);
+        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
+        config.flipBit(ConvertConfig.SYNONYMS);
+//        try {
+//            
+//            config.setQueryType(ConvertConfig.BM25TP_QUERY);
+//        } catch (Exception e1) {
+//            // TODO Auto-generated catch block
+//            e1.printStackTrace();
+//        }
         // only need to flip a certain number of features
 //        features.add(ConvertConfig.SHORTENED);
 //        features.add(ConvertConfig.LOCATION);

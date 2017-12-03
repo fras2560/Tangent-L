@@ -52,6 +52,7 @@ public class ConvertConfig {
     private String queryType;
     private boolean boostedQueries;
     private boolean boostLocation;
+    private boolean seperate;
     /*
      * The possible features that Tangent can use
      */
@@ -71,6 +72,7 @@ public class ConvertConfig {
     public final static String BM25_DISTANCE_QUERY = "BM25_DISTANCE_QUERY";
     public final static String TERM_QUERY = "TERM_QUERY";
     public final static String BOOST_QUERIES = "BOOST_QUERIES";
+    public final static String SEPERATE_MATH_TEXT = "SEPERATE_MATH_FROM_TEXT";
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
@@ -98,6 +100,7 @@ public class ConvertConfig {
         this.bags = false;
         this.boostedQueries = false;
         this.boostLocation = false;
+        this.seperate = false;
         this.queryType = ConvertConfig.TERM_QUERY;
     }
 
@@ -171,6 +174,8 @@ public class ConvertConfig {
             this.boostedQueries = !this.boostedQueries;
         }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
             this.boostLocation = !this.boostLocation;
+        }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
+            this.seperate = !this.seperate;
         }
     }
 
@@ -238,6 +243,8 @@ public class ConvertConfig {
             result  = this.boostedQueries;
         }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
             result = this.boostLocation;
+        }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
+            result = this.seperate;
         }
         return result;
     }
@@ -280,6 +287,8 @@ public class ConvertConfig {
             this.boostedQueries = setting;
         }else if (attribute.equals(ConvertConfig.BOOST_LOCATION)){
             this.boostLocation = setting;
+        }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
+            this.seperate = setting;
         }
     }
 
@@ -358,6 +367,7 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, this.bags);
         config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, this.boostedQueries);
         config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, this.boostLocation);
+        config.setBooleanAttribute(ConvertConfig.SEPERATE_MATH_TEXT, this.seperate);
         config.setWindowSize(this.windowSize);
         try {
             config.setQueryType(this.queryType);

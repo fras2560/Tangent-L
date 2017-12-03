@@ -102,6 +102,8 @@ public class NTCIR_TEST {
             // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
             config.loadConfig(index);
+            config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
+            config.setQueryType(ConvertConfig.BM25TP_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);
             searcher.ntcirTest(queries, results, resultsWriter);

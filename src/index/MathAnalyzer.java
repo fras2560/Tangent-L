@@ -25,11 +25,12 @@ import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
-import org.apache.lucene.analysis.payloads.IdentityEncoder;
 import org.apache.lucene.analysis.standard.ClassicFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
+
+import utilities.Constants;
 
 
 /**
@@ -123,8 +124,16 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
         result = new MathSynonymFilter(result);
     }
     // parse out any payloads that are added
-    result = new PayloadFilter(result, new IdentityEncoder());
+    result = new PayloadFilter(result);
     result = new PorterStemFilter(result);
+    if (fieldName.equals(Constants.MATHFIELD)){
+        // remove words
+        result = new RemoveTextFilter(result);
+    }
+    if (fieldName.equals(Constants.TEXTFIElD)){
+        // remove math tuples
+        result = new RemoveMathFilter(result);
+    }
     return new TokenStreamComponents(source, result);
   }
 

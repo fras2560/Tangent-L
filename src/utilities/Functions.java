@@ -17,6 +17,8 @@ package utilities;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -115,6 +117,18 @@ public class Functions {
           throw new RuntimeException("Error analyzing query text", e);
         }
         return tokens;
+    }
+
+    /**
+     * Returns a string by parsing the file using the analyzer
+     * @param analyzer the analyzer to use
+     * @param reader the reader of the file
+     * @return String the String of the file
+     * @throws IOException 
+     */
+    public static String parseString(Path path) throws IOException{
+        String contents = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        return contents;
     }
 
     /**

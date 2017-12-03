@@ -32,6 +32,8 @@ import utilities.ProjectLogger;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.payloads.PayloadFunction;
+import org.apache.lucene.queries.payloads.PayloadScoreQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BoostQuery;
@@ -47,6 +49,7 @@ import org.w3c.dom.Element;
  * @since 2017-11-07
  */
 public class MathQuery {
+    public static float WILDCARD_BOOST = 0.9f;
     private String queryName;
     private ArrayList<String> terms;
     private ArrayList<String> analyzedTerms;
@@ -252,6 +255,8 @@ public class MathQuery {
                 // do not have synonyms indexed so use wildcard query
                 // this term has a wildcard so need it for match wildcard
                 tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
+                // boost the wildcard
+                tempQuery = new BoostQuery(tempQuery, MathQuery.WILDCARD_BOOST);
             }
             if (config.getAttribute(ConvertConfig.BOOST_QUERIES)){
                 // boost the term by the number of times it appears in the query
@@ -259,7 +264,7 @@ public class MathQuery {
             }
             if (config.getAttribute(ConvertConfig.BOOST_LOCATION)){
                 // boost the term if location matches
-                tempQuery = new LocationBoostedQuery(tempQuery, termPair, field); 
+                tempQuery = new LocationBoostedQuery(tempQuery, termPair, field);
             }
             // add the query
             bq.add(tempQuery, BooleanClause.Occur.SHOULD);

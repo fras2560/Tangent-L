@@ -117,7 +117,7 @@ public class ConvertMathML {
         // read any errors from the attempted command
         this.logger.log(Level.FINEST, "Here is the standard error of the command:\n");
         while ((s = stdError.readLine()) != null) {
-            this.logger.log(Level.SEVERE, s);
+            this.logger.log(Level.FINEST, s);
         }
         proc.waitFor();
         return new_file;

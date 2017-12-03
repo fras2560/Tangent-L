@@ -17,53 +17,40 @@ package index;
 
 import java.io.IOException;
 import java.util.Arrays;
-import org.apache.lucene.analysis.TokenFilter;
+
+import org.apache.lucene.analysis.FilteringTokenFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.payloads.PayloadEncoder;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
-import org.apache.lucene.util.BytesRef;
-import utilities.Constants;
+
+
 /**
- * Filter adds a payload to appropriate terms
+ * Filters words that are not tuples
  * 
  * @author Dallas Fraser
  * @since 2017-11-06
  *
  */
-public class PayloadFilter extends TokenFilter {
-    private PayloadAttribute payloadAtt;
+public class RemoveTextFilter extends FilteringTokenFilter{
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
-    private PayloadEncoder encoder;
     /**
      * Class Constructor
-     * @param in the token stream
+     * @param in the stream of tokens
      */
-    public PayloadFilter(TokenStream in){
+    public RemoveTextFilter(TokenStream in){
         super(in);
-        this.payloadAtt = addAttribute(PayloadAttribute.class);
     }
 
     @Override
-    public final boolean incrementToken() throws IOException {
-        if (!this.input.incrementToken()) {
-            return false;
-        }
+    protected boolean accept() throws IOException {
+        // TODO Auto-generated method stub
         // get the current token
         final char[] token = Arrays.copyOfRange(this.termAtt.buffer(), 0, this.termAtt.length());
         String stoken = String.valueOf(token);
-        String[] parts = stoken.split(Constants.PAYLOAD_DELIMITER);
-        if (parts.length > 1 && parts.length == 2){
-            termAtt.setLength(parts[0].length());
-            // the rest is the payload
-            BytesRef br = new BytesRef(parts[1]);
-            payloadAtt.setPayload(br);
-        }else if (parts.length > 1){
-            // skip
-        }else{
-            // no payload here
-            payloadAtt.setPayload(null);
+        boolean keep = false;
+        if (stoken.startsWith("(") && stoken.endsWith(")")){
+            keep = true;
         }
-        return true;
+        return keep;
     }
 }
+

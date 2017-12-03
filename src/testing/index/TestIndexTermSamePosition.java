@@ -72,6 +72,7 @@ public class TestIndexTermSamePosition extends BaseTest{
             // try opening the index if no errors are raised should be fine
             IndexReader reader = DirectoryReader.open(FSDirectory.open(this.index));
             long result = reader.totalTermFreq(new Term (Constants.FIELD, "('m!()1x1','=','n')"));
+            System.out.println(result);
             assertEquals(result == 2l, true);
             System.out.println(result);
             reader.close();

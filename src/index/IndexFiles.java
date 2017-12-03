@@ -203,13 +203,11 @@ public class IndexFiles {
     Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
     int docLength = 1;
-    try (InputStream stream = Files.newInputStream(new_file)){
-        // get the statistics of the file
-        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        docLength = Functions.documentLength(writer.getAnalyzer(), Constants.FIELD, reader);
-    }
+    String text;
+    text = Functions.parseString(new_file);
     try (InputStream stream = Files.newInputStream(new_file)) {
-        
+        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        docLength = text.split(" ").length;
         // make a new, empty document
         Document doc = new Document();
         // Add the path of the file as a field named "path".  Use a
@@ -233,17 +231,19 @@ public class IndexFiles {
         // so that the text of the file is tokenized and indexed, but not stored.
         // Note that FileReader expects the file to be in UTF-8 encoding.
         // If that's not the case searching for special characters will fail.;
-        FieldType fieldType = new FieldType();
-        fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
-        fieldType.setTokenized(true);
-        fieldType.setStoreTermVectors(true);
-        fieldType.setStoreTermVectorPositions(true);
-        fieldType.setStoreTermVectorPayloads(true);
-        fieldType.setStoreTermVectorOffsets(true);
-        doc.add(new Field(Constants.FIELD,
-                          new InputStreamReader(stream, StandardCharsets.UTF_8),
-                          fieldType
-                          ));
+        FieldType storeField = new FieldType();
+        storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+        storeField.setTokenized(true);
+        storeField.setStoreTermVectors(true);
+        storeField.setStoreTermVectorPositions(true);
+        storeField.setStoreTermVectorPayloads(true);
+        storeField.setStoreTermVectorOffsets(true);
+        FieldType freqType = new FieldType();
+        freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+        freqType.setTokenized(true);
+        doc.add(new Field(Constants.FIELD, text, storeField));
+        doc.add(new Field(Constants.MATHFIELD, text, freqType));
+        doc.add(new Field(Constants.TEXTFIElD, text, freqType));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());
@@ -302,6 +302,8 @@ public class IndexFiles {
         ConvertConfig config = new ConvertConfig();
         // use the best known configuration
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

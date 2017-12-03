@@ -28,6 +28,7 @@ import utilities.Functions;
 import utilities.ProjectLogger;
 
 public class BaseTest {
+    
     public boolean deleteDirectory(Path directory){
         File dir = directory.toFile();
         if (dir.isDirectory()) {

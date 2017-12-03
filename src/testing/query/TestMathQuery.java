@@ -65,7 +65,9 @@ public class TestMathQuery {
         mq.addTerm(" #('m!()1x1','n!1','n')# #('v!t','*','b')#", Constants.FIELD);
         try {
             Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
-            assertEquals(q.toString(), "custom(contents:('m!()1x1','n!1','n') contents:('v!t','*','b'))");
+            assertEquals(q.toString(), "custom(contents:('m!()1x1','n!1','n') (contents:('v!t','*','b'))^"
+                                       + MathQuery.WILDCARD_BOOST
+                                       + ")");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -73,7 +75,7 @@ public class TestMathQuery {
         }
         config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, true);
         try {
-            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), true, config, stats);
             assertEquals(q.toString(), "custom((contents:('m!()1x1','n!1','n'))^1.0 (contents:('v!t','*','b'))^1.0)");
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -82,7 +84,7 @@ public class TestMathQuery {
         }
         config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, true);
         try {
-            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), false, config, stats);
+            Query q = mq.buildQuery(Constants.FIELD, new BooleanQuery.Builder(), true, config, stats);
             assertEquals(q.toString(),
                          "custom(custom((contents:('m!()1x1','n!1','n'))^1.0) custom((contents:('v!t','*','b'))^1.0))");
         } catch (IOException e) {

@@ -136,7 +136,7 @@ public class LocationBoostedQuery extends CustomScoreQuery{
            System.out.println("Has payloads:" + reader.getFieldInfos().hasPayloads());
            // loop through each location of the term and boost if location matches the payload
            if (reader != null){
-               PostingsEnum posting = reader.postings(new Term(this.field, term.getTerm()), PostingsEnum.ALL);
+               PostingsEnum posting = reader.postings(new Term(this.field, term.getTerm()), PostingsEnum.POSITIONS);
                System.out.println("Term: " + term.getTerm());
                if (posting != null){
                    // move to the document currently looking at
@@ -148,7 +148,6 @@ public class LocationBoostedQuery extends CustomScoreQuery{
                        System.out.println(posting.getClass());
                        System.out.println(posting.attributes());
                        System.out.println("Load: " + load);
-                       System.out.println(posting.nextPosition());
                        // if the location matches in the term location than boos the term by the boost factor
                        try {
                             if(load != null && term.containLocation(new Payload(load))){
@@ -158,7 +157,7 @@ public class LocationBoostedQuery extends CustomScoreQuery{
                             // do not care too much, the payload is unrecognized
                             // this is not going to change the  boost factor
                         }
-                       
+                       posting.nextPosition();
                        count += 1;
                    }
                }

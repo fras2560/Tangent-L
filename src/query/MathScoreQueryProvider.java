@@ -99,7 +99,6 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
             // default scoring to use
             newScore = subQueryScore;
         }
-        System.out.println("Before: " + subQueryScore + "  After:" + newScore);
         return newScore; // New Score
     }
 
@@ -115,8 +114,6 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
     public float bm25DistanceCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
         float newScore = subQueryScore;
         float minDistance = this.minDistancePair(doc);
-        System.out.println("Min Distance:" + minDistance);
-        System.out.println("pi(Q,D) = " + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-minDistance)));
         newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-minDistance)));
         return newScore;
     }
@@ -165,13 +162,13 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
     }
 
     /**
-     * Calculate the terp pair instance weight
+     * Calculate the term pair instance weight
      * @param i
      * @param j
-     * @return
+     * @return float the term pair distance
      */
     public float calculateTPI(float i, float j){
-        return (float) (1f / Math.pow(Math.abs(i - j), 2));
+        return (float) (1f / Math.pow(Math.abs(i - j) + 1, 2));
     }
 
     /**
@@ -179,20 +176,17 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      * @param iPos The positions that Term i appear in
      * @param jPos The positions that Term j appear in
      * @param K Okapi document length consideration
-     * @return
+     * @return float term weight
      */
     public float termWeight(List<Integer> iPos, List<Integer> jPos, float K){
         float sumTPI = 0;
         float weight;
         for (int i = 0; i < iPos.size(); i++){
             for (int j = 0; j < jPos.size(); j++){
-                System.out.println("    TPI: " + this.calculateTPI(iPos.get(i), jPos.get(j)));
                 sumTPI += this.calculateTPI(iPos.get(i), jPos.get(j));
             }
         }
-        System.out.println("sumTPI:" + sumTPI + " K:" + K);
         weight =  (MathScoreQueryProvider.K_1 + 1) * (sumTPI / (K + sumTPI));
-        System.out.println("Weight: " + weight);
         return weight; 
     }
 
@@ -209,28 +203,29 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         float newScore = subQueryScore;
         Map<String, List<Integer>> pos = this.termsPositions(doc);
         float docLength = this.getDocLength(doc);
-        System.out.println("DocLength:" + docLength  + " avgdl:" + this.avgDL);
         float K = MathScoreQueryProvider.K * ((1 - MathScoreQueryProvider.B) + 
                                                MathScoreQueryProvider.B * (docLength / this.avgDL));
         int qtfi, qtfj;
         List<Integer> iPos, jPos;
         float qwi, qwj;
         float score = 0;
+        float termWeight;
         for (int i = 0; i < this.terms.size(); i++){
             iPos = pos.get(this.terms.get(i).getTerm());
-            qtfi = (int) this.terms.get(i).getCount();
-            qwi = (float) ((qtfi / (MathScoreQueryProvider.K_3 + qtfi)) *
-                                         Math.log((this.numDocs - iPos.size()) / iPos.size()));
-            for (int j = i + 1; j < this.terms.size(); j++){
-                System.out.println("Term i: " + this.terms.get(i) + " Term j: " + this.terms.get(j));
-                jPos = pos.get(this.terms.get(j).getTerm());
-                qtfj = (int) this.terms.get(j).getCount();
-                qwj = (float) ((qtfj / (MathScoreQueryProvider.K_3 + qtfj)) *
-                               Math.log((this.numDocs - jPos.size()) / jPos.size()));
-                
-                score += this.termWeight(iPos, jPos, K) * Math.min(qwi, qwj); 
-                System.out.println("qwi:" + qwi + " qwj:" + qwj +
-                                   " score:" + this.termWeight(iPos, jPos, K) * Math.min(qwi, qwj));
+            if (iPos != null){
+                qtfi = (int) this.terms.get(i).getCount();
+                qwi = (float) ((qtfi / (MathScoreQueryProvider.K_3 + qtfi)) *
+                                             Math.log((this.numDocs - iPos.size()) / iPos.size()));
+                for (int j = i + 1; j < this.terms.size(); j++){
+                    jPos = pos.get(this.terms.get(j).getTerm());
+                    if (jPos != null){
+                        qtfj = (int) this.terms.get(j).getCount();
+                        qwj = (float) ((qtfj / (MathScoreQueryProvider.K_3 + qtfj)) *
+                                       Math.log((this.numDocs - jPos.size()) / jPos.size()));
+                        termWeight = this.termWeight(iPos, jPos, K);
+                        score +=  termWeight * Math.min(qwi, qwj); 
+                    }
+                }
             }
         }
         return newScore + score;
@@ -247,7 +242,6 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         LeafReader reader = this.context.reader();
         if (reader != null){
             docLength = reader.getNumericDocValues(Constants.DOCUMENT_LENGTH).get(doc);
-            System.out.println(docLength);
         }
         return docLength;
     }
@@ -270,7 +264,6 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
                         count += 1;
                     }
                     positions.put(term.getTerm(), pos);
-                    System.out.println(term.getTerm() + ":" + pos);
                 }
             }
         }

@@ -103,6 +103,7 @@ public class TestSearch extends BaseTest{
     @Test
     public void testStatsBeingRecorded(){
         try {
+            fail("Not implemented at the moment");
             // find the document id
             Term searchTerm = new Term(Constants.FIELD, "('v!a','m!()1x1','n')");
             TopDocs searchResultsWild = this.searcher.getSearcher().search(new TermQuery(searchTerm), 4);
