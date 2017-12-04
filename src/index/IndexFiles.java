@@ -16,9 +16,6 @@
 package index;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -117,7 +114,7 @@ public class IndexFiles {
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
         analyzerPerField.put(Constants.MATHFIELD, new JustMathAnalyzer());
         analyzerPerField.put(Constants.TEXTFIELD, new JustTextAnalyzer());
-        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper( new MathAnalyzer(config), analyzerPerField);
+        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper( analyzer, analyzerPerField);
         IndexWriterConfig iwc = new IndexWriterConfig(wrapper);
         iwc.setSimilarity(simlarity);
         if (create) {
@@ -213,7 +210,7 @@ public class IndexFiles {
     String text;
     text = Functions.parseString(new_file);
     try (InputStream stream = Files.newInputStream(new_file)) {
-        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        // Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         docLength = text.split(" ").length;
         // make a new, empty document
         Document doc = new Document();
@@ -249,7 +246,6 @@ public class IndexFiles {
         freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
         freqType.setTokenized(true);
         doc.add(new Field(Constants.FIELD, text, storeField));
-        System.out.println(text);
         doc.add(new Field(Constants.TEXTFIELD, text, freqType));
         doc.add(new Field(Constants.MATHFIELD, text, freqType));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {

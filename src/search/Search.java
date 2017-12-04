@@ -34,7 +34,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.PerFieldSimilarityWrapper;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.search.BooleanQuery;
@@ -167,7 +167,9 @@ public class Search {
         }
         this.reader = DirectoryReader.open(FSDirectory.open(index));
         this.searcher = new IndexSearcher(reader);
-        this.searcher.setSimilarity(similarity);
+        // allows for different fields to use different similarity classes
+        PerFieldSimilarityWrapper wrapper = new MathSimilarityWrapper(similarity);
+        this.searcher.setSimilarity(wrapper);
         this.config = config;
         this.logger = logger;
     }

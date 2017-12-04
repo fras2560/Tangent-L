@@ -30,8 +30,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 
-import utilities.Constants;
-
 
 /**
  * {@link Analyzer} for English.

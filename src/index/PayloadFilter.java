@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.payloads.PayloadEncoder;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.util.BytesRef;
@@ -34,7 +33,6 @@ import utilities.Constants;
 public class PayloadFilter extends TokenFilter {
     private PayloadAttribute payloadAtt;
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
-    private PayloadEncoder encoder;
     /**
      * Class Constructor
      * @param in the token stream

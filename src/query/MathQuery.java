@@ -32,8 +32,6 @@ import utilities.ProjectLogger;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queries.payloads.PayloadFunction;
-import org.apache.lucene.queries.payloads.PayloadScoreQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BoostQuery;
@@ -251,11 +249,13 @@ public class MathQuery {
         Query tempQuery = null;
         String tfield;
         for (TermCountPair termPair : uniqueTerms){
-            if (termPair.getTerm().startsWith("(")){
-                tfield = Constants.MATHFIELD;
-            }else{
-                tfield = Constants.TEXTFIELD;
-            }
+            tfield = field;
+//            if (termPair.getTerm().startsWith("(")){
+//                tfield = Constants.MATHFIELD;
+//            }else{
+//                tfield = Constants.TEXTFIELD;
+//            }
+            
             tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
             if (!synonym && Functions.containsWildcard(termPair.getTerm())){
                 // do not have synonyms indexed so use wildcard query

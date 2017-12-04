@@ -25,10 +25,11 @@ import org.apache.lucene.search.similarities.Similarity;
  * @since 2017-11-06
  */
 public class MathSimilarity {
-    private static int CLASSIC = 0;
-    private static int BM25 = 1;
-    private static int BOOLEAN = 2;
-    private static int MATH = 3;
+    public static int CLASSIC = 0;
+    public static int BM25 = 1;
+    public static int BOOLEAN = 2;
+    public static int MATH = 3;
+    public static int TEXT = 4;
     /**
      * Class constructor
      * @param type the similarity type to use
@@ -44,6 +45,8 @@ public class MathSimilarity {
             sim = new BooleanSimilarity();
         }else if(type == MathSimilarity.MATH){
             sim = new MathSimilarityImpl();
+        }else if(type == MathSimilarity.TEXT){
+            sim = new BM25Similarity();
         }
         return sim;
     }
