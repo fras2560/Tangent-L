@@ -26,9 +26,12 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
@@ -111,7 +114,11 @@ public class IndexFiles {
         this.logger.log(Level.FINE, "Indexing to directory: '" + indexPath.toString() + "'...");
         Directory dir = FSDirectory.open(indexPath);
         Analyzer analyzer = new MathAnalyzer(config);
-        IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
+        analyzerPerField.put(Constants.MATHFIELD, new JustMathAnalyzer());
+        analyzerPerField.put(Constants.TEXTFIELD, new JustTextAnalyzer());
+        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper( new MathAnalyzer(config), analyzerPerField);
+        IndexWriterConfig iwc = new IndexWriterConfig(wrapper);
         iwc.setSimilarity(simlarity);
         if (create) {
           // Create a new index in the directory, removing any
@@ -242,8 +249,9 @@ public class IndexFiles {
         freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
         freqType.setTokenized(true);
         doc.add(new Field(Constants.FIELD, text, storeField));
+        System.out.println(text);
+        doc.add(new Field(Constants.TEXTFIELD, text, freqType));
         doc.add(new Field(Constants.MATHFIELD, text, freqType));
-        doc.add(new Field(Constants.TEXTFIElD, text, freqType));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());

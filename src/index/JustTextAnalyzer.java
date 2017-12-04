@@ -36,10 +36,10 @@ import utilities.Constants;
 /**
  * {@link Analyzer} for English.
  */
-public final class MathAnalyzer extends StopwordAnalyzerBase {
+public final class JustTextAnalyzer extends StopwordAnalyzerBase {
   private final CharArraySet stemExclusionSet;
   private ConvertConfig config;
-  public MathAnalyzer(ConvertConfig config){
+  public JustTextAnalyzer(ConvertConfig config){
       this(DefaultSetHolder.DEFAULT_STOP_SET);
       this.config = config;
   }
@@ -63,7 +63,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
   /**
    * Builds an analyzer with the default stop words: {@link #getDefaultStopSet}.
    */
-  public MathAnalyzer() {
+  public JustTextAnalyzer() {
     this(DefaultSetHolder.DEFAULT_STOP_SET);
     this.config = new ConvertConfig();
   }
@@ -73,7 +73,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    * 
    * @param stopwords a stopword set
    */
-  public MathAnalyzer(CharArraySet stopwords) {
+  public JustTextAnalyzer(CharArraySet stopwords) {
     this(stopwords, CharArraySet.EMPTY_SET);
     this.config = new ConvertConfig();
   }
@@ -86,7 +86,7 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
    * @param stopwords a stopword set
    * @param stemExclusionSet a set of terms not to be stemmed
    */
-  public MathAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet) {
+  public JustTextAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet) {
     super(stopwords);
     this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(stemExclusionSet));
     this.config = new ConvertConfig();
@@ -126,14 +126,8 @@ public final class MathAnalyzer extends StopwordAnalyzerBase {
     // parse out any payloads that are added
     result = new PayloadFilter(result);
     result = new PorterStemFilter(result);
-    if (fieldName.equals(Constants.MATHFIELD)){
-        // remove words
-        result = new RemoveTextFilter(result);
-    }
-    if (fieldName.equals(Constants.TEXTFIELD)){
-        // remove math tuples
-        result = new RemoveMathFilter(result);
-    }
+    // remove math tuples
+    result = new RemoveMathFilter(result);
     return new TokenStreamComponents(source, result);
   }
 

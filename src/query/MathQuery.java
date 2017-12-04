@@ -249,8 +249,14 @@ public class MathQuery {
                             CollectionStatistics stats) throws IOException{
         List<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
         Query tempQuery = null;
+        String tfield;
         for (TermCountPair termPair : uniqueTerms){
-            tempQuery = new TermQuery(new Term(field, termPair.getTerm().trim()));
+            if (termPair.getTerm().startsWith("(")){
+                tfield = Constants.MATHFIELD;
+            }else{
+                tfield = Constants.TEXTFIELD;
+            }
+            tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
             if (!synonym && Functions.containsWildcard(termPair.getTerm())){
                 // do not have synonyms indexed so use wildcard query
                 // this term has a wildcard so need it for match wildcard
