@@ -31,6 +31,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 
+import index.JustMathAnalyzer;
 import query.TermCountPair;
 import utilities.Payload.PayloadException;
 
@@ -117,6 +118,44 @@ public class Functions {
           throw new RuntimeException("Error analyzing query text", e);
         }
         return tokens;
+    }
+
+    /**
+     * Returns the count of math tuples
+     * @param text the document text to count the tuples of
+     * @return int the number of tuples
+     */
+    public static int countTuples(String text){
+        int count = 0;
+        for(String term: text.split(" ")){
+            if((term.startsWith("#") && term.endsWith("#")) || (term.startsWith("(") && term.endsWith(")"))){
+                if(!term.contains(Constants.FORMULA_START_TAG) && !term.contains(Constants.FORMULA_END_TAG)){
+                    count += 1;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Parses the formulas of a query text
+     * @param queryText the query text String
+     * @return List a list of String
+     */
+    public static List<String> parseFormulas(String queryText){
+        List<String> formulas = new ArrayList<String>();
+        // seperate the different math formulas
+        Analyzer analyzer = new JustMathAnalyzer();
+        int pos = 0;
+        String tempFormula;
+        while (queryText.indexOf(Constants.FORMULA_END_TAG) != -1){
+            // need to add two because #
+            pos = queryText.indexOf(Constants.FORMULA_END_TAG) + Constants.FORMULA_END_TAG.length() + 2;
+            tempFormula = queryText.substring(0, pos);
+            queryText = queryText.substring(pos);
+            formulas.add(String.join(" ", analyzeTokens(analyzer, Constants.MATHFIELD, tempFormula)));
+        }
+        return formulas;
     }
 
     /**

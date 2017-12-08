@@ -73,6 +73,7 @@ public class ConvertConfig {
     public final static String TERM_QUERY = "TERM_QUERY";
     public final static String BOOST_QUERIES = "BOOST_QUERIES";
     public final static String SEPERATE_MATH_TEXT = "SEPERATE_MATH_FROM_TEXT";
+    public final static String TOMPA_QUERY = "BM25_TOMPA_QUERY";
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
@@ -187,7 +188,8 @@ public class ConvertConfig {
         if (queryType.equals(ConvertConfig.DICE_QUERY) ||
             queryType.equals(ConvertConfig.BM25TP_QUERY) ||
             queryType.equals(ConvertConfig.BM25_DISTANCE_QUERY) ||
-            queryType.equals(ConvertConfig.TERM_QUERY)){
+            queryType.equals(ConvertConfig.TERM_QUERY) ||
+            queryType.equals(ConvertConfig.TOMPA_QUERY)){
             this.queryType = queryType;
         }else{
             throw new Exception("Query type was not recgonized");

@@ -34,6 +34,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.document.NumericDocValuesField;
+import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
@@ -212,6 +213,7 @@ public class IndexFiles {
     try (InputStream stream = Files.newInputStream(new_file)) {
         // Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         docLength = text.split(" ").length;
+        int formulaCount = Functions.countTuples(text);
         // make a new, empty document
         Document doc = new Document();
         // Add the path of the file as a field named "path".  Use a
@@ -248,6 +250,8 @@ public class IndexFiles {
         doc.add(new Field(Constants.FIELD, text, storeField));
         doc.add(new Field(Constants.TEXTFIELD, text, freqType));
         doc.add(new Field(Constants.MATHFIELD, text, freqType));
+        doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
+        doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             logger.log(Level.FINE, "Adding file: " + file.toString());
@@ -308,6 +312,11 @@ public class IndexFiles {
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
+        config.setBooleanAttribute(ConvertConfig.LOCATION, true);
+        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+        config.setBooleanAttribute(ConvertConfig.EDGE, true);
+        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

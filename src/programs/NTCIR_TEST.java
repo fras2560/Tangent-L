@@ -82,7 +82,7 @@ public class NTCIR_TEST {
           }
         }
         logFile.toFile().createNewFile();
-        ProjectLogger.setLevel(Level.FINEST);
+        ProjectLogger.setLevel(Level.INFO);
         ProjectLogger.setLogFile(logFile);
         BufferedWriter queryWriter = null;
         BufferedWriter resultsWriter = null;
@@ -102,8 +102,15 @@ public class NTCIR_TEST {
             // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
             config.loadConfig(index);
+            config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+            config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
             config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-            config.setQueryType(ConvertConfig.BM25TP_QUERY);
+            config.setBooleanAttribute(ConvertConfig.LOCATION, true);
+            config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+            config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+            config.setBooleanAttribute(ConvertConfig.EDGE, true);
+            config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+//            config.setQueryType(ConvertConfig.BM25TP_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);
             searcher.ntcirTest(queries, results, resultsWriter);

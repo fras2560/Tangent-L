@@ -44,7 +44,7 @@ public class MathSimilarity {
         }else if(type == MathSimilarity.BOOLEAN){
             sim = new BooleanSimilarity();
         }else if(type == MathSimilarity.MATH){
-            sim = new MathSimilarityImpl();
+            sim = new BM25Similarity();
         }else if(type == MathSimilarity.TEXT){
             sim = new BM25Similarity();
         }
@@ -56,7 +56,7 @@ public class MathSimilarity {
      * @return Similarity the similarity to use
      */
     public static Similarity getSimilarity(){
-        return getSimilarity(MathSimilarity.BM25);
+        return getSimilarity(MathSimilarity.BOOLEAN);
     }
 
 }

@@ -492,13 +492,13 @@ public class FindOptimal {
         config.flipBit(ConvertConfig.TERMINAL);
         config.flipBit(ConvertConfig.BAGS_OF_WORDS);
         config.flipBit(ConvertConfig.SYNONYMS);
-//        try {
-//            
-//            config.setQueryType(ConvertConfig.BM25TP_QUERY);
-//        } catch (Exception e1) {
-//            // TODO Auto-generated catch block
-//            e1.printStackTrace();
-//        }
+        try {
+            
+            config.setQueryType(ConvertConfig.BM25TP_QUERY);
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         // only need to flip a certain number of features
 //        features.add(ConvertConfig.SHORTENED);
 //        features.add(ConvertConfig.LOCATION);

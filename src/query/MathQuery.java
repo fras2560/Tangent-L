@@ -47,8 +47,9 @@ import org.w3c.dom.Element;
  * @since 2017-11-07
  */
 public class MathQuery {
-    public static float WILDCARD_BOOST = 0.9f;
+    public static float WILDCARD_BOOST = 1.0f;
     private String queryName;
+    private List<String> formulas;
     private ArrayList<String> terms;
     private ArrayList<String> analyzedTerms;
     private Logger logger;
@@ -70,6 +71,7 @@ public class MathQuery {
      */
     public MathQuery(String queryName, ConvertConfig config){
         this.terms = new ArrayList<String>();
+        this.formulas = new ArrayList<String>();
         this.queryName = queryName;
         this.logger = ProjectLogger.getLogger();
         this.fieldName = Constants.FIELD;
@@ -102,6 +104,7 @@ public class MathQuery {
                 for (String t : Functions.analyzeTokens(analyzer, Constants.FIELD, term)){
                     this.terms.add(t);
                 }
+                this.formulas = Functions.parseFormulas(term);
             }else{
                 this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
@@ -249,18 +252,23 @@ public class MathQuery {
         Query tempQuery = null;
         String tfield;
         for (TermCountPair termPair : uniqueTerms){
-            tfield = field;
-//            if (termPair.getTerm().startsWith("(")){
-//                tfield = Constants.MATHFIELD;
-//            }else{
-//                tfield = Constants.TEXTFIELD;
-//            }
+            if (config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
+                // want our query to seperate math from the texts
+                if (termPair.getTerm().startsWith("(")){
+                    tfield = Constants.MATHFIELD;
+                }else{
+                    tfield = Constants.TEXTFIELD;
+                }
+            }else{
+                // want to query on them being in the same field
+                tfield = field;
+            }
             
             tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
             if (!synonym && Functions.containsWildcard(termPair.getTerm())){
                 // do not have synonyms indexed so use wildcard query
                 // this term has a wildcard so need it for match wildcard
-                tempQuery = new WildcardQuery(new Term(field, termPair.getTerm().trim()));
+                tempQuery = new WildcardQuery(new Term(tfield, termPair.getTerm().trim()));
                 // boost the wildcard
                 tempQuery = new BoostQuery(tempQuery, MathQuery.WILDCARD_BOOST);
             }
@@ -280,5 +288,51 @@ public class MathQuery {
         }
         Query result = bq.build();
         return (Query) (new MathScoreQuery(result, uniqueTerms, field, config, stats));
+    }
+
+    public Query buildTextQuery(String field,
+                                BooleanQuery.Builder bq)throws IOException{
+        Query tempQuery = null;
+        for (String term : this.terms){
+            if(!term.startsWith("(")){
+                tempQuery = new TermQuery(new Term(field, term.trim()));
+                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+            }
+        }
+        if (tempQuery ==  null){
+            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+        }
+        return bq.build();
+    }
+
+    public List<Query> buildFormulaQuery(String field,
+                                                boolean synonym,
+                                                ConvertConfig config){
+        // build a query for our custom approach for math queries
+        List<Query> mathQueries = new ArrayList<Query>();
+        for(String formula : this.formulas){
+            // build a math query
+            Query mathQuery = null;
+            Query tempQuery = null;
+            BooleanQuery.Builder bq = new BooleanQuery.Builder();
+            for(String tuple : formula.split(" ")){
+                tempQuery = new TermQuery(new Term(field, tuple));
+                if (!synonym && Functions.containsWildcard(tuple)){
+                    // do not have synonyms indexed so use wildcard query
+                    // this term has a wildcard so need it for match wildcard
+                    tempQuery = new WildcardQuery(new Term(field, tuple.trim()));
+                    // boost the wildcard
+                    tempQuery = new BoostQuery(tempQuery, MathQuery.WILDCARD_BOOST);
+                }
+                // add the query
+                bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+            }
+            if (tempQuery ==  null){
+                bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+            }
+            mathQuery = (Query) bq.build();
+            mathQueries.add(mathQuery);
+        }
+        return mathQueries;
     }
 }

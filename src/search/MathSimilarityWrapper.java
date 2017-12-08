@@ -22,9 +22,9 @@ public class MathSimilarityWrapper extends PerFieldSimilarityWrapper {
     public Similarity get(String field) {
         Similarity result;
         if (field.equals(Constants.MATHFIELD)){
-            result = MathSimilarity.getSimilarity(MathSimilarity.TEXT);
-        }else if(field.equals(Constants.TEXTFIELD)){
             result = MathSimilarity.getSimilarity(MathSimilarity.MATH);
+        }else if(field.equals(Constants.TEXTFIELD)){
+            result = MathSimilarity.getSimilarity(MathSimilarity.TEXT);
         }else{
             result = this.similarity;
         }
