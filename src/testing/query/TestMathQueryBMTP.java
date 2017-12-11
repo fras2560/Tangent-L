@@ -101,9 +101,9 @@ public class TestMathQueryBMTP extends TestMathQueryBase {
             e.printStackTrace();
         }
         Map<String, Float> expect = new HashMap<String, Float>();
-        expect.put("text_1", 0.26714295f);
-        expect.put("text_2", 0.26757059f);
-        expect.put("text_3", 0.26757059f);
+        expect.put("text_1", 2.0000463f);
+        expect.put("text_2", 2.0001693f);
+        expect.put("text_3", 2.0001693f);
         for (String doc : results.keySet()) {
             assertEquals(expect.get(doc), results.get(doc));
         }

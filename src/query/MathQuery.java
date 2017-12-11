@@ -290,6 +290,13 @@ public class MathQuery {
         return (Query) (new MathScoreQuery(result, uniqueTerms, field, config, stats));
     }
 
+    /**
+     * Build a query of just text
+     * @param field the field to query
+     * @param bq the boolean query builder
+     * @return Query the text only query
+     * @throws IOException
+     */
     public Query buildTextQuery(String field,
                                 BooleanQuery.Builder bq)throws IOException{
         Query tempQuery = null;
@@ -305,6 +312,13 @@ public class MathQuery {
         return bq.build();
     }
 
+    /**
+     * Returns a list of Query for each formula
+     * @param field the field of the query
+     * @param synonym whether synonyms were used when indexing
+     * @param config the config to used when querying
+     * @return List the lst of formulas query
+     */
     public List<Query> buildFormulaQuery(String field,
                                                 boolean synonym,
                                                 ConvertConfig config){

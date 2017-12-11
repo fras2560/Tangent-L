@@ -102,9 +102,9 @@ public class TestMathQueryBMMin extends TestMathQueryBase {
             e.printStackTrace();
         }
         Map<String, Float> expect = new HashMap<String, Float>();
-        expect.put("text_1", -0.7833679f);
-        expect.put("text_2", -0.1365848f);
-        expect.put("text_3", -0.1365848f);
+        expect.put("text_1", 0.94956934f);
+        expect.put("text_2", 1.5963525f);
+        expect.put("text_3", 1.5963525f);
         for (String doc : results.keySet()) {
             assertEquals(expect.get(doc), results.get(doc));
         }

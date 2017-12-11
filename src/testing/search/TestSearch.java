@@ -161,10 +161,8 @@ public class TestSearch extends BaseTest{
             expect.add("1307.6316_1_108");
             ArrayList<String> expect2 = new ArrayList<String>();
             expect2.add("1301.6848_1_17");
-            expect2.add("math-ph0607065_1_57");
-            
             expect2.add("1303.3122_1_41");
-            
+            expect2.add("math-ph0607065_1_57");
             expect2.add("1307.6316_1_108");
             assertEquals(this.compareResults(expect, results.get(0), this.searcher) ||
                          this.compareResults(expect2, results.get(0), this.searcher), true);
@@ -197,9 +195,9 @@ public class TestSearch extends BaseTest{
             SearchResult result = this.searcher.searchQuery(query);
             System.out.println(result);
             ArrayList<String> expect2 = new ArrayList<String>();
-            expect2.add("math-ph0607065_1_57");
-            expect2.add("1303.3122_1_41");
             expect2.add("1301.6848_1_17");
+            expect2.add("1303.3122_1_41");
+            expect2.add("math-ph0607065_1_57");
             expect2.add("1307.6316_1_108");
             ArrayList<String> expect = new ArrayList<String>();
             expect.add("math-ph0607065_1_57");
@@ -240,7 +238,8 @@ public class TestSearch extends BaseTest{
             MathQuery query = mathQueries.get(0);
             ArrayList<String> results = this.searcher.searchQueryFiles(query);
             
-            assertEquals(results.get(0) , "math-ph0607065_1_57");
+            assertEquals(results.get(0).equals("math-ph0607065_1_57")  || results.get(0).equals("1301.6848_1_17"),
+                         true);
             assertEquals(results.get(1).equals("1301.6848_1_17") ||
                          results.get(1).equals("1303.3122_1_41"),  true);
             assertEquals(results.get(1).equals("1301.6848_1_17") ||

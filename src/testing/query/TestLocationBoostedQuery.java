@@ -50,7 +50,7 @@ public class TestLocationBoostedQuery extends TestMathQueryBase{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // this.deleteDirectory(this.index);
+        this.deleteDirectory(this.index);
     }
 
     @Test
