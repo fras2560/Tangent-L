@@ -143,7 +143,6 @@ public class Functions {
      * @return List a list of String
      */
     public static List<String> parseFormulas(String queryText){
-        System.out.println(queryText);
         List<String> formulas = new ArrayList<String>();
         // seperate the different math formulas
         Analyzer analyzer = new JustMathAnalyzer();
@@ -151,9 +150,11 @@ public class Functions {
         String tempFormula;
         while (queryText.indexOf(Constants.FORMULA_END_TAG) != -1){
             // need to add two because #
-            pos = queryText.indexOf(Constants.FORMULA_END_TAG) + Constants.FORMULA_END_TAG.length() + 1;
-            System.out.println(pos);
-            System.out.println(queryText.length());
+            if(queryText.indexOf("#" + Constants.FORMULA_END_TAG + "#") == -1){
+                pos = queryText.indexOf(Constants.FORMULA_END_TAG) + Constants.FORMULA_END_TAG.length();
+            }else{
+                pos = queryText.indexOf(Constants.FORMULA_END_TAG) + Constants.FORMULA_END_TAG.length() + 1;
+            }
             tempFormula = queryText.substring(0, pos);
             queryText = queryText.substring(pos);
             formulas.add(String.join(" ", analyzeTokens(analyzer, Constants.MATHFIELD, tempFormula)));
