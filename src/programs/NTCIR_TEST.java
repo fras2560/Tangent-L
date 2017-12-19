@@ -105,12 +105,8 @@ public class NTCIR_TEST {
             config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
             config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
             config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-            config.setBooleanAttribute(ConvertConfig.LOCATION, true);
-            config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
-            config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
-            config.setBooleanAttribute(ConvertConfig.EDGE, true);
-            config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
-//            config.setQueryType(ConvertConfig.BM25TP_QUERY);
+            config.setBooleanAttribute(ConvertConfig.SEPERATE_MATH_TEXT, true);
+            //config.setQueryType(ConvertConfig.TOMPA_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);
             searcher.ntcirTest(queries, results, resultsWriter);

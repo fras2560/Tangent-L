@@ -40,7 +40,8 @@ def convert_math_expression(mathml,
                             shortened=True,
                             location=False,
                             synonyms=False,
-                            no_payload=False):
+                            no_payload=False,
+                            expand_location=False):
     """Returns the math tuples for a given math expression
 
     Parameters:
@@ -88,9 +89,14 @@ def convert_math_expression(mathml,
                          ]
         # create a list of nodes and their payloads
         formula_size = len(node_list)
-        # remove the location if not wanted and create payloads
-        nodes_payloads = [pop_location(node, formula_size, location)
-                          for node in node_list]
+        # do we want to expand with location
+        if expand_location:
+            nodes_payloads = expand_nodes_with_location(node_list,
+                                                        formula_size)
+        else:
+            # remove the location if not wanted and create payloads
+            nodes_payloads = [pop_location(node, formula_size, location)
+                              for node in node_list]
         if no_payload:
             node_list = [format_node(node[0]) for node in nodes_payloads]
         else:
@@ -125,6 +131,30 @@ def check_node(node):
         # keep them regardless at this point
         pass
     return check
+
+
+def expand_nodes_with_location(nodes, formula_size):
+    """Returns a list of nodes where each tuple is expand to two tuples
+        one with its location and one without its location
+
+    Parameters:
+        nodes: the list of nodes
+        formula_size: the size of the formula
+    Returns:
+        result: the list of nodes after expansion
+    """
+    result = []
+    for node in nodes:
+        location = node[-1]
+        # add the first node
+        result.append((node, location + PAYLOAD_SEPARATOR + str(formula_size)))
+        # add the second node
+        temp_node = list(node)
+        temp_node.pop()
+        temp_node = tuple(temp_node)
+        result.append((temp_node,
+                      location + PAYLOAD_SEPARATOR + str(formula_size)))
+    return result
 
 
 def pop_location(node, formula_size, include_location):
@@ -269,7 +299,8 @@ def convert_file_to_words(filename,
                           location=False,
                           synonyms=False,
                           query=False,
-                          no_payload=True):
+                          no_payload=True,
+                          expand_location=False):
     """Parses a file and returns a of words
     Parameters:
         filename: the name of the file to parse
@@ -299,7 +330,8 @@ def convert_file_to_words(filename,
                                          shortened=shortened,
                                          location=location,
                                          synonyms=synonyms,
-                                         no_payload=no_payload)
+                                         no_payload=no_payload,
+                                         expand_location=expand_location)
             tokens += " " + paragraph + " " + ex
             # now move the content further along
             content = content[end:]
@@ -319,7 +351,8 @@ def parse_file(filename,
                shortened=True,
                location=False,
                synonyms=False,
-               query=True):
+               query=True,
+               expand_location=False):
     """Parses a file and ouputs to a file with math tuples
 
     Parameters:
@@ -327,7 +360,6 @@ def parse_file(filename,
         file_id: the file id
         output_file: the name of the file to output to
     """
-
     (ext, content) = MathDocument.read_doc_file(filename)
     with open(output_file, "w+", encoding=ENCODING) as out:
         while len(content) != 0:
@@ -348,7 +380,8 @@ def parse_file(filename,
                                              unbounded=unbounded,
                                              shortened=shortened,
                                              location=location,
-                                             synonyms=synonyms)
+                                             synonyms=synonyms,
+                                             expand_location=expand_location)
                 print(paragraph, file=out)
                 print(ex, file=out)
                 # now move the content further along
@@ -383,6 +416,11 @@ if __name__ == "__main__":
                         dest="eol",
                         action="store_true",
                         help="Use EOL tuples",
+                        default=False)
+    parser.add_argument('-expand_location',
+                        dest="expand_location",
+                        action="store_true",
+                        help="Expand tuples to include location",
                         default=False)
     parser.add_argument('-compound_symbols',
                         dest="compound_symbols",
@@ -448,7 +486,8 @@ if __name__ == "__main__":
                shortened=args.shortened,
                location=args.location,
                synonyms=args.synonyms,
-               query=args.query
+               query=args.query,
+               expand_location=args.expand_location
                )
     print(args)
     logger.info("Done")

@@ -13,6 +13,7 @@ try:
                                 check_node,\
                                 check_wildcard,\
                                 determine_node,\
+                                expand_nodes_with_location,\
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
@@ -22,6 +23,7 @@ except ImportError:
                                 check_node,\
                                 check_wildcard,\
                                 determine_node,\
+                                expand_nodes_with_location,\
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
@@ -91,6 +93,54 @@ class TestSymbolPairs(TestBase):
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
+
+
+class TestExpandLocation(TestBase):
+    def setUp(self):
+        self.debug = True
+        self.file = os.path.join(os.getcwd(), "testFiles", "test_wildcard.xml")
+        self.mathml = self.loadFile(self.file)
+
+    def tearDown(self):
+        pass
+
+    def testExpandLocation(self):
+        file = os.path.join(os.getcwd(), "testFiles", "test_edge_pair.xml")
+        mathml = self.loadFile(file)
+        results = convert_math_expression(mathml,
+                                          expand_location=True)
+        expect = [START_TAG,
+                  """#('v!w','m!()1x2','n','-')||-:10#""",
+                  """#('v!w','m!()1x2','n')||-:10#""",
+                  """#('m!()1x2','gt','n','n')||n:10#""",
+                  """#('m!()1x2','gt','n')||n:10#""",
+                  """#('gt','n!2','n','nn')||nn:10#""",
+                  """#('gt','n!2','n')||nn:10#""",
+                  """#('n!2','/','n','nnn')||nnn:10#""",
+                  """#('n!2','/','n')||nnn:10#""",
+                  """#('/','v!k','n','nnnn')||nnnn:10#""",
+                  """#('/','v!k','n')||nnnn:10#""",
+                  """#('v!k','v!ε','a','nnnnn')||nnnnn:10#""",
+                  """#('v!k','v!ε','a')||nnnnn:10#""",
+                  """#('n!2','v!k','a','nnn')||nnn:10#""",
+                  """#('n!2','v!k','a')||nnn:10#""",
+                  """#('m!()1x2','n!2','w','n')||n:10#""",
+                  """#('m!()1x2','n!2','w')||n:10#""",
+                  """#('n!2','comma','n','nw')||nw:10#""",
+                  """#('n!2','comma','n')||nw:10#""",
+                  """#('n!2','v!k','e','nw')||nw:10#""",
+                  """#('n!2','v!k','e')||nw:10#""",
+                  END_TAG]
+        self.log(results)
+        self.assertEqual(" ".join(expect), results)
+
+    def testExpandLocation2(self):
+        nodes_list = [('m!()1x1', '?w', 'n', "-")]
+        result = expand_nodes_with_location(nodes_list, 6)
+        self.assertEquals(len(result), 2)
+        expect = [(('m!()1x1', '?w', 'n', '-'), '-:6'),
+                  (('m!()1x1', '?w', 'n'), '-:6')]
+        self.assertEquals(result, expect)
 
 
 class TestDifferentWildcardReplacements(TestBase):

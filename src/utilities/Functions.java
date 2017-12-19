@@ -233,4 +233,43 @@ public class Functions {
         }
         return tokens;
     }
+
+    /**
+     * Scores a formula using Tompa approach (BM25 where TF=1 and n(qi) = rank(f))
+     * @param docId the doc id
+     * @param totalDoc the total number of documents
+     * @param avgDL average document length
+     * @param rank the rank of the formula in the query
+     * @return Double the formula score
+     * @throws NumberFormatException
+     * @throws IOException
+     */
+    public static Double scoreFormula(double docLength,
+                                      double totalDoc,
+                                      double avgDL,
+                                      double rank,
+                                      double K1,
+                                      double B,
+                                      double docScore){
+        double idf = Math.log((totalDoc - rank + 0.5) / (rank + 0.5));
+        double tf = ((docScore * (K1 + 1)) /
+                     (docScore + K1 * (1 - B + B * (docLength / avgDL))));
+        System.out.println("r(rank=" +
+                           rank +
+                           ", docLength=" +
+                           docLength +
+                           ", totalDoc=" +
+                           totalDoc +
+                           ", avgDL=" +
+                           avgDL +
+                           ", docScore=" +
+                           docScore +
+                           ") " +
+                           idf +
+                           " X " +
+                           tf +
+                           " = " +
+                           (idf*tf));
+        return (idf * tf);
+    }
 }

@@ -67,7 +67,7 @@ public class Search {
     private IndexReader reader;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
-    private static final int TOMPA_SEARCH_LIMIT = 1000;
+    private static final int TOMPA_SEARCH_LIMIT = 10000;
     private static final float TOMPA_B = 0.75f;
     private static final float TOMPA_K1 = 1.2f;
     private static final float MATH_WEIGHT = 1.0f;
@@ -284,25 +284,6 @@ public class Search {
     }
 
     /**
-     * Scores a formula using Tompa approach (BM25 where TF=1 and n(qi) = rank(f))
-     * @param docId the doc id
-     * @param totalDoc the total number of documents
-     * @param avgDL average document length
-     * @param rank the rank of the formula in the query
-     * @return Double the formula score
-     * @throws NumberFormatException
-     * @throws IOException
-     */
-    public Double scoreFormula(int docId, int totalDoc, double avgDL, int rank) throws NumberFormatException,
-                                                                                       IOException{
-        double idf = Math.log((totalDoc - rank + 0.5) / (rank + 0.5));
-        double docLength = Double.parseDouble(this.searcher.doc(docId).get(Constants.FORMULA_COUNT));
-        double tf = ((1 * (Search.TOMPA_K1 + 1)) /
-                     (1 + Search.TOMPA_K1 * (1 - Search.TOMPA_B + Search.TOMPA_B * (docLength / avgDL))));
-        return (idf * tf);
-    }
-
-    /**
      * Returns a SearchResult using tompa search method
      * Using BM25 for keywords and using a BM25 for each formula as a query than uses it rank to create a score
      * which is added to BM25 Keyword score
@@ -319,15 +300,15 @@ public class Search {
             result = new SearchResult(null, mathQuery, k, null);
         }else{
             BooleanQuery.Builder bq = new BooleanQuery.Builder();
-            Query textQuery = mathQuery.buildTextQuery(mathQuery.getFieldName(), bq);
-            List<Query> formulaQueries = mathQuery.buildFormulaQuery(mathQuery.getFieldName(),
+            Query textQuery = mathQuery.buildTextQuery(Constants.TEXTFIELD, bq);
+            List<Query> formulaQueries = mathQuery.buildFormulaQuery(Constants.MATHFIELD,
                                                                      this.synonym,
                                                                      this.config);
             Map<Integer, Double> scoreLookup = new HashMap<Integer, Double>();
             // score the formulas
             TopDocs formulaResults;
             TopDocs textResults = this.searcher.search(textQuery, Search.TOMPA_SEARCH_LIMIT);
-            CollectionStatistics stats = this.searcher.collectionStatistics(mathQuery.getFieldName());
+            CollectionStatistics stats = this.searcher.collectionStatistics(Constants.MATHFIELD);
             long sumTotalTermFreq = stats.sumTotalTermFreq();
             int docCount = (int) (stats.docCount() == -1 ? stats.maxDoc() : stats.docCount());
             double avgDL = 1d;
@@ -339,19 +320,33 @@ public class Search {
                 formulaResults = this.searcher.search(formula, Search.TOMPA_SEARCH_LIMIT);
                 ScoreDoc[] hits = formulaResults.scoreDocs;
                 int rank = 1;
+                int pos = 0;
                 for (ScoreDoc hit : hits){
                     Integer docId = new Integer(hit.doc);
+                    double docLength = Double.parseDouble(this.searcher.doc(docId.intValue()).get(Constants.FORMULA_COUNT));
                     Double prevScore = scoreLookup.get(docId);
-                    Double currentScore = this.scoreFormula(docId.intValue(), docCount, avgDL, rank); 
+                    Double currentScore = Functions.scoreFormula((double) docLength,
+                                                                 (double) docCount,
+                                                                 (double) avgDL,
+                                                                 (double) rank,
+                                                                 (double) Search.TOMPA_K1,
+                                                                 (double) Search.TOMPA_B,
+                                                                 (double) 1d);
                     if(prevScore == null){
                         scoreLookup.put(docId, currentScore);
                     }else{
                         scoreLookup.put(docId, prevScore + currentScore);
                     }
-                    rank += 1;
+                    if(pos > 0 && hits[pos].score != hits[pos - 1].score){
+                        // if the the two scores are equal then rank should be the same
+                        rank += 1;
+                    }
+                    pos += 1;
+                    
                 }
             }
             // add the formula
+            // with the text results
             for (ScoreDoc hit : textResults.scoreDocs){
                 Integer docId = new Integer(hit.doc);
                 Double prevScore = scoreLookup.get(docId);
@@ -364,27 +359,32 @@ public class Search {
             }
             // now have all the scores
             // build up an array
+            
             ScoreDoc[] results = new ScoreDoc[scoreLookup.size()];
             int pos = 0;
             for (Map.Entry<Integer, Double> entry : scoreLookup.entrySet()) {
                 Integer docId = entry.getKey();
                 Double score = entry.getValue();
                 results[pos] = new ScoreDoc(docId.intValue(), (float) score.floatValue());
+                pos++;
             }
             // just need to sort
             Arrays.sort(results,
                         new Comparator<ScoreDoc>() {
                             @Override
                             public int compare(ScoreDoc o1, ScoreDoc o2) {
-                                if (o1.score > o2.score){
+                                if (o1.score < o2.score){
                                     return 1;
-                                }else if(o1.score < o2.score){
+                                }else if(o1.score > o2.score){
                                     return -1;
                                 }else{
                                     return 0;
                                 }
                             }
                         });
+            if (scoreLookup.size() < k){
+                k = scoreLookup.size();
+            }
             results = Arrays.copyOfRange(results, 0, k);
             TopDocs finalResults = new TopDocs(k, results, results[0].score);
             result = new SearchResult(finalResults, mathQuery, k, textQuery);

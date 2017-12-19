@@ -352,6 +352,7 @@ public class FindOptimal {
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
             result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+            //result.explainResults(searcher.getSearcher());
             System.out.println(mq.getQueryName());
             found = this.found_answer(searcher.getSearcher(), result);
             reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
@@ -490,15 +491,21 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.TERMINAL);
-        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
+//        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
         config.flipBit(ConvertConfig.SYNONYMS);
-        try {
-            
-            config.setQueryType(ConvertConfig.BM25TP_QUERY);
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        config.flipBit(ConvertConfig.COMPOUND);
+        config.flipBit(ConvertConfig.EDGE);
+        config.flipBit(ConvertConfig.UNBOUNDED);
+        features.add(ConvertConfig.LOCATION);
+        features.add(ConvertConfig.SHORTENED);
+        
+//        try {
+//            config.setQueryType(ConvertConfig.TOMPA_QUERY);
+//        } catch (Exception e1) {
+//            // TODO Auto-generated catch block
+//            e1.printStackTrace();
+//        }
+        // config.flipBit(ConvertConfig.SEPERATE_MATH_TEXT);
         // only need to flip a certain number of features
 //        features.add(ConvertConfig.SHORTENED);
 //        features.add(ConvertConfig.LOCATION);

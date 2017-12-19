@@ -84,6 +84,7 @@ public class MathQuery {
      * @param config the config to use
      */
     public MathQuery(Node node, ConvertConfig config){
+        this.formulas = new ArrayList<String>();
         this.config = config;
         this.fieldName = Constants.FIELD;
         this.logger = ProjectLogger.getLogger();
@@ -104,7 +105,7 @@ public class MathQuery {
                 for (String t : Functions.analyzeTokens(analyzer, Constants.FIELD, term)){
                     this.terms.add(t);
                 }
-                this.formulas = Functions.parseFormulas(term);
+                this.formulas.addAll(Functions.parseFormulas(term));
             }else{
                 this.logger.log(Level.FINEST, "Node Type:" + nNode.getNodeType() + " " + nNode.getNodeName());
             }
@@ -320,11 +321,12 @@ public class MathQuery {
      * @return List the lst of formulas query
      */
     public List<Query> buildFormulaQuery(String field,
-                                                boolean synonym,
-                                                ConvertConfig config){
+                                         boolean synonym,
+                                         ConvertConfig config){
         // build a query for our custom approach for math queries
         List<Query> mathQueries = new ArrayList<Query>();
         for(String formula : this.formulas){
+            System.out.println(formula);
             // build a math query
             Query mathQuery = null;
             Query tempQuery = null;

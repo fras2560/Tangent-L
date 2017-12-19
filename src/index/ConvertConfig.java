@@ -53,6 +53,7 @@ public class ConvertConfig {
     private boolean boostedQueries;
     private boolean boostLocation;
     private boolean seperate;
+    private boolean expandLocation;
     /*
      * The possible features that Tangent can use
      */
@@ -64,6 +65,7 @@ public class ConvertConfig {
     public final static String EDGE = "EDGE_PAIRS";
     public final static String UNBOUNDED = "UNBOUNDED";
     public final static String LOCATION = "LOCATION";
+    public final static String EXPAND_LOCATION = "EXPAND_LOCATION";
     public final static String SYNONYMS = "SYNONYMS";
     public final static String SYMBOLS = "SYMBOL_PAIRS";
     public final static String BAGS_OF_WORDS = "BAG_OF_WORDS";
@@ -102,6 +104,7 @@ public class ConvertConfig {
         this.boostedQueries = false;
         this.boostLocation = false;
         this.seperate = false;
+        this.expandLocation = false;
         this.queryType = ConvertConfig.TERM_QUERY;
     }
 
@@ -177,6 +180,8 @@ public class ConvertConfig {
             this.boostLocation = !this.boostLocation;
         }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
             this.seperate = !this.seperate;
+        }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
+            this.expandLocation = !this.expandLocation;
         }
     }
 
@@ -247,6 +252,8 @@ public class ConvertConfig {
             result = this.boostLocation;
         }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
             result = this.seperate;
+        }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
+            result = this.expandLocation;
         }
         return result;
     }
@@ -291,6 +298,8 @@ public class ConvertConfig {
             this.boostLocation = setting;
         }else if (attribute.equals(ConvertConfig.SEPERATE_MATH_TEXT)){
             this.seperate = setting;
+        }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
+            this.expandLocation = setting;
         }
     }
 
@@ -337,6 +346,9 @@ public class ConvertConfig {
         if (!this.symbolPairs){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.SYMBOLS.toLowerCase());
         }
+        if (this.expandLocation){
+            commands.add(ConvertConfig.DELIMINTER + ConvertConfig.EXPAND_LOCATION.toLowerCase());
+        }
         if (this.windowSize > 1){
             commands.add(ConvertConfig.DELIMINTER + ConvertConfig.WINDOW_SIZE.toLowerCase());
             commands.add(Integer.toString(this.windowSize));
@@ -367,6 +379,7 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.SYMBOLS, this.symbolPairs);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, this.synonyms);
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, this.bags);
+        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, this.expandLocation);
         config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, this.boostedQueries);
         config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, this.boostLocation);
         config.setBooleanAttribute(ConvertConfig.SEPERATE_MATH_TEXT, this.seperate);
@@ -545,6 +558,9 @@ public class ConvertConfig {
         }
         if (this.synonyms){
             result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.SYNONYMS;
+        }
+        if(this.bags){
+            result = result + " " + ConvertConfig.DELIMINTER + ConvertConfig.BAGS_OF_WORDS;
         }
         if (this.query){
             if (this.boostedQueries){

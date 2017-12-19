@@ -102,7 +102,9 @@ public class SearchResult {
         String result = this.mathQuery.getQueryName();
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;
+            System.out.println(hits);
             for (ScoreDoc hit : hits){
+                System.out.println("Hit: " + hit);
                 result =  result + " " + hit.doc +":" + hit.score;
             }
         }

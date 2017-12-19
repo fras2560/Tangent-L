@@ -14,7 +14,7 @@ public class MathSimilarityWrapper extends PerFieldSimilarityWrapper {
 
     @SuppressWarnings("deprecation")
     public MathSimilarityWrapper(Similarity similarity) {
-        // TODO Auto-generated constructor stub
+        // default similarity
         this.similarity = similarity;
     }
 

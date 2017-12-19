@@ -45,7 +45,7 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import query.MathSimilarity;
+import search.MathSimilarityWrapper;
 import utilities.Constants;
 import utilities.Functions;
 import utilities.ProjectLogger;
@@ -87,7 +87,7 @@ public class IndexFiles {
                              Path docsPath,
                              boolean create,
                              ConvertConfig config) throws IOException{
-      this.indexDirectory(indexPath, docsPath, create, config, MathSimilarity.getSimilarity());
+      this.indexDirectory(indexPath, docsPath, create, config, new MathSimilarityWrapper());
   }
   /**
    * Index a directory
@@ -311,12 +311,12 @@ public class IndexFiles {
         // use the best known configuration
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
-        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-        config.setBooleanAttribute(ConvertConfig.LOCATION, true);
-        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
-        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
-        config.setBooleanAttribute(ConvertConfig.EDGE, true);
-        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+//        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
+//        config.setBooleanAttribute(ConvertConfig.LOCATION, true);
+//        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+//        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+//        config.setBooleanAttribute(ConvertConfig.EDGE, true);
+//        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {
