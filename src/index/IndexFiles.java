@@ -309,6 +309,7 @@ public class IndexFiles {
         System.out.println(ProjectLogger.getLogger().getLevel());
         ConvertConfig config = new ConvertConfig();
         // use the best known configuration
+        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
 //        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);

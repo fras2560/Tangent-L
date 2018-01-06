@@ -150,6 +150,7 @@ public class ConvertConfig {
     /**
      * Flips the current attributes setting.
      * Parameter attribute is one of the static String of ConvertConfig
+     * NOTE: EXPAND_LOCATION will also flip location
      * (e.g. <code> ConvertConfig.UNBOUNDED </code>)
      * @param attribute The attribute to flip
      */
@@ -182,6 +183,8 @@ public class ConvertConfig {
             this.seperate = !this.seperate;
         }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
             this.expandLocation = !this.expandLocation;
+            this.location = this.expandLocation;
+            
         }
     }
 
@@ -300,6 +303,7 @@ public class ConvertConfig {
             this.seperate = setting;
         }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
             this.expandLocation = setting;
+            this.location = setting;
         }
     }
 
@@ -406,8 +410,15 @@ public class ConvertConfig {
             (config.synonyms == false || config.bags == false)){
             // using dice requires bag of words and synonyms expansion
             result = false;
-        }else if (config.shortened != this.shortened || config.location != this.location){
-            // neither is backwards compatible
+        }else if (config.shortened != this.shortened){
+            // shortened is no backwards compatible
+            result = false;
+        }else if (config.location != this.location && this.expandLocation != true){
+            // if expand location is true than do have  backwards compatible
+            // otherwise we dont
+            result = false;
+        }else if(this.expandLocation != true && config.expandLocation != this.location){
+            // expand Location is backwards compatible
             result = false;
         }else if(this.eol != true && this.eol != config.eol){
             // eol is backwards compatible
@@ -471,6 +482,8 @@ public class ConvertConfig {
         fileWriter.write(ConvertConfig.WINDOW_SIZE + ConvertConfig.SEPERATOR + this.windowSize);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbolPairs);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.EXPAND_LOCATION + ConvertConfig.SEPERATOR + this.expandLocation);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.BAGS_OF_WORDS + ConvertConfig.SEPERATOR + this.bags);
         fileWriter.newLine();

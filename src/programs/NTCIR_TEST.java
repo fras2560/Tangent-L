@@ -102,10 +102,10 @@ public class NTCIR_TEST {
             // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
             config.loadConfig(index);
-            config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+            config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, false);
+            config.setBooleanAttribute(ConvertConfig.LOCATION, true);
+            // config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
             config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
-            config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-            config.setBooleanAttribute(ConvertConfig.SEPERATE_MATH_TEXT, true);
             //config.setQueryType(ConvertConfig.TOMPA_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);

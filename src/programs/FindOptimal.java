@@ -53,14 +53,14 @@ import utilities.ProjectLogger;
  */
 public class FindOptimal {
     private Path documents;
-    private Path index;
-    private BufferedWriter output;
+    protected Path index;
+    protected BufferedWriter output;
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
     private static int TOP_K = 10000;
     private Path queries;
-    private Logger logger;
+    protected Logger logger;
     private boolean greedy;
 
     /*
@@ -490,15 +490,17 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.TERMINAL);
-//        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
-        config.flipBit(ConvertConfig.SYNONYMS);
-        config.flipBit(ConvertConfig.COMPOUND);
-        config.flipBit(ConvertConfig.EDGE);
-        config.flipBit(ConvertConfig.UNBOUNDED);
-        features.add(ConvertConfig.LOCATION);
+        config.flipBit(ConvertConfig.EXPAND_LOCATION);
+        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
         features.add(ConvertConfig.SHORTENED);
-        
+        features.add(ConvertConfig.TERMINAL);
+        features.add(ConvertConfig.COMPOUND);
+        features.add(ConvertConfig.EDGE);
+        features.add(ConvertConfig.UNBOUNDED);
+        features.add(ConvertConfig.SYNONYMS);
+        // config.flipBit(ConvertConfig.EXPAND_LOCATION);
+//        features.add(ConvertConfig.LOCATION);
+//        features.add(ConvertConfig.SHORTENED);
 //        try {
 //            config.setQueryType(ConvertConfig.TOMPA_QUERY);
 //        } catch (Exception e1) {

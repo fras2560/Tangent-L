@@ -172,6 +172,8 @@ public class Search {
         ConvertConfig indexConfig = new ConvertConfig();
         indexConfig.loadConfig(index);
         // index config needs to be compatible with the searching config (not necessarily reverse direction)
+        System.out.println("Search config:" + config);
+        System.out.println("Index config:" + indexConfig);
         if (!indexConfig.compatible(config)){
             logger.log(Level.WARNING, "Incompatible config files: " + config + " vs " + indexConfig);
             throw new SearchConfigException("Config did not match index");
