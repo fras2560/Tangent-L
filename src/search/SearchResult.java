@@ -65,6 +65,13 @@ public class SearchResult {
     }
 
     /**
+     * Sets the results
+     */
+    public void setResults(TopDocs docs){
+        this.results = docs;
+    }
+
+    /**
      * Returns the Math Query
      * @return MathQuery
      */

@@ -42,6 +42,27 @@ import utilities.Payload.PayloadException;
  */
 public class Functions {
     /**
+     * 
+     * @param title
+     * @return
+     */
+    public static String parseDocumentName(String title){
+        String[] parts = title.split("/|\\\\");
+        String filename = parts[parts.length -1];
+        String[] temp = filename.split("\\.");
+        String[] nameparts = Arrays.copyOfRange(temp, 0, temp.length - 1);
+        // remove formula part
+        temp = String.join(".", nameparts).split("-");
+        if(temp.length > 1){
+            nameparts = Arrays.copyOfRange(temp, 0, temp.length - 1);
+        }else{
+            nameparts = Arrays.copyOfRange(temp, 0, temp.length);
+        }
+        
+        return String.join(".", nameparts);
+    }
+    
+    /**
      * Parses a title
      * @param title the title which may include the filepath
      * @return String the name of the document

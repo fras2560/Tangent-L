@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,6 +42,7 @@ import search.Search;
 import search.Search.SearchConfigException;
 import search.SearchResult;
 import query.MathQuery;
+import utilities.Functions;
 import utilities.ProjectLogger;
 
 /*
@@ -58,10 +60,11 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 100000;
+    private static int TOP_K = 10000;
     private Path queries;
     protected Logger logger;
     private boolean greedy;
+    private boolean formulaLevel;
 
     /*
      * Class Constructor
@@ -148,6 +151,22 @@ public class FindOptimal {
         this.logger = logger;
         this.queries = queries;
         this.greedy = greedy;
+        this.formulaLevel = true;
+    }
+
+    /**
+     * Set to evaluate query results at the Document Level and ignore formula number
+     */
+    public void evaulateAtDocumentLevel(){
+        this.formulaLevel = false;
+    }
+
+    /**
+     * Set to evaluate query results at the Formula Level
+     * By Default this is true
+     */
+    public void evaulateAtFormulaLevel(){
+        this.formulaLevel = true;
     }
 
     /*
@@ -324,6 +343,38 @@ public class FindOptimal {
         return found;
     }
 
+    /**
+     * Remove the duplicates from the results
+     * @param results the results to remove duplicates from
+     * @throws IOException 
+     */
+    public void removeDuplicates(IndexSearcher searcher, SearchResult results, int size) throws IOException{
+        ScoreDoc[] unique = new ScoreDoc[size];
+        HashMap<String, ScoreDoc> lookup = new HashMap<String, ScoreDoc>();
+        ScoreDoc[] hits = results.getResults().scoreDocs;
+        String docName;
+        int i = 0;
+        for(ScoreDoc hit :  hits){
+            Document doc = searcher.doc(hit.doc);
+            docName = Functions.parseDocumentName(doc.get("path"));
+            if(lookup.get(docName) ==  null){
+                // do not have the result
+                unique[i] = hit;
+                lookup.put(docName, hit);
+                i += 1;
+            }
+            // fill up the array to a certain size
+            if(i >= size){
+                break;
+            }
+        }
+        if(i < size){
+            // shrink it down to the right size
+            unique = Arrays.copyOfRange(unique, 0, i);
+        }
+        results.getResults().scoreDocs = unique;
+    }
+
     /*
      * Scores the index
      * @param index the path to the created index
@@ -351,12 +402,21 @@ public class FindOptimal {
         double found;
         this.updateQueries(config);
         for (MathQuery mq: this.mathQueries){
-            result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+            if(this.formulaLevel){
+                result = searcher.searchQuery(mq, FindOptimal.TOP_K);
+                found = this.found_answer(searcher.getSearcher(), result);
+                reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
+            }else{
+                result = searcher.searchQuery(mq, 2*FindOptimal.TOP_K);
+                this.removeDuplicates(searcher.getSearcher(), result, FindOptimal.TOP_K);
+                found = this.found_answer(searcher.getSearcher(), result);
+                reciprocal = this.reciprocal_rank(searcher.getSearcher(), result);
+            }
+            
             //result.explainResults(searcher.getSearcher());
             System.out.println(mq.getQueryName());
-            found = this.found_answer(searcher.getSearcher(), result);
-            reciprocal = this.reciprocal_rank(searcher.getSearcher(), result); 
-            this.logger.log(Level.FINER,
+            
+            this.logger.log(Level.INFO,
                             mq.getQueryName() +
                             " found:" +
                             found +
@@ -496,8 +556,6 @@ public class FindOptimal {
                                     "wikipedia",
                                     timeStamp + "findOptimal.log");
             }
-            
-            
         }
         // check command line for override default methods
         for(int i = 0;i < args.length;i++) {
@@ -525,34 +583,8 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        // config.flipBit(ConvertConfig.EXPAND_LOCATION);
         config.flipBit(ConvertConfig.BAGS_OF_WORDS);
         config.flipBit(ConvertConfig.SYNONYMS);
-//        features.add(ConvertConfig.SHORTENED);
-//        features.add(ConvertConfig.TERMINAL);
-//        features.add(ConvertConfig.COMPOUND);
-//        features.add(ConvertConfig.EDGE);
-//        features.add(ConvertConfig.UNBOUNDED);
-//        features.add(ConvertConfig.SYNONYMS);
-        // config.flipBit(ConvertConfig.EXPAND_LOCATION);
-//        features.add(ConvertConfig.LOCATION);
-//        features.add(ConvertConfig.SHORTENED);
-//        try {
-//            config.setQueryType(ConvertConfig.TOMPA_QUERY);
-//        } catch (Exception e1) {
-//            // TODO Auto-generated catch block
-//            e1.printStackTrace();
-//        }
-        // config.flipBit(ConvertConfig.SEPERATE_MATH_TEXT);
-        // only need to flip a certain number of features
-//        features.add(ConvertConfig.SHORTENED);
-//        features.add(ConvertConfig.LOCATION);
-//        // start with these since they are compatible
-//        config.flipBit(ConvertConfig.EDGE);
-//        config.flipBit(ConvertConfig.COMPOUND);
-//        config.flipBit(ConvertConfig.UNBOUNDED);
-//        config.flipBit(ConvertConfig.TERMINAL);
-//        config.flipBit(ConvertConfig.SYNONYMS);
         // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {
@@ -570,6 +602,9 @@ public class FindOptimal {
                                  queries,
                                  results,
                                  false);
+            if(!formulaOnly){
+                fo.evaulateAtDocumentLevel();
+            }
             fo.optimize(config, features);
             outputWriter.close();
         } catch (IOException e) {

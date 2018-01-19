@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
 
 public class IndexThreadProducer implements Runnable{
     private BlockingQueue <IndexThreadObject> queue;
