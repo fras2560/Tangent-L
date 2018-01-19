@@ -58,7 +58,7 @@ public class FindOptimal {
     private ArrayList<MathQuery> mathQueries;
     private Judgements answers;
     private static Float RELEVANT_LOWER = new Float(0.0);
-    private static int TOP_K = 10000;
+    private static int TOP_K = 100000;
     private Path queries;
     protected Logger logger;
     private boolean greedy;
@@ -446,22 +446,57 @@ public class FindOptimal {
         }
         // default arguments
         boolean wiki = true;
+        boolean formulaOnly = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
-            documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
+            documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "arXiv");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "findOptimal");
             output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "output.txt");
             queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
             logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "findOptimal.log");
         }else{
-            documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
-            indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "output.txt");
-            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
-            results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "findOptimal.log");
+            if(formulaOnly){
+                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "wikipedia_formula");
+                indexDirectory = Paths.get(System.getProperty("user.dir"),
+                                           "resources",
+                                           "index",
+                                           "wikipedia_formula",
+                                           "findOptimal");
+                output = Paths.get(System.getProperty("user.dir"),
+                                   "resources",
+                                   "output",
+                                   "wikipedia_formula",
+                                   timeStamp + "output.txt");
+                queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+                results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-formula-11.txt");
+                logFile = Paths.get(System.getProperty("user.dir"),
+                                    "resources",
+                                    "output",
+                                    "wikipedia_formula",
+                                    timeStamp + "findOptimal.log");
+            }else{
+                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "wikipedia");
+                indexDirectory = Paths.get(System.getProperty("user.dir"),
+                                           "resources",
+                                           "index",
+                                           "wikipedia",
+                                           "findOptimal");
+                output = Paths.get(System.getProperty("user.dir"),
+                                   "resources",
+                                   "output",
+                                   "wikipedia",
+                                   timeStamp + "output.txt");
+                queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+                results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
+                logFile = Paths.get(System.getProperty("user.dir"),
+                                    "resources",
+                                    "output",
+                                    "wikipedia",
+                                    timeStamp + "findOptimal.log");
+            }
+            
             
         }
         // check command line for override default methods
@@ -490,14 +525,15 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.EXPAND_LOCATION);
+        // config.flipBit(ConvertConfig.EXPAND_LOCATION);
         config.flipBit(ConvertConfig.BAGS_OF_WORDS);
-        features.add(ConvertConfig.SHORTENED);
-        features.add(ConvertConfig.TERMINAL);
-        features.add(ConvertConfig.COMPOUND);
-        features.add(ConvertConfig.EDGE);
-        features.add(ConvertConfig.UNBOUNDED);
-        features.add(ConvertConfig.SYNONYMS);
+        config.flipBit(ConvertConfig.SYNONYMS);
+//        features.add(ConvertConfig.SHORTENED);
+//        features.add(ConvertConfig.TERMINAL);
+//        features.add(ConvertConfig.COMPOUND);
+//        features.add(ConvertConfig.EDGE);
+//        features.add(ConvertConfig.UNBOUNDED);
+//        features.add(ConvertConfig.SYNONYMS);
         // config.flipBit(ConvertConfig.EXPAND_LOCATION);
 //        features.add(ConvertConfig.LOCATION);
 //        features.add(ConvertConfig.SHORTENED);

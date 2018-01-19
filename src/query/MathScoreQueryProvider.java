@@ -246,6 +246,12 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         return docLength;
     }
 
+    /**
+     * Returns a map lookup for a string and its list of positions
+     * @param doc the document to create the map for
+     * @return Map
+     * @throws IOException
+     */
     public Map<String, List<Integer>> termsPositions(int doc) throws IOException{
         LeafReader reader = this.context.reader();
         Map<String, List<Integer>> positions = new HashMap<String, List<Integer>>();
@@ -269,6 +275,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         }
         return positions;
     }
+
     /**
      * Returns a mapping of positions and count for the term given
      * @param reader the leaf reader of the document

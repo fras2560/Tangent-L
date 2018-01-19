@@ -65,6 +65,8 @@ public class Search {
     private ConvertConfig config;
     private boolean synonym;
     private IndexReader reader;
+    private float alpha = 1.0f;
+    private float beta = 1.0f;
     private static final int DEFAULT_K = 100;
     private static final int MAX_CLUASES = 4096;
     private static final int TOMPA_SEARCH_LIMIT = 10000;
@@ -185,6 +187,8 @@ public class Search {
         this.searcher.setSimilarity(wrapper);
         this.config = config;
         this.logger = logger;
+        this.alpha = 1.0f;
+        this.beta = 1.0f;
     }
 
     /**
@@ -202,6 +206,39 @@ public class Search {
     public boolean getSynonym(){
         return this.synonym;
     }
+
+    /**
+     * Returns the alpha value (used for weighting math and text)
+     * @return float
+     */
+    public float getAlpha(){
+        return this.alpha;
+    }
+
+    /**
+     * Sets a new alpha value
+     * @param a
+     */
+    public void setAlpha(float a){
+        this.alpha = a;
+    }
+
+    /**
+     * Returns the beta value (used for weighting math and text)
+     * @return float
+     */
+    public float getBeta(){
+        return this.beta;
+    }
+
+    /**
+     * Sets a new beta value
+     * @param b
+     */
+    public void setBeta(float b){
+        this.beta = b;
+    }
+
     /**
      * Search using the query and return a list of the documents file paths
      * @param mathQuery the query to search
@@ -271,11 +308,24 @@ public class Search {
                 result = new SearchResult(null, mathQuery, k, null);
             }else{
                 BooleanQuery.Builder bq = new BooleanQuery.Builder();
-                Query buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
-                                                        bq,
-                                                        this.synonym,
-                                                        this.config,
-                                                        this.searcher.collectionStatistics(mathQuery.getFieldName()));
+                Query buildQuery;
+                if(this.config.getQueryType().equals(ConvertConfig.DIFFERENT_WEIGHTED_QUERY)){
+                    // weight query based upon alpha=text weight and beta = math weight
+                    buildQuery = mathQuery.buildWeightedQuery(mathQuery.getFieldName(),
+                                                              bq,
+                                                              this.synonym,
+                                                              this.config,
+                                                              this.searcher.collectionStatistics(mathQuery.getFieldName()),
+                                                              this.alpha,
+                                                              this.beta);
+                }else{
+                     buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
+                                                            bq,
+                                                            this.synonym,
+                                                            this.config,
+                                                            this.searcher.collectionStatistics(mathQuery.getFieldName()));
+                }
+                
                 this.logger.log(Level.FINEST, "Boolean Query Size:" + mathQuery.getTerms().size());
                 this.logger.log(Level.FINEST, "BuildQuery:" + buildQuery);
                 TopDocs searchResultsWild = this.searcher.search(buildQuery, k);
@@ -333,11 +383,11 @@ public class Search {
                                                                  (double) rank,
                                                                  (double) Search.TOMPA_K1,
                                                                  (double) Search.TOMPA_B,
-                                                                 (double) 1d);
+                                                                 (double) hit.score);
                     if(prevScore == null){
-                        scoreLookup.put(docId, currentScore);
+                        scoreLookup.put(docId, Search.MATH_WEIGHT * currentScore);
                     }else{
-                        scoreLookup.put(docId, prevScore + currentScore);
+                        scoreLookup.put(docId, prevScore + Search.MATH_WEIGHT * currentScore);
                     }
                     if(pos > 0 && hits[pos].score != hits[pos - 1].score){
                         // if the the two scores are equal then rank should be the same
@@ -354,9 +404,9 @@ public class Search {
                 Double prevScore = scoreLookup.get(docId);
                 Double currentScore = new Double(hit.score);
                 if(prevScore == null){
-                    scoreLookup.put(docId, Search.MATH_WEIGHT * currentScore);
+                    scoreLookup.put(docId, Search.TEXT_WEIGHT * currentScore);
                 }else{
-                    scoreLookup.put(docId, Search.MATH_WEIGHT * prevScore + Search.TEXT_WEIGHT * currentScore);
+                    scoreLookup.put(docId, prevScore + Search.TEXT_WEIGHT * currentScore);
                 }
             }
             // now have all the scores
@@ -584,6 +634,113 @@ public class Search {
     }
 
     /**
+     * Runs the NTCIR test and returns the average precision for relevant and partially relevant
+     * @param queries a path to file with the queries
+     * @param results a path to the judgments on the results
+     * @return float[] the averages
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     */
+    public float[] runNtcirTest(Path queries, Path results)throws IOException,
+                                                                  XPathExpressionException,
+                                                                  ParserConfigurationException,
+                                                                  SAXException,
+                                                                  InterruptedException,
+                                                                  ParseException{
+        ArrayList<SearchResult> queryResults = this.searchQueries(queries, 20);
+        Judgements answers = new Judgements(results.toFile());
+        ArrayList<ArrayList<Double>> scores;
+        float[] avg_scores = new float[8];
+        Arrays.fill(avg_scores, 0f);
+        float count = 0f;
+        for (SearchResult queryResult: queryResults){
+            // queryResult.explainResults(this.searcher);
+            if (queryResult.getMathQuery() == null){
+                // do not have to do anything
+            }else{
+                scores = this.arxivScore(queryResult.getResults(), queryResult.getMathQuery(), answers);
+                avg_scores[0] += scores.get(0).get(0); 
+                avg_scores[1] += scores.get(0).get(1); 
+                avg_scores[2] += scores.get(0).get(2); 
+                avg_scores[3] += scores.get(0).get(3); 
+                avg_scores[4] += scores.get(1).get(0); 
+                avg_scores[5] += scores.get(1).get(1); 
+                avg_scores[6] += scores.get(1).get(2); 
+                avg_scores[7] += scores.get(1).get(3); 
+            }
+            count += 1f;
+        }
+        for (int i = 0; i < avg_scores.length; i++){
+            avg_scores[i] = avg_scores[i] / count;
+        }
+        return avg_scores;
+    }
+
+    /**
+     * Prints out the optimal math to text weight for each query
+     * @param queries the file path to the queries
+     * @param reuslts the jugements on the files
+     * @throws IOException
+     * @throws XPathExpressionException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws InterruptedException
+     * @throws ParseException
+     */
+    public void optimizePerQuery(Path queries, Path results) throws IOException,
+                                                                    XPathExpressionException,
+                                                                    ParserConfigurationException,
+                                                                    SAXException,
+                                                                    InterruptedException,
+                                                                    ParseException {
+        // loads the judgements for all queries
+        Judgements answers = new Judgements(results.toFile());
+        // parse the query file
+        ParseQueries queryLoader = new ParseQueries(queries.toFile(), this.config);
+        ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
+        // some variables used in the for loop
+        double tPR, tR, bRatioR, bRatioPR, bPR, bR;
+        SearchResult result;
+        ArrayList<ArrayList<Double>> scores;
+        for(MathQuery mq: mathQueries){
+            bPR = 0d;
+            bR = 0d;
+            bRatioR = 0d;
+            bRatioPR = 0d;
+            // run the result for a range of ratios
+            for (float ratio = 0.01f; ratio < 2f; ratio = ratio + 0.01f){
+                this.alpha = ratio;
+                result = this.searchQuery(mq);
+                scores = this.arxivScore(result.getResults(), result.getMathQuery(), answers);
+                tPR = (scores.get(1).get(0) / 5d +
+                       scores.get(1).get(1) / 10d +
+                       scores.get(1).get(2) / 15d +
+                       scores.get(1).get(3) / 20d) / 4d;
+                tR = (scores.get(0).get(0) / 5d +
+                      scores.get(0).get(1) / 10d +
+                      scores.get(0).get(2) / 15d +
+                      scores.get(0).get(3) / 20d) / 4d;
+                if(tPR > bPR){
+                    bRatioPR = ratio;
+                    bPR = tPR;
+                }
+                if(tR > bR){
+                    bRatioR = ratio;
+                    bR = tR;
+                }
+            }
+            // print what one achieved the best score
+            System.out.println(mq.getQueryName() + " best partially relevant:" + bPR  + " @ " + bRatioPR );
+            System.out.println(mq.getQueryName() + " best relevant:" + bR  + " @ " + bRatioR );
+        }
+        return;
+    }
+
+    /**
      * runs the ntcir test scoring precision for P5, P10, P15, P20 on relevant and partially relevant documents
      * @param queries path to the queries to run
      * @param results the expected results used to check relevance
@@ -719,6 +876,22 @@ public class Search {
     public ArrayList<ArrayList<Double>> arxivScore(TopDocs searchResults,
                                                    MathQuery query,
                                                    Judgements judgements) throws IOException{
+        return this.arxivScore(searchResults, query, judgements, true);
+    }
+
+    /**
+     * Returns arxiv score for partially relevant and relevant with Precision at K for K in {5,10,15,20}
+     * @param searchResults the documents return by the query
+     * @param query the query to score
+     * @param judgements the judgements of the query
+     * @param countNonRank true if should include non ranked documents while scoring
+     * @return ArrayList
+     * @throws IOException
+     */
+    public ArrayList<ArrayList<Double>> arxivScore(TopDocs searchResults,
+                                                   MathQuery query,
+                                                   Judgements judgements,
+                                                   boolean countNonRank) throws IOException{
         ScoreDoc[] hits = searchResults.scoreDocs;
         Float rank;
         ArrayList<Double>relevantScores = new ArrayList<Double>();
@@ -770,7 +943,12 @@ public class Search {
                     partialScores.set(3, partialScores.get(3) + new Double(1));
                 }
             }
-            index += 1;
+            if (rank < 0 && !countNonRank){
+                // do nothin since if it not counted
+            }else{
+                index += 1;
+            }
+            
         }
         ArrayList<ArrayList<Double>> scores = new ArrayList<ArrayList<Double>>();
         scores.add(relevantScores);

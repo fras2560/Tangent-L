@@ -80,7 +80,7 @@ public class ParseQueries{
     public ParseQueries(File f, ConvertConfig config) throws IOException, InterruptedException{
         this(f, config, ProjectLogger.getLogger());
     }
-    
+
     /**
      * 
      * @param f the file (NTCIR - MathIR file format)

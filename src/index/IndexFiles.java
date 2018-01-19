@@ -27,6 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
@@ -44,7 +48,6 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-
 import search.MathSimilarityWrapper;
 import utilities.Constants;
 import utilities.Functions;
@@ -60,19 +63,39 @@ import utilities.ProjectLogger;
  */
 public class IndexFiles {
   private Logger logger;
+  private boolean multiThreaded;
   /**
    * Class constructor
+   * Defaults logger to projectLogger, and is multi-threaded
    */
   public IndexFiles(){
-      this.logger = ProjectLogger.getLogger();
+      this(ProjectLogger.getLogger(), true);
   }
 
   /**
-   * Class constructor with a specified logger
+   * Class constructor with a specified logger and is multi-threaded
    * @param logger the logger to use
    */
   public IndexFiles(Logger logger){
+      this(logger, true);
+  }
+
+  /**
+   * Class constructor with specifying if multi-threaded or not
+   * @param logger the logger to use
+   */
+  public IndexFiles(boolean multiThreaded){
+      this(ProjectLogger.getLogger(), multiThreaded);
+  }
+
+  /**
+   * Class constructor with specifying it multi-threaded and logger
+   * @param logger the logger to use
+   * @param multiThreaded True if want multi-threaded
+   */
+  public IndexFiles(Logger logger, boolean multiThreaded){
       this.logger = logger;
+      this.multiThreaded = multiThreaded;
   }
 
   /**
@@ -89,6 +112,7 @@ public class IndexFiles {
                              ConvertConfig config) throws IOException{
       this.indexDirectory(indexPath, docsPath, create, config, new MathSimilarityWrapper());
   }
+
   /**
    * Index a directory
    * @param indexPath the path to the index
@@ -115,7 +139,7 @@ public class IndexFiles {
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
         analyzerPerField.put(Constants.MATHFIELD, new JustMathAnalyzer());
         analyzerPerField.put(Constants.TEXTFIELD, new JustTextAnalyzer());
-        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper( analyzer, analyzerPerField);
+        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(analyzer, analyzerPerField);
         IndexWriterConfig iwc = new IndexWriterConfig(wrapper);
         iwc.setSimilarity(simlarity);
         if (create) {
@@ -133,14 +157,34 @@ public class IndexFiles {
         //
         // iwc.setRAMBufferSizeMB(256.0);
         IndexWriter writer = new IndexWriter(dir, iwc);
-        indexDocs(writer, docsPath, config);
+        int processors = Runtime.getRuntime().availableProcessors();
+        if(this.multiThreaded && processors > 1){
+            BlockingQueue<IndexThreadObject> bq = new LinkedBlockingQueue<IndexThreadObject>();
+            IndexThreadProducer producer =  new IndexThreadProducer(bq, docsPath, processors - 1);
+            new Thread(producer).start();
+            for(int i = 0; i < (processors - 1); i++){
+                new Thread(new IndexThreadConsumer(bq, writer, config)).start();
+            }
+            try {
+                TimeUnit.MINUTES.sleep(1);
+                while (!bq.isEmpty()){
+                    System.out.println("Number of files left: "  + bq.size());
+                    TimeUnit.MINUTES.sleep(1);
+                }
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                System.out.println("Unable to sleep");
+                e.printStackTrace();
+            }
+        }else{
+            indexDocs(writer, docsPath, config);
+        }
         // NOTE: if you want to maximize search performance,
         // you can optionally call forceMerge here.  This can be
         // a terribly costly operation, so generally it's only
         // worth it when your index is relatively static (ie
         // you're done adding documents to it):
-        //
-        // writer.forceMerge(1);
+        writer.forceMerge(4);
         Date end = new Date();
         this.logger.log(Level.INFO, end.getTime() - start.getTime() + " total milliseconds");
         config.saveConfig(indexPath);
@@ -274,9 +318,9 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
-    Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "document", "arXiv");
-    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "index.log");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
+    Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "document", "NTCIR12_MathIR_WikiCorpus");
+    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_MathIR_WikiCorpus.log");
     boolean create = true;
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {
@@ -309,15 +353,14 @@ public class IndexFiles {
         System.out.println(ProjectLogger.getLogger().getLevel());
         ConvertConfig config = new ConvertConfig();
         // use the best known configuration
-        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+        // -!SHORTENED -LOCATION -COMPOUND_SYMBOLS -TERMINAL_SYMBOLS -UNBOUNDED -SYNONYMS -BAG_OF_WORDS
+        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
-//        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
-//        config.setBooleanAttribute(ConvertConfig.LOCATION, true);
-//        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
-//        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
-//        config.setBooleanAttribute(ConvertConfig.EDGE, true);
-//        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+        config.setBooleanAttribute(ConvertConfig.SHORTENED, false);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

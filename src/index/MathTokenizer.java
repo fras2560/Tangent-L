@@ -64,7 +64,7 @@ public final class MathTokenizer extends CharTokenizer {
         this.mathToken = !Character.isWhitespace(c);
         return !Character.isWhitespace(c);
     }else{
-        // want to break anything that not a characer ' or -
+        // want to break anything that not a character ' or -
         boolean special = (s!= null && (s.equals("APOSTROPHE") || s.equals("HYPHEN-MINUS"))
                             || Character.isLetterOrDigit(c));
         return !Character.isWhitespace(c) && special;

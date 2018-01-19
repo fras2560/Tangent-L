@@ -89,7 +89,6 @@ public class MathScoreQuery extends CustomScoreQuery{
         if (sumTotalTermFreq > 0) {
           this.avgDL = (float) (sumTotalTermFreq / (double) docCount);
         }
-        System.out.println("Average Document length: " + this.avgDL);
         this.numDocs = docCount;
     }
 

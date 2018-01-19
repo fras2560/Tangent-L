@@ -97,18 +97,17 @@ public class NTCIR_TEST {
             File resultsText = resultOutput.toFile();
             resultsText.createNewFile();
             FileOutputStream ris = new FileOutputStream(resultsText);
-            OutputStreamWriter rosw = new OutputStreamWriter(ris);
+            OutputStreamWriter rosw = new OutputStreamWriter(ris);  
             resultsWriter = new BufferedWriter(rosw);
             // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
             config.loadConfig(index);
-            config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, false);
-            config.setBooleanAttribute(ConvertConfig.LOCATION, true);
-            // config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
-            config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
-            //config.setQueryType(ConvertConfig.TOMPA_QUERY);
+            // config.setQueryType(ConvertConfig.BM25TP_QUERY);
+            config.setQueryType(ConvertConfig.DIFFERENT_WEIGHTED_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);
+            searcher.setAlpha(0.05f);
+            searcher.setBeta(0.34f);
             searcher.ntcirTest(queries, results, resultsWriter);
             searcher.recordQueries(queries, queryWriter, 100);;
             // close the files
