@@ -54,6 +54,8 @@ public class ConvertConfig {
     private boolean boostLocation;
     private boolean seperate;
     private boolean expandLocation;
+    private boolean proximity;
+    private boolean payloads;
     /*
      * The possible features that Tangent can use
      */
@@ -69,14 +71,21 @@ public class ConvertConfig {
     public final static String SYNONYMS = "SYNONYMS";
     public final static String SYMBOLS = "SYMBOL_PAIRS";
     public final static String BAGS_OF_WORDS = "BAG_OF_WORDS";
+    public final static String SEPERATE_MATH_TEXT = "SEPERATE_MATH_FROM_TEXT";
+    public final static String PROXIMITY = "PROXIMITY";
+    public final static String PAYLOADS = "PAYLOADS";
+
+    /*
+     * The ways to query
+     */
+    public final static String BOOST_QUERIES = "BOOST_QUERIES";
     public final static String DICE_QUERY = "DICE_QUERY";
     public final static String BM25TP_QUERY = "BM25TP_QUERY";
     public final static String BM25_DISTANCE_QUERY = "BM25_DISTANCE_QUERY";
     public final static String TERM_QUERY = "TERM_QUERY";
-    public final static String BOOST_QUERIES = "BOOST_QUERIES";
-    public final static String SEPERATE_MATH_TEXT = "SEPERATE_MATH_FROM_TEXT";
     public final static String TOMPA_QUERY = "BM25_TOMPA_QUERY";
     public final static String DIFFERENT_WEIGHTED_QUERY = "DIFFERENT_WEIGHT_FOR_MATH_AND_TEXT_QUERY";
+    
     private final static String DELIMINTER = "-";
     private final static String SEPERATOR = ":";
     private final static String WINDOW_SIZE = "WINDOW_SIZE";
@@ -107,6 +116,8 @@ public class ConvertConfig {
         this.seperate = false;
         this.expandLocation = false;
         this.queryType = ConvertConfig.TERM_QUERY;
+        this.proximity = false;
+        this.payloads = false;
     }
 
     public ConvertConfig getSearchConfig(){
@@ -185,7 +196,10 @@ public class ConvertConfig {
         }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
             this.expandLocation = !this.expandLocation;
             this.location = this.expandLocation;
-            
+        }else if(attribute.equals(ConvertConfig.PAYLOADS)){
+            this.payloads = !this.payloads;
+        }else if(attribute.equals(ConvertConfig.PROXIMITY)){
+            this.proximity = !this.proximity;
         }
     }
 
@@ -259,6 +273,10 @@ public class ConvertConfig {
             result = this.seperate;
         }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
             result = this.expandLocation;
+        }else if (attribute.equals(ConvertConfig.PAYLOADS)){
+            result = this.payloads;
+        }else if (attribute.equals(ConvertConfig.PROXIMITY)){
+            result = this.proximity;
         }
         return result;
     }
@@ -306,6 +324,10 @@ public class ConvertConfig {
         }else if (attribute.equals(ConvertConfig.EXPAND_LOCATION)){
             this.expandLocation = setting;
             this.location = setting;
+        }else if (attribute.equals(ConvertConfig.PROXIMITY)){
+            this.proximity = setting;
+        }else if (attribute.equals(ConvertConfig.PAYLOADS)){
+            this.payloads = setting;
         }
     }
 
@@ -315,7 +337,10 @@ public class ConvertConfig {
     public void optimalConfig(){
         this.compoundSymbols = true;
         this.edgePairs = true;
+        this.expandLocation = true;
+        this.terminalSymbols = true;
         this.unbounded = true;
+        this.shortened = false;
         return;
     }
 
@@ -389,6 +414,8 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.BOOST_QUERIES, this.boostedQueries);
         config.setBooleanAttribute(ConvertConfig.BOOST_LOCATION, this.boostLocation);
         config.setBooleanAttribute(ConvertConfig.SEPERATE_MATH_TEXT, this.seperate);
+        config.setBooleanAttribute(ConvertConfig.PROXIMITY, this.proximity);
+        config.setBooleanAttribute(ConvertConfig.PAYLOADS, this.payloads);
         config.setWindowSize(this.windowSize);
         try {
             config.setQueryType(this.queryType);
@@ -409,8 +436,19 @@ public class ConvertConfig {
         // assume compatible
         boolean result = true;
         if ((this.queryType.equals(ConvertConfig.DICE_QUERY) == true) &&
-            (config.synonyms == false || config.bags == false)){
-            // using dice requires bag of words and synonyms expansion
+            (config.synonyms == false ||
+             config.bags == false ||
+             config.proximity == false ||
+             config.payloads == false)){
+            // using dice requires bag of words, synonyms expansion, proximity, and payloads
+            result = false;
+        }else if ((this.queryType.equals(ConvertConfig.BM25TP_QUERY) == true) &&
+                  (config.proximity == false)){
+            // requires proximity to use bm25tp
+            result = false;
+        }else if ((this.queryType.equals(ConvertConfig.BM25_DISTANCE_QUERY) == true) &&
+                  (config.proximity == false)){
+            // requires proximity to use bm25tp
             result = false;
         }else if (config.shortened != this.shortened){
             // shortened is no backwards compatible
@@ -419,7 +457,7 @@ public class ConvertConfig {
             // if expand location is true than do have  backwards compatible
             // otherwise we dont
             result = false;
-        }else if(this.expandLocation != true && config.expandLocation != this.location){
+        }else if(this.expandLocation != true && config.expandLocation != this.expandLocation){
             // expand Location is backwards compatible
             result = false;
         }else if(this.eol != true && this.eol != config.eol){
@@ -471,6 +509,8 @@ public class ConvertConfig {
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.EOL + ConvertConfig.SEPERATOR + this.eol);
         fileWriter.newLine();
+        fileWriter.write(ConvertConfig.EXPAND_LOCATION + ConvertConfig.SEPERATOR + this.expandLocation);
+        fileWriter.newLine();
         fileWriter.write(ConvertConfig.LOCATION + ConvertConfig.SEPERATOR + this.location);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SHORTENED + ConvertConfig.SEPERATOR + this.shortened);
@@ -485,10 +525,9 @@ public class ConvertConfig {
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SYMBOLS + ConvertConfig.SEPERATOR + this.symbolPairs);
         fileWriter.newLine();
-        fileWriter.write(ConvertConfig.EXPAND_LOCATION + ConvertConfig.SEPERATOR + this.expandLocation);
-        fileWriter.newLine();
         fileWriter.write(ConvertConfig.BAGS_OF_WORDS + ConvertConfig.SEPERATOR + this.bags);
         fileWriter.newLine();
+        fileWriter.write(ConvertConfig.SEPERATE_MATH_TEXT + ConvertConfig.SEPERATOR + this.seperate);
         fileWriter.close();
     }
 

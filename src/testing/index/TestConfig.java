@@ -117,7 +117,7 @@ public class TestConfig extends BaseTest {
         assertEquals(config.toString(), " -eol".toUpperCase());
         config.flipBit(ConvertConfig.EOL);
         config.flipBit(ConvertConfig.SHORTENED);
-        assertEquals(config.toString(), " -shortened".toUpperCase());
+        assertEquals(config.toString(), " -!shortened".toUpperCase());
         config.flipBit(ConvertConfig.SHORTENED);
         config.flipBit(ConvertConfig.UNBOUNDED);
         assertEquals(config.toString(), " -unbounded".toUpperCase());
@@ -212,6 +212,50 @@ public class TestConfig extends BaseTest {
         assertEquals(compare.compatible(config), true);
         compare.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.PAYLOADS, true);
+        assertEquals(config.compatible(compare), true);
+        assertEquals(compare.compatible(config), true);
+    }
+
+    @Test
+    public void testQueryType2(){
+        // test bm25tp
+        ConvertConfig config = new ConvertConfig();
+        ConvertConfig compare = new ConvertConfig();
+        try {
+            config.setQueryType(ConvertConfig.BM25TP_QUERY);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Expceiton raised");
+        }
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
+        assertEquals(config.compatible(compare), true);
+        assertEquals(compare.compatible(config), true);
+    }
+
+    @Test
+    public void testQueryType3(){
+        // test bm25tp
+        ConvertConfig config = new ConvertConfig();
+        ConvertConfig compare = new ConvertConfig();
+        try {
+            config.setQueryType(ConvertConfig.BM25_DISTANCE_QUERY);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Expceiton raised");
+        }
+        assertEquals(config.compatible(compare), false);
+        assertEquals(compare.compatible(config), true);
+        compare.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
         assertEquals(config.compatible(compare), true);
         assertEquals(compare.compatible(config), true);
     }

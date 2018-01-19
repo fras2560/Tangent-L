@@ -35,7 +35,7 @@ public class Constants {
     public final static String FORMULA_SUFFIX = ")";
     public final static String FORMULA_START_TAG = "(start)";
     public final static String FORMULA_END_TAG = "(end)";
-    public final static String PAYLOAD_DELIMITER = "\\|\\|";
+    public final static String PAYLOAD_DELIMITER = "\\|__\\|";
     public final static String PAYLOAD_SEPARATOR = ":";
     
 }

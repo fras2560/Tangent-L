@@ -297,13 +297,19 @@ public class FindOptimal {
      */
     public double reciprocal_rank(IndexSearcher searcher, SearchResult result) throws IOException{
         double reciprocal = (double) 0.0;
+        String docName;
         if(result.getResults() != null){
             ScoreDoc[] hits = result.getResults().scoreDocs;
             double rank = (double) 0.0;
             int count = 1;
             for (ScoreDoc hit : hits){
                 Document doc = searcher.doc(hit.doc);
-                rank = this.answers.findResult(result.getMathQuery(), this.parseTitle(doc.get("path")));
+                if(this.formulaLevel){
+                    docName = this.parseTitle(doc.get("path"));
+                }else{
+                    docName = Functions.parseDocumentName(doc.get("path"));
+                }
+                rank = this.answers.findResult(result.getMathQuery(), docName);
                 if (rank > FindOptimal.RELEVANT_LOWER){
                     this.logger.log(Level.FINER, "Count:" + count + " Rank:" + rank + "Doc:" + doc);
                     reciprocal = (double) 1 / (double) count;
@@ -332,7 +338,12 @@ public class FindOptimal {
             for (ScoreDoc hit : hits){
                 // build the list of filenames to check against the answers
                 Document doc = searcher.doc(hit.doc);
-                filenames.add(this.parseTitle(doc.get("path")));
+                if(this.formulaLevel){
+                    filenames.add(this.parseTitle(doc.get("path")));
+                }else{
+                    filenames.add(Functions.parseDocumentName(doc.get("path")));
+                }
+                
             }
             int[] results = this.answers.recallResult(result.getMathQuery(), filenames);
             if(results[3] > 0){
@@ -351,28 +362,32 @@ public class FindOptimal {
     public void removeDuplicates(IndexSearcher searcher, SearchResult results, int size) throws IOException{
         ScoreDoc[] unique = new ScoreDoc[size];
         HashMap<String, ScoreDoc> lookup = new HashMap<String, ScoreDoc>();
-        ScoreDoc[] hits = results.getResults().scoreDocs;
-        String docName;
-        int i = 0;
-        for(ScoreDoc hit :  hits){
-            Document doc = searcher.doc(hit.doc);
-            docName = Functions.parseDocumentName(doc.get("path"));
-            if(lookup.get(docName) ==  null){
-                // do not have the result
-                unique[i] = hit;
-                lookup.put(docName, hit);
-                i += 1;
+        
+        if(results.getResults() != null){
+            ScoreDoc[] hits = results.getResults().scoreDocs;
+            String docName;
+            int i = 0;
+            for(ScoreDoc hit :  hits){
+                Document doc = searcher.doc(hit.doc);
+                docName = Functions.parseDocumentName(doc.get("path"));
+                if(lookup.get(docName) ==  null){
+                    // do not have the result
+                    unique[i] = hit;
+                    lookup.put(docName, hit);
+                    i += 1;
+                }
+                // fill up the array to a certain size
+                if(i >= size){
+                    break;
+                }
             }
-            // fill up the array to a certain size
-            if(i >= size){
-                break;
+            if(i < size){
+                // shrink it down to the right size
+                unique = Arrays.copyOfRange(unique, 0, i);
             }
+            results.getResults().scoreDocs = unique;
         }
-        if(i < size){
-            // shrink it down to the right size
-            unique = Arrays.copyOfRange(unique, 0, i);
-        }
-        results.getResults().scoreDocs = unique;
+
     }
 
     /*
@@ -506,7 +521,8 @@ public class FindOptimal {
         }
         // default arguments
         boolean wiki = true;
-        boolean formulaOnly = true;
+        boolean formulaOnly = false;
+        boolean documentLevel = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
@@ -530,7 +546,12 @@ public class FindOptimal {
                                    "wikipedia_formula",
                                    timeStamp + "output.txt");
                 queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
-                results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-formula-11.txt");
+                if(documentLevel){
+                    results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
+                }else{
+                    results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-formula-11.txt");
+                }
+                
                 logFile = Paths.get(System.getProperty("user.dir"),
                                     "resources",
                                     "output",
@@ -602,7 +623,7 @@ public class FindOptimal {
                                  queries,
                                  results,
                                  false);
-            if(!formulaOnly){
+            if(formulaOnly && documentLevel){
                 fo.evaulateAtDocumentLevel();
             }
             fo.optimize(config, features);

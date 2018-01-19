@@ -65,7 +65,7 @@ public class TestIndex extends BaseTest{
             indexer.indexDirectory(this.index, this.documents, true, new ConvertConfig());
             // make sure some files were created
             String[]entries = this.index.toFile().list();
-            assertEquals(entries.length, 6);
+            assertEquals(entries.length > 6, true);
             // try opening the index if no errors are raised should be fine
             IndexReader reader = DirectoryReader.open(FSDirectory.open(this.index));
             new IndexSearcher(reader);

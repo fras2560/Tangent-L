@@ -10,7 +10,7 @@ except ImportError:
     from tangent.math_extractor import MathExtractor
     from tangent.mathdocument import MathDocument
     from tangent.htmlStriper import strip_tags
-PAYLOAD_DELIMITER = "||"
+PAYLOAD_DELIMITER = "|__|"
 PAYLOAD_SEPARATOR = ":"
 START_TAG = "#(start)#"
 END_TAG = "#(end)#"

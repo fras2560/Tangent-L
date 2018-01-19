@@ -26,7 +26,6 @@ public class IndexThreadProducer implements Runnable{
         for (int i =0 ; i < this.consumers; i++){
             this.queue.add(new IndexThreadObject(IndexThreadObject.COMPLETE, 0l));
         }
-        this.queue.add(new IndexThreadObject(IndexThreadObject.MOVE_ON, 0l));
     }
 
     public void indexDocs(Path path){

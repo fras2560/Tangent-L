@@ -161,15 +161,17 @@ public class IndexFiles {
         if(this.multiThreaded && processors > 1){
             BlockingQueue<IndexThreadObject> bq = new LinkedBlockingQueue<IndexThreadObject>();
             IndexThreadProducer producer =  new IndexThreadProducer(bq, docsPath, processors - 1);
+            System.out.println("Number of processors:" + processors);
+            
             new Thread(producer).start();
             for(int i = 0; i < (processors - 1); i++){
                 new Thread(new IndexThreadConsumer(bq, writer, config)).start();
             }
             try {
-                TimeUnit.MINUTES.sleep(1);
+                TimeUnit.SECONDS.sleep(5);
                 while (!bq.isEmpty()){
                     System.out.println("Number of files left: "  + bq.size());
-                    TimeUnit.MINUTES.sleep(1);
+                    TimeUnit.SECONDS.sleep(5);
                 }
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -249,7 +251,6 @@ public class IndexFiles {
                        Path file,
                        long lastModified,
                        ConvertConfig config) throws IOException, InterruptedException {
-    Logger logger = ProjectLogger.getLogger();
     Path new_file = new ConvertMathML(file).convert(config);
     int docLength = 1;
     String text;
@@ -261,50 +262,47 @@ public class IndexFiles {
         // make a new, empty document
         Document doc = new Document();
         // Add the path of the file as a field named "path".  Use a
-        // field that is indexed (i.e. searchable), but don't tokenize 
-        // the field into separate words and don't index term frequency
-        // or positional information:
-        logger.log(Level.INFO, "Working on file " + file.toString());
         Field pathField = new StringField("path", file.toString(), Field.Store.YES);
         doc.add(pathField);
         // a field to keep track of the doc length
         doc.add(new NumericDocValuesField(Constants.DOCUMENT_LENGTH, (long) docLength));
         // Add the last modified date of the file a field named "modified".
-        // Use a LongPoint that is indexed (i.e. efficiently filterable with
-        // PointRangeQuery).  This indexes to milli-second resolution, which
-        // is often too fine.  You could instead create a number based on
-        // year/month/day/hour/minutes/seconds, down the resolution you require.
-        // For example the long value 2011021714 would mean
-        // February 17, 2011, 2-3 PM.
         doc.add(new LongPoint("modified", lastModified));
         // Add the contents of the file to a field named "contents".  Specify a Reader,
         // so that the text of the file is tokenized and indexed, but not stored.
-        // Note that FileReader expects the file to be in UTF-8 encoding.
-        // If that's not the case searching for special characters will fail.;
         FieldType storeField = new FieldType();
-        storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
-        storeField.setTokenized(true);
-        storeField.setStoreTermVectors(true);
-        storeField.setStoreTermVectorPositions(true);
-        storeField.setStoreTermVectorPayloads(true);
-        storeField.setStoreTermVectorOffsets(true);
+        if(config.getAttribute(ConvertConfig.PROXIMITY)){
+            storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+            storeField.setTokenized(true);
+            storeField.setStoreTermVectors(true);
+            storeField.setStoreTermVectorPositions(true);
+            storeField.setStoreTermVectorOffsets(true);
+            if(config.getAttribute(ConvertConfig.PAYLOADS)){
+                storeField.setStoreTermVectorPayloads(true);
+            }
+        }else{
+            storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+            storeField.setTokenized(true);
+        }
+        
         FieldType freqType = new FieldType();
         freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
         freqType.setTokenized(true);
-        doc.add(new Field(Constants.FIELD, text, storeField));
-        doc.add(new Field(Constants.TEXTFIELD, text, freqType));
-        doc.add(new Field(Constants.MATHFIELD, text, freqType));
+        if(config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
+            doc.add(new Field(Constants.TEXTFIELD, text, freqType));
+            doc.add(new Field(Constants.MATHFIELD, text, freqType));
+        }else{
+            doc.add(new Field(Constants.FIELD, text, storeField));
+        }
         doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
         doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
-            logger.log(Level.FINE, "Adding file: " + file.toString());
             writer.addDocument(doc);
         } else {
             // Existing index (an old copy of this document may have been indexed) so 
             // we use updateDocument instead to replace the old one matching the exact 
             // path, if present:
-            logger.log(Level.FINE, "Updating file: " + file.toString());
             writer.updateDocument(new Term("path", file.toString()), doc);
         }
     }

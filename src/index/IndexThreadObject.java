@@ -4,8 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class IndexThreadObject {
-    public static String COMPLETE;
-    public static String MOVE_ON;
+    public static String COMPLETE = "COMPLETE";
+    public static String MOVE_ON = "MOVE_ON";
     private String path;
     private long lastModified;
     public IndexThreadObject(String path, long lastModified){
