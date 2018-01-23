@@ -30,6 +30,7 @@ public class MathSimilarity {
     public static int BOOLEAN = 2;
     public static int MATH = 3;
     public static int TEXT = 4;
+    public static int ADJUSTED_BM25 = 5;
     /**
      * Class constructor
      * @param type the similarity type to use
@@ -47,7 +48,11 @@ public class MathSimilarity {
             BM25Similarity temp = new BM25Similarity();
             sim = (Similarity) temp;
         }else if(type == MathSimilarity.TEXT){
-            sim = new BM25Similarity();
+            BM25Similarity bm  = new BM25Similarity();
+            bm.setDiscountOverlaps(false);
+            sim = bm;
+        }else if(type == MathSimilarity.ADJUSTED_BM25){
+            sim = new AdjustedBM25Similarity();
         }
         return sim;
     }
@@ -57,7 +62,7 @@ public class MathSimilarity {
      * @return Similarity the similarity to use
      */
     public static Similarity getSimilarity(){
-        return getSimilarity(MathSimilarity.BM25);
+        return getSimilarity(MathSimilarity.ADJUSTED_BM25);
     }
 
 }

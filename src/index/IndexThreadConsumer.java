@@ -26,9 +26,7 @@ public class IndexThreadConsumer implements Runnable{
                 if(task.complete()){
                     // done
                     run = false;
-                    System.out.println("Shutting down");
                 }else{
-                    System.out.println("Indexing: " + task.getFilePath());
                     try{
                         IndexFiles.indexDoc(writer, task.getFilePath(), task.getLastModified(), this.config);
                     } catch (IOException ex){

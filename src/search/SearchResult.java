@@ -17,6 +17,8 @@ package search;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+
+import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -127,7 +129,7 @@ public class SearchResult {
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;
             for (ScoreDoc hit : hits){
-                System.out.println(hit.toString() + ":" + searcher.explain(this.query, hit.doc));
+                System.out.println(searcher.doc(hit.doc).get("path") + " "  + hit.toString() + ":" + searcher.explain(this.query, hit.doc));
             }
         }else{
             System.out.println("Query had no terms or results");
@@ -144,7 +146,7 @@ public class SearchResult {
         if (this.results != null){
             ScoreDoc[] hits = this.results.scoreDocs;
             for (ScoreDoc hit : hits){
-                output.write(hit.toString() + ":" + searcher.explain(this.query, hit.doc));
+                output.write(searcher.doc(hit.doc).get("path") + " "  + hit.toString() + ":" + searcher.explain(this.query, hit.doc));
                 output.newLine();
             }
         }else{

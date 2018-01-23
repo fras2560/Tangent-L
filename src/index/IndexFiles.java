@@ -16,6 +16,9 @@
 package index;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +40,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongPoint;
-import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
@@ -114,6 +116,61 @@ public class IndexFiles {
   }
 
   /**
+   * Index all the documents
+   * @param documents path to the documents folder
+   * @param consumers the number of consumer threads
+   * @param queue the queue to add the files to
+   */
+  public void run(Path documents, int consumers, BlockingQueue<IndexThreadObject> queue) {
+      // add all the documents to the thread
+      this.indexDocs(documents, queue);
+      // add signals to the consumers they are done
+      for (int i =0 ; i < consumers; i++){
+          queue.add(new IndexThreadObject(IndexThreadObject.COMPLETE, 0l));
+      }
+  }
+
+  /**
+   * indexDocs using multiple threads
+   * @param path the path to main folder
+   * @param queue the queue to adds for the consumer threads
+   */
+  public void indexDocs(Path path, BlockingQueue<IndexThreadObject> queue){
+      if (Files.isDirectory(path)) {
+          try {
+              Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    try {
+                      queue.put(new IndexThreadObject(file.toString(), attrs.lastModifiedTime().toMillis()));
+                  } catch (InterruptedException e) {
+                      // TODO Auto-generated catch block
+                      e.printStackTrace();
+                      System.out.println("Unable to add file: " + file.toString());
+                  }
+                    return FileVisitResult.CONTINUE;
+                }
+              });
+          } catch (IOException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+          }
+      } else {
+          try {
+              queue.put(new IndexThreadObject(path.toString(), Files.getLastModifiedTime(path).toMillis()));
+          } catch (InterruptedException e) {
+              // TODO Auto-generated catch block
+              System.out.println("Unable to add file: " + path.toString());
+              e.printStackTrace();
+          } catch (IOException e) {
+              // TODO Auto-generated catch block
+              System.out.println("Unable to add file: " + path.toString());
+              e.printStackTrace();
+          }
+      }
+  }
+
+  /**
    * Index a directory
    * @param indexPath the path to the index
    * @param docsPath the path to the documents
@@ -160,23 +217,20 @@ public class IndexFiles {
         int processors = Runtime.getRuntime().availableProcessors();
         if(this.multiThreaded && processors > 1){
             BlockingQueue<IndexThreadObject> bq = new LinkedBlockingQueue<IndexThreadObject>();
-            IndexThreadProducer producer =  new IndexThreadProducer(bq, docsPath, processors - 1);
             System.out.println("Number of processors:" + processors);
             
-            new Thread(producer).start();
-            for(int i = 0; i < (processors - 1); i++){
+            for(int i = 0; i < (processors); i++){
                 new Thread(new IndexThreadConsumer(bq, writer, config)).start();
             }
-            try {
-                TimeUnit.SECONDS.sleep(5);
-                while (!bq.isEmpty()){
-                    System.out.println("Number of files left: "  + bq.size());
-                    TimeUnit.SECONDS.sleep(5);
+            this.run(docsPath, processors, bq);
+            while (!bq.isEmpty()){
+                System.out.println("Number of files left: "  + bq.size());
+                try {
+                    TimeUnit.MINUTES.sleep(1);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                System.out.println("Unable to sleep");
-                e.printStackTrace();
             }
         }else{
             indexDocs(writer, docsPath, config);
@@ -253,19 +307,25 @@ public class IndexFiles {
                        ConvertConfig config) throws IOException, InterruptedException {
     Path new_file = new ConvertMathML(file).convert(config);
     int docLength = 1;
-    String text;
-    text = Functions.parseString(new_file);
-    try (InputStream stream = Files.newInputStream(new_file)) {
-        // Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+    String text = "";
+    // make a new, empty document
+    Document doc = new Document();
+    if(config.getAttribute(ConvertConfig.PROXIMITY) || config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
+        text = Functions.parseString(new_file);
         docLength = text.split(" ").length;
         int formulaCount = Functions.countTuples(text);
-        // make a new, empty document
-        Document doc = new Document();
+        // a field to keep track of the doc length and formula length
+        doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
+        doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
+        
+    }
+    try (InputStream stream = Files.newInputStream(new_file)) {
+        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        
+
         // Add the path of the file as a field named "path".  Use a
         Field pathField = new StringField("path", file.toString(), Field.Store.YES);
         doc.add(pathField);
-        // a field to keep track of the doc length
-        doc.add(new NumericDocValuesField(Constants.DOCUMENT_LENGTH, (long) docLength));
         // Add the last modified date of the file a field named "modified".
         doc.add(new LongPoint("modified", lastModified));
         // Add the contents of the file to a field named "contents".  Specify a Reader,
@@ -292,10 +352,8 @@ public class IndexFiles {
             doc.add(new Field(Constants.TEXTFIELD, text, freqType));
             doc.add(new Field(Constants.MATHFIELD, text, freqType));
         }else{
-            doc.add(new Field(Constants.FIELD, text, storeField));
+            doc.add(new Field(Constants.FIELD, reader, storeField));
         }
-        doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
-        doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
         if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
             writer.addDocument(doc);

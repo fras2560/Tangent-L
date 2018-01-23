@@ -48,6 +48,7 @@ public class EvaluateFeatures extends FindOptimal{
                                               SAXException {
         super(documents, indexDirectory, outputWriter, queries, results, b);
         this.bestMRR = 0d;
+        this.evaulateAtDocumentLevel();;
     }
 
     /**
@@ -195,6 +196,8 @@ public class EvaluateFeatures extends FindOptimal{
         boolean wiki = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
+        boolean formulaLevel = true;
+        boolean documentLevel = false;
         if (!wiki){
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "findOptimal");
@@ -203,12 +206,27 @@ public class EvaluateFeatures extends FindOptimal{
             results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
             logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "evaluateFeatures.log");
         }else{
-            documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
-            indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
-            output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "evaluateFeatures.txt");
-            queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
-            results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
-            logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "evaluateFeatures.log");
+            if (formulaLevel){
+                documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia_formula");
+                indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia_formula", "findOptimal");
+                output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia_formula", timeStamp + "evaluateFeatures.txt");
+                queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+                if (documentLevel){
+                    results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
+                }else{
+                    results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-formula-11.txt");
+                }
+                
+                logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia_formula", timeStamp + "evaluateFeatures.log");
+            }else{
+                documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "wikipedia");
+                indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia", "findOptimal");
+                output = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "evaluateFeatures.txt");
+                queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+                results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
+                logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "evaluateFeatures.log");
+            }
+
             
         }
         // check command line for override default methods
@@ -261,6 +279,9 @@ public class EvaluateFeatures extends FindOptimal{
                                       queries,
                                       results,
                                       false);
+            if(formulaLevel && !documentLevel){
+                fo.evaulateAtFormulaLevel();
+            }
             fo.evaluateFeatures(features, config);
             outputWriter.close();
         } catch (IOException e) {

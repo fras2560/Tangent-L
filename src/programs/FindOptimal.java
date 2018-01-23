@@ -521,7 +521,7 @@ public class FindOptimal {
         }
         // default arguments
         boolean wiki = true;
-        boolean formulaOnly = false;
+        boolean formulaOnly = true;
         boolean documentLevel = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
@@ -551,7 +551,6 @@ public class FindOptimal {
                 }else{
                     results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-formula-11.txt");
                 }
-                
                 logFile = Paths.get(System.getProperty("user.dir"),
                                     "resources",
                                     "output",
@@ -604,8 +603,11 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
         config.flipBit(ConvertConfig.SYNONYMS);
+        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+        config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
         // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {
