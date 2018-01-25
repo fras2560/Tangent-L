@@ -62,7 +62,7 @@ public class MathSimilarity {
      * @return Similarity the similarity to use
      */
     public static Similarity getSimilarity(){
-        return getSimilarity(MathSimilarity.ADJUSTED_BM25);
+        return getSimilarity(MathSimilarity.BM25);
     }
 
 }

@@ -226,8 +226,6 @@ public class EvaluateFeatures extends FindOptimal{
                 results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR11-wikipedia-11.txt");
                 logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia", timeStamp + "evaluateFeatures.log");
             }
-
-            
         }
         // check command line for override default methods
         for(int i = 0;i < args.length;i++) {

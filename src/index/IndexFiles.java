@@ -317,12 +317,9 @@ public class IndexFiles {
         // a field to keep track of the doc length and formula length
         doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
         doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
-        
     }
     try (InputStream stream = Files.newInputStream(new_file)) {
         Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        
-
         // Add the path of the file as a field named "path".  Use a
         Field pathField = new StringField("path", file.toString(), Field.Store.YES);
         doc.add(pathField);

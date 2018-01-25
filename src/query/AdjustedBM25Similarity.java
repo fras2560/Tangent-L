@@ -208,7 +208,7 @@ public class AdjustedBM25Similarity extends Similarity {
     Explanation idf = termStats.length == 1 ? idfExplain(collectionStats, termStats[0]) : idfExplain(collectionStats, termStats);
 
     float avgdl = avgFieldLength(collectionStats);
-
+    
     // compute freq-independent part of bm25 equation across all norm values
     float cache[] = new float[256];
     for (int i = 0; i < cache.length; i++) {

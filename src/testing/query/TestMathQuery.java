@@ -20,14 +20,12 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.Query;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import index.ConvertConfig;
 import query.MathQuery;
 import query.TermCountPair;

@@ -320,10 +320,10 @@ public class Search {
                                                               this.beta);
                 }else{
                      buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
-                                                            bq,
-                                                            this.synonym,
-                                                            this.config,
-                                                            this.searcher.collectionStatistics(mathQuery.getFieldName()));
+                                                       bq,
+                                                       this.synonym,
+                                                       this.config,
+                                                       this.searcher.collectionStatistics(mathQuery.getFieldName()));
                 }
                 
                 this.logger.log(Level.FINEST, "Boolean Query Size:" + mathQuery.getTerms().size());

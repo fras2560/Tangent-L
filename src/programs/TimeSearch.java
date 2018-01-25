@@ -122,7 +122,10 @@ public class TimeSearch{
                                              ParseException,
                                              SearchConfigException,
                                              ConvertConfigException{
+        Date queryLoadStart = new Date();
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
+        Date queryLoadEnd = new Date();
+        System.out.println(new Double(queryLoadEnd.getTime() - queryLoadStart .getTime()));
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         queryLoader.deleteFile();
         Date start, end;
@@ -175,9 +178,9 @@ public class TimeSearch{
         ConvertConfig config = new ConvertConfig();
         // default values
         int precision = 1000;
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "config", "compound-unbounded-edge_pairs");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
-        Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "recallChceck.log");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia_formula", "current");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
+        Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia_formula", "recallChceck.log");
         for(int i = 0;i < args.length;i++) {
           if ("-index".equals(args[i])) {
             index = Paths.get(args[i+1]);
@@ -195,11 +198,13 @@ public class TimeSearch{
         }
         try {
             // setup the logger
+            
             config.loadConfig(index);
             ProjectLogger.setLevel(Level.INFO);
             ProjectLogger.setLogFile(logFile);
             // time all the different queries
             new TimeSearch(index, queries, config, precision);
+            
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
             e.printStackTrace();

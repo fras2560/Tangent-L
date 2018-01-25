@@ -56,6 +56,7 @@ public class ConvertConfig {
     private boolean expandLocation;
     private boolean proximity;
     private boolean payloads;
+    private boolean mathbm25;
     /*
      * The possible features that Tangent can use
      */
@@ -74,6 +75,7 @@ public class ConvertConfig {
     public final static String SEPERATE_MATH_TEXT = "SEPERATE_MATH_FROM_TEXT";
     public final static String PROXIMITY = "PROXIMITY";
     public final static String PAYLOADS = "PAYLOADS";
+    public final static String MATH_BM25 = "MATH_BM25";
 
     /*
      * The ways to query
@@ -118,6 +120,23 @@ public class ConvertConfig {
         this.queryType = ConvertConfig.TERM_QUERY;
         this.proximity = false;
         this.payloads = false;
+        this.mathbm25 = false;
+    }
+
+    /**
+     * Sets whether to use adjusted math bm25 for math terms
+     * @param bm25 True if to use adjusted math bm25
+     */
+    public void setMathBM25(boolean bm25){
+        this.mathbm25 = bm25;
+    }
+
+    /**
+     * Returns whether to use adjusted math bm25 for math terms
+     * @return boolean
+     */
+    public boolean getMathBM25(){
+        return this.mathbm25;
     }
 
     public ConvertConfig getSearchConfig(){

@@ -266,7 +266,11 @@ public class MathQuery {
                 // want to query on them being in the same field
                 tfield = field;
             }
-            tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
+            if(termPair.getTerm().trim().startsWith("(") && config.getMathBM25()){
+                tempQuery = new MathTermQuery(new Term(tfield, termPair.getTerm().trim()), (int) termPair.getCount());
+            }else{
+                tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
+            }
             if (!synonym && Functions.containsWildcard(termPair.getTerm())){
                 // do not have synonyms indexed so use wildcard query
                 // this term has a wildcard so need it for match wildcard
@@ -336,7 +340,12 @@ public class MathQuery {
                 // want to query on them being in the same field
                 tfield = field;
             }
-            tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
+            if(termPair.getTerm().trim().startsWith("(") && config.getMathBM25()){
+                // if a math term and using an adjusted math bm25
+                tempQuery = new MathTermQuery(new Term(tfield, termPair.getTerm().trim()), (int) termPair.getCount());
+            }else{
+                tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
+            }
             if (!synonym && Functions.containsWildcard(termPair.getTerm())){
                 // do not have synonyms indexed so use wildcard query
                 // this term has a wildcard so need it for match wildcard

@@ -37,5 +37,6 @@ public class Constants {
     public final static String FORMULA_END_TAG = "(end)";
     public final static String PAYLOAD_DELIMITER = "\\|__\\|";
     public final static String PAYLOAD_SEPARATOR = ":";
+    public final static String DOCUMENT_SIZE = "DOCUMENT SIZE";
     
 }

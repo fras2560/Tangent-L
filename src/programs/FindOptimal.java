@@ -604,10 +604,14 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.SYNONYMS);
+        config.setMathBM25(true);
         config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
         config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+        
+        // config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
         // this are all backwards compatible
         BufferedWriter outputWriter = null;
         try {

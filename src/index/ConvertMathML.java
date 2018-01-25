@@ -21,9 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.apache.commons.lang3.ArrayUtils;
-
 import utilities.Functions;
 import utilities.ProjectLogger;
 
@@ -43,6 +41,7 @@ public class ConvertMathML {
     private Path file;
     private Path app;
     private Logger logger;
+
     /**
      * Class constructor
      * @param f the path to the file to convert
@@ -50,6 +49,7 @@ public class ConvertMathML {
     public ConvertMathML(Path f){
         this(f, ProjectLogger.getLogger());
     }
+
     /**
      * Class constructor with a specified logger
      * @param f the path to the file to convert
@@ -62,6 +62,7 @@ public class ConvertMathML {
         this.logger.log(Level.FINEST, "Path:" + this.file.toFile().getAbsolutePath());
         
     }
+
     /**
      * Converts a file and returns a path to the converted file path
      * @exception IOException
@@ -73,6 +74,7 @@ public class ConvertMathML {
         config.optimalConfig();
         return this.convert(config);
     }
+
     /**
      * Converts a file using the specified config and returns a path to the converted file path
      * @see ConvertConfig
