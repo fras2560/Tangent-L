@@ -436,6 +436,7 @@ public class ConvertConfig {
         config.setBooleanAttribute(ConvertConfig.PROXIMITY, this.proximity);
         config.setBooleanAttribute(ConvertConfig.PAYLOADS, this.payloads);
         config.setWindowSize(this.windowSize);
+        config.setMathBM25(this.mathbm25);
         try {
             config.setQueryType(this.queryType);
         } catch (Exception e) {

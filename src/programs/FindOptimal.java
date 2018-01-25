@@ -522,7 +522,7 @@ public class FindOptimal {
         // default arguments
         boolean wiki = true;
         boolean formulaOnly = true;
-        boolean documentLevel = true;
+        boolean documentLevel = false;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
@@ -604,7 +604,8 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.SYNONYMS);
-        config.setMathBM25(true);
+        //config.setMathBM25(true);
+        
         config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
         config.setBooleanAttribute(ConvertConfig.COMPOUND, true);

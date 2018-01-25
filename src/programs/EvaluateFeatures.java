@@ -88,18 +88,33 @@ public class EvaluateFeatures extends FindOptimal{
             copyFeatures.remove(feature);
             // now check it versus all its input
             for(int i = 0; i < Math.pow(2, copyFeatures.size()); i++){
-                config = this.initConfig(i, copyFeatures);
-                // get score when feature is true
-                config.setBooleanAttribute(feature, true);
-                mrrPos = scoreLookup.get(config.toString());
-                // get score when feature is false
-                config.setBooleanAttribute(feature, false);
-                mrrNeg = scoreLookup.get(config.toString());
-                // output the difference
-                delta = (mrrPos - mrrNeg);
-                sumDelta += delta;
-                this.output.write(delta.toString() + ",");
-                count += one;
+                try {
+                    config = this.initConfig(i, copyFeatures);
+                    if(feature.equals(config.getAttribute(ConvertConfig.SHORTENED)) &&
+                       config.getAttribute(ConvertConfig.UNBOUNDED) == false){
+                        // only care about shortened when it is unbounded
+                        throw new ConfigException("Skipping this config");
+                    }
+                    if(feature.equals(config.getAttribute(ConvertConfig.UNBOUNDED)) &&
+                       config.getAttribute(ConvertConfig.SHORTENED) == true){
+                        // should have another config that tests for this
+                        throw new ConfigException("Skipping this config");
+                    }
+                    // get score when feature is true
+                    config.setBooleanAttribute(feature, true);
+                    mrrPos = scoreLookup.get(config.toString());
+                    // get score when feature is false
+                    config.setBooleanAttribute(feature, false);
+                    mrrNeg = scoreLookup.get(config.toString());
+                    // output the difference
+                    delta = (mrrPos - mrrNeg);
+                    sumDelta += delta;
+                    this.output.write(delta.toString() + ",");
+                    count += one;
+                } catch (ConfigException e) {
+                    // TODO Auto-generated catch block
+                    System.out.println("Skipped config");
+                }
             }
             this.output.write(new Double(sumDelta / count).toString());
             this.output.newLine();
@@ -136,14 +151,21 @@ public class EvaluateFeatures extends FindOptimal{
         double[] scores;
         for(int i = 0; i < Math.pow(2, featureList.size()); i++){
             this.logger.log(Level.INFO, "completed " + i + " of " + Math.pow(2, featureList.size()));
-            config = this.initConfig(i, featureList);
-            index = this.createIndex(config);
-            scores = this.scoreIndex(index, config);
-            scorings.put(config.toString(), new Double(scores[1]));
-            if(scores[1] > this.bestMRR){
-                this.bestMRR = scores[1];
-                this.bestConfig = config;
+            try {
+                config = this.initConfig(i, featureList);
+                index = this.createIndex(config);
+                scores = this.scoreIndex(index, config);
+                scorings.put(config.toString(), new Double(scores[1]));
+                if(scores[1] > this.bestMRR){
+                    this.bestMRR = scores[1];
+                    this.bestConfig = config;
+                }
+            } catch (ConfigException e) {
+                // TODO Auto-generated catch block
+                //e.printStackTrace();
+                System.out.println("Skip config");
             }
+
         }
         return scorings;
     }
@@ -153,8 +175,9 @@ public class EvaluateFeatures extends FindOptimal{
      * @param bitString the bitstring
      * @param featureList the list of features
      * @return ConvertConfig
+     * @throws ConfigException 
      */
-    public ConvertConfig initConfig(int i, List<String> featureList){
+    public ConvertConfig initConfig(int i, List<String> featureList) throws ConfigException{
         String bitString = this.generateBitString(i, featureList.size());
         ConvertConfig config = this.base.copy();
         
@@ -164,6 +187,9 @@ public class EvaluateFeatures extends FindOptimal{
             }else{
                 config.setBooleanAttribute(featureList.get(pos), true);
             }
+        }
+        if(config.getAttribute(ConvertConfig.UNBOUNDED) == false && config.getAttribute(ConvertConfig.SHORTENED)){
+            throw new ConfigException("Cannot shortened when not unbounded");
         }
         return config;
     }
@@ -197,7 +223,7 @@ public class EvaluateFeatures extends FindOptimal{
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         boolean formulaLevel = true;
-        boolean documentLevel = false;
+        boolean documentLevel = true;
         if (!wiki){
             documents = Paths.get(System.getProperty("user.dir"), "resources", "documents", "arXiv");
             indexDirectory = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "findOptimal");
@@ -253,13 +279,13 @@ public class EvaluateFeatures extends FindOptimal{
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.BAGS_OF_WORDS);
+        config.flipBit(ConvertConfig.SYNONYMS);
+        config.setMathBM25(true);
         features.add(ConvertConfig.SHORTENED);
         features.add(ConvertConfig.TERMINAL);
         features.add(ConvertConfig.COMPOUND);
         features.add(ConvertConfig.EDGE);
         features.add(ConvertConfig.UNBOUNDED);
-        features.add(ConvertConfig.SYNONYMS);
         features.add(ConvertConfig.EXPAND_LOCATION);
         BufferedWriter outputWriter = null;
         try {
@@ -308,6 +334,11 @@ public class EvaluateFeatures extends FindOptimal{
             if(outputWriter != null){
                 outputWriter.close();
             }
+        }
+    }
+    private class ConfigException extends Exception {
+        public ConfigException(String message) {
+            super(message);
         }
     }
 }
