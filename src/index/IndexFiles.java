@@ -371,9 +371,9 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
-    Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "document", "NTCIR12_MathIR_WikiCorpus");
-    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_MathIR_WikiCorpus.log");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "current");
+    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_FullArXiv");
+    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_FullArxiv.log");
     boolean create = true;
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {
@@ -413,7 +413,7 @@ public class IndexFiles {
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
         config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
         config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
-        config.setBooleanAttribute(ConvertConfig.SHORTENED, false);
+        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

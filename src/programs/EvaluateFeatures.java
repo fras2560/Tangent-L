@@ -155,7 +155,7 @@ public class EvaluateFeatures extends FindOptimal{
                 config = this.initConfig(i, featureList);
                 index = this.createIndex(config);
                 scores = this.scoreIndex(index, config);
-                scorings.put(config.toString(), new Double(scores[1]));
+                scorings.put(config.toString(), new Double(scores[0]));
                 if(scores[1] > this.bestMRR){
                     this.bestMRR = scores[1];
                     this.bestConfig = config;
@@ -280,7 +280,7 @@ public class EvaluateFeatures extends FindOptimal{
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.SYNONYMS);
-        config.setMathBM25(true);
+        // config.setMathBM25(true);
         features.add(ConvertConfig.SHORTENED);
         features.add(ConvertConfig.TERMINAL);
         features.add(ConvertConfig.COMPOUND);

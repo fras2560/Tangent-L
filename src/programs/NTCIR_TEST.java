@@ -42,24 +42,24 @@ public class NTCIR_TEST {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-MathWiki-formula.xml");
+        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-MathWiki-formula.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path logFile = Paths.get(System.getProperty("user.dir"),
                                  "resources",
                                  "output",
-                                 "arXiv",
+                                 "ntcir12-wikipedia",
                                  date + ".log");
         Path queryOutput = Paths.get(System.getProperty("user.dir"),
                                      "resources",
                                      "output",
-                                     "arXiv",
+                                     "ntcir12-wikipedia",
                                      date + "-queries.txt");
         Path resultOutput = Paths.get(System.getProperty("user.dir"),
                                       "resources",
                                       "output",
-                                      "arXiv",
+                                      "ntcir12-wikipedia",
                                       date + "-results.txt");
         for(int i = 0;i < args.length;i++) {
           if ("-index".equals(args[i])) {
