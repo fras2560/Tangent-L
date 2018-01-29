@@ -371,9 +371,9 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "current");
-    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_FullArXiv");
-    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_FullArxiv.log");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
+    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_SampleArXiv");
+    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_SampleArxiv.log");
     boolean create = true;
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {

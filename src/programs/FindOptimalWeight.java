@@ -23,9 +23,9 @@ public class FindOptimalWeight {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-MathWiki-main.xml");
+        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-MathWiki-main.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "weights", date + ".csv");
         Path logFile = Paths.get(System.getProperty("user.dir"),
@@ -67,37 +67,31 @@ public class FindOptimalWeight {
             Search searcher = new Search(index, config);
             float bestMAPR = 0f;
             float bestMAPPR = 0f;
-            float alphaBestR = 0f;;
-            float alphaBestPR = 0f;
-            float betaBestR = 0f;
-            float betaBestPR = 0f;
+            float bestMathWeight = 0f;
+            float bestMathWeightPR = 0f;
             float tempMAPR, tempMAPPR;
             float[] result;
-            for (float beta = 0f; beta <= 1f; beta = beta + 0.01f){
-                searcher.setBeta(beta);
-                System.out.println(beta + " of " + 1f);
-                for (float alpha = 0f; alpha <= 1f; alpha = alpha + 0.01f){
-                    searcher.setAlpha(alpha);
-                    result = searcher.runNtcirTest(queries, results);
-                    System.out.println(Arrays.toString(result));
-                    tempMAPR = (result[0] / 5 + result[1] / 10 + result[2] / 15 + result[3] / 20) / 4;
-                    tempMAPPR = (result[4] / 5 + result[5] / 10 + result[6] / 15 + result[7] / 20) / 4;
-                    outputWriter.write(alpha + "," + beta + "," + tempMAPR + "," + tempMAPPR);
-                    outputWriter.newLine();
-                    if(tempMAPR > bestMAPR){
-                        alphaBestR = alpha;
-                        betaBestR = beta;
-                        bestMAPR = tempMAPR;
-                    }
-                    if(tempMAPPR > bestMAPPR){
-                        alphaBestPR = alpha;
-                        betaBestPR = beta;
-                        bestMAPPR = tempMAPPR;
-                    }
+            searcher.setBeta(1f);
+            // config.setMathBM25(true);
+            for (float mathWeight = 0.01f; mathWeight <= 3f; mathWeight = mathWeight + 0.01f){
+                searcher.setAlpha(mathWeight);
+                result = searcher.runNtcirTest(queries, results);
+                System.out.println(Arrays.toString(result));
+                tempMAPR = (result[0] / 5 + result[1] / 10 + result[2] / 15 + result[3] / 20) / 4;
+                tempMAPPR = (result[4] / 5 + result[5] / 10 + result[6] / 15 + result[7] / 20) / 4;
+                outputWriter.write(mathWeight + "," + tempMAPR + "," + tempMAPPR);
+                outputWriter.newLine();
+                if(tempMAPR > bestMAPR){
+                    bestMathWeightPR = mathWeight;
+                    bestMAPR = tempMAPR;
+                }
+                if(tempMAPPR > bestMAPPR){
+                    bestMathWeight = mathWeight; 
+                    bestMAPPR = tempMAPPR;
                 }
             }
-            System.out.println("Best alpha for Relevant Results: " + bestMAPR + " @ alpha=" + alphaBestR  + " beta=" + betaBestR);
-            System.out.println("Best alpha for Partially Relevant Results: " + bestMAPPR +  " @ alpha=" + alphaBestPR  + " beta=" + betaBestPR);
+            System.out.println("Best alpha for Relevant Results: " + bestMAPR + " @ mathWeight = " + bestMathWeight);
+            System.out.println("Best alpha for Partially Relevant Results: " + bestMAPPR +  " @ mathWeight = " + bestMathWeightPR);
             outputWriter.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
