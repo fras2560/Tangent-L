@@ -102,7 +102,7 @@ class MathExtractor:
         return: Presentation MathML
         rtype:  string
         """
-        parsed_xml=BeautifulSoup(tree)
+        parsed_xml=BeautifulSoup(tree, "lxml")
 
 
         math_root=parsed_xml.find("math") # namespaces have been removed (FWT)
@@ -147,7 +147,7 @@ class MathExtractor:
         root = xml.etree.ElementTree.parse(elem_content,
                                            parser=parser).getroot()
         mmathml = xml.etree.ElementTree.tostring(root, encoding="unicode")
-        uprint("parse_from_mathml tree: " + mmathml)
+        # uprint("parse_from_mathml tree: " + mmathml)
         return MathSymbol.parse_from_mathml(root)
 
     @classmethod

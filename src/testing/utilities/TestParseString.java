@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.Test;
 
+import index.ConvertConfig;
 import index.ConvertMathML;
 import utilities.Functions;
 
@@ -67,7 +68,9 @@ public class TestParseString {
                                "documents",
                                "27419.html");
        try {
-           this.temp_file = new ConvertMathML(file).convert();
+           ConvertConfig config = new ConvertConfig();
+           config.optimalConfig();
+           this.temp_file = new ConvertMathML(file).convertPath(config);
            String text = Functions.parseString(this.temp_file);
            System.out.println(text);
            System.out.println(text.length());

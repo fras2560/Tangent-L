@@ -37,7 +37,7 @@ def strip_tags(html):
     if result.strip() == "":
         words = re.sub(r'<.*?>', ' ', html)
         words = words.replace("  ", " ")
-        result = BeautifulSoup(words).text
+        result = BeautifulSoup(words, "lxml").text
     return result
 
 

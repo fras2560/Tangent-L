@@ -42,9 +42,9 @@ import utilities.Payload.PayloadException;
  */
 public class Functions {
     /**
-     * 
-     * @param title
-     * @return
+     * Returns the name of the document
+     * @param title the title which may include the filepath
+     * @return String the name of Document (formula id removed)
      */
     public static String parseDocumentName(String title){
         String[] parts = title.split("/|\\\\");
@@ -84,7 +84,7 @@ public class Functions {
         String title = parseTitle(file.getFileName().toString());
         String[] fn = file.getFileName().toString().split("\\.");
         String filenameExtension = fn[fn.length - 1];
-        String new_filename = title + "_temp." + filenameExtension;
+        String new_filename = title + Constants.TEMP_EXT  + "." + filenameExtension;
         Path new_path = Paths.get(file.getParent().toString(), new_filename);
         return new_path;
         
@@ -193,6 +193,17 @@ public class Functions {
     public static String parseString(Path path) throws IOException{
         String contents = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         return contents;
+    }
+
+    /**
+     * Returns a string by parsing the file using the analyzer
+     * @param analyzer the analyzer to use
+     * @param reader the reader of the file
+     * @return String the String of the file
+     * @throws IOException 
+     */
+    public static String parseString(Reader reader) throws IOException{
+        return "";
     }
 
     /**

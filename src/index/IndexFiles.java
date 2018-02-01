@@ -15,10 +15,7 @@
  */
 package index;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -226,7 +223,7 @@ public class IndexFiles {
             while (!bq.isEmpty()){
                 System.out.println("Number of files left: "  + bq.size());
                 try {
-                    TimeUnit.MINUTES.sleep(1);
+                    TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -305,64 +302,59 @@ public class IndexFiles {
                        Path file,
                        long lastModified,
                        ConvertConfig config) throws IOException, InterruptedException {
-    Path new_file = new ConvertMathML(file).convert(config);
+    Reader reader = new ConvertMathML(file).convert(config);
     int docLength = 1;
     String text = "";
     // make a new, empty document
     Document doc = new Document();
     if(config.getAttribute(ConvertConfig.PROXIMITY) || config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
-        text = Functions.parseString(new_file);
+        text = Functions.parseString(reader);
         docLength = text.split(" ").length;
         int formulaCount = Functions.countTuples(text);
         // a field to keep track of the doc length and formula length
         doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
         doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
     }
-    try (InputStream stream = Files.newInputStream(new_file)) {
-        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        // Add the path of the file as a field named "path".  Use a
-        Field pathField = new StringField("path", file.toString(), Field.Store.YES);
-        doc.add(pathField);
-        // Add the last modified date of the file a field named "modified".
-        doc.add(new LongPoint("modified", lastModified));
-        // Add the contents of the file to a field named "contents".  Specify a Reader,
-        // so that the text of the file is tokenized and indexed, but not stored.
-        FieldType storeField = new FieldType();
-        if(config.getAttribute(ConvertConfig.PROXIMITY)){
-            storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
-            storeField.setTokenized(true);
-            storeField.setStoreTermVectors(true);
-            storeField.setStoreTermVectorPositions(true);
-            storeField.setStoreTermVectorOffsets(true);
-            if(config.getAttribute(ConvertConfig.PAYLOADS)){
-                storeField.setStoreTermVectorPayloads(true);
-            }
-        }else{
-            storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
-            storeField.setTokenized(true);
+    // Add the path of the file as a field named "path".  Use a
+    Field pathField = new StringField("path", file.toString(), Field.Store.YES);
+    doc.add(pathField);
+    // Add the last modified date of the file a field named "modified".
+    doc.add(new LongPoint("modified", lastModified));
+    // Add the contents of the file to a field named "contents".  Specify a Reader,
+    // so that the text of the file is tokenized and indexed, but not stored.
+    FieldType storeField = new FieldType();
+    if(config.getAttribute(ConvertConfig.PROXIMITY)){
+        storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+        storeField.setTokenized(true);
+        storeField.setStoreTermVectors(true);
+        storeField.setStoreTermVectorPositions(true);
+        storeField.setStoreTermVectorOffsets(true);
+        if(config.getAttribute(ConvertConfig.PAYLOADS)){
+            storeField.setStoreTermVectorPayloads(true);
         }
-        
-        FieldType freqType = new FieldType();
-        freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
-        freqType.setTokenized(true);
-        if(config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
-            doc.add(new Field(Constants.TEXTFIELD, text, freqType));
-            doc.add(new Field(Constants.MATHFIELD, text, freqType));
-        }else{
-            doc.add(new Field(Constants.FIELD, reader, storeField));
-        }
-        if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
-            // New index, so we just add the document (no old document can be there):
-            writer.addDocument(doc);
-        } else {
-            // Existing index (an old copy of this document may have been indexed) so 
-            // we use updateDocument instead to replace the old one matching the exact 
-            // path, if present:
-            writer.updateDocument(new Term("path", file.toString()), doc);
-        }
+    }else{
+        storeField.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+        storeField.setTokenized(true);
     }
-    // remove the file
-    new_file.toFile().delete();
+    
+    FieldType freqType = new FieldType();
+    freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+    freqType.setTokenized(true);
+    if(config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
+        doc.add(new Field(Constants.TEXTFIELD, text, freqType));
+        doc.add(new Field(Constants.MATHFIELD, text, freqType));
+    }else{
+        doc.add(new Field(Constants.FIELD, reader, storeField));
+    }
+    if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
+        // New index, so we just add the document (no old document can be there):
+        writer.addDocument(doc);
+    } else {
+        // Existing index (an old copy of this document may have been indexed) so 
+        // we use updateDocument instead to replace the old one matching the exact 
+        // path, if present:
+        writer.updateDocument(new Term("path", file.toString()), doc);
+    }
   }
 
   /** Index all text files under a directory. */
@@ -371,9 +363,9 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
-    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_SampleArXiv");
-    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIR12_SampleArxiv.log");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "temp");
+    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR_TEMP");
+    Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIRTemp.log");
     boolean create = true;
     for(int i=0;i<args.length;i++) {
       if ("-index".equals(args[i])) {

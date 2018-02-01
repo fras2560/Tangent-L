@@ -55,7 +55,7 @@ public class TestConvert {
         config.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
         ConvertMathML math = new ConvertMathML(this.path);
         try{
-            Path result = math.convert(config);
+            Path result = math.convertPath(config);
             this.temp_file = result;
             Path expect = Paths.get(System.getProperty("user.dir"),
                                     "resources",
@@ -85,8 +85,10 @@ public class TestConvert {
     public void test() {
         System.out.println(this.path.toString());
         ConvertMathML math =  new ConvertMathML(this.path);
+        ConvertConfig config = new ConvertConfig();
+        config.optimalConfig();
         try {
-            Path result = math.convert();
+            Path result = math.convertPath(config);
             this.temp_file = result;
             Path expect = Paths.get(System.getProperty("user.dir"),
                                     "resources",

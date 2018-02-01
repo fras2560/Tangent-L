@@ -17,6 +17,9 @@ package index;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -69,22 +72,14 @@ public class ConvertMathML {
      * @exception InterruptedException
      * @return path to the file that was converted
      */
-    public Path convert() throws IOException, InterruptedException{
+    public Reader convert() throws IOException, InterruptedException{
         ConvertConfig config = new ConvertConfig();
         config.optimalConfig();
         return this.convert(config);
     }
 
-    /**
-     * Converts a file using the specified config and returns a path to the converted file path
-     * @see ConvertConfig
-     * @param config the configuration of features to be used when converting
-     * @exception IOException
-     * @exception InterruptedException
-     * @return path to the file that was converted
-     */
-    public Path convert(ConvertConfig config) throws IOException, InterruptedException{
-        // the output file
+    public Path convertPath(ConvertConfig config) throws IOException, InterruptedException{
+     // the output file
         Path new_file = Functions.createtempFile(this.file);
         String[] attributes = config.toCommands();
         String[] program = {"python3",
@@ -123,5 +118,59 @@ public class ConvertMathML {
         }
         proc.waitFor();
         return new_file;
+    }
+
+    /**
+     * Converts a file using the specified config and returns a path to the converted file path
+     * @see ConvertConfig
+     * @param config the configuration of features to be used when converting
+     * @exception IOException
+     * @exception InterruptedException
+     * @return path to the file that was converted
+     */
+    public Reader convert(ConvertConfig config) throws IOException, InterruptedException{
+        // the output file
+        String[] attributes = config.toCommands();
+        String[] program = {"python3",
+                            this.app.toString(),
+                            "-infile",
+                            this.file.toString()
+                            };
+        String[] command = ArrayUtils.addAll(program,attributes);
+        this.logger.log(Level.FINEST, "Command");
+        for (String s : command){
+            this.logger.log(Level.FINEST, s);
+        }
+        Process proc;
+        try {
+            proc = Runtime.getRuntime().exec(command);
+        } catch (IOException e){
+            this.logger.log(Level.WARNING, "Unable to find python3 using python command");
+            program[0] = "python";
+            command = ArrayUtils.addAll(program,attributes);
+            proc = Runtime.getRuntime().exec(command);
+        }
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+        // read the output from the command
+        this.logger.log(Level.FINEST, "Here is the standard output of the command:\n");
+        String s = null;
+        StringWriter outBuffer = new StringWriter();
+        while (proc.isAlive() || stdInput.ready() || stdError.ready()) {
+            if (stdInput.ready()) {
+                if ((s = stdInput.readLine()) != null) {
+                    outBuffer.write(s);
+                    outBuffer.write("\n");
+                }
+            }
+            if (stdError.ready()) {
+                if ((s = stdError.readLine()) != null) {
+                    this.logger.log(Level.SEVERE, s);
+                }
+            }
+        }
+        proc.waitFor();
+        Reader bufferedString = new StringReader(outBuffer.toString());
+        return bufferedString;
     }
 }

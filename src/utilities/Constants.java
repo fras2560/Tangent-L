@@ -38,5 +38,5 @@ public class Constants {
     public final static String PAYLOAD_DELIMITER = "\\|__\\|";
     public final static String PAYLOAD_SEPARATOR = ":";
     public final static String DOCUMENT_SIZE = "DOCUMENT SIZE";
-    
+    public final static String TEMP_EXT = "_temp";
 }

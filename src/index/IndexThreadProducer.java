@@ -8,6 +8,9 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.BlockingQueue;
 
+import utilities.Constants;
+import utilities.Functions;
+
 public class IndexThreadProducer implements Runnable{
     private BlockingQueue <IndexThreadObject> queue;
     private Path documents;
@@ -26,6 +29,7 @@ public class IndexThreadProducer implements Runnable{
         for (int i =0 ; i < this.consumers; i++){
             this.queue.add(new IndexThreadObject(IndexThreadObject.COMPLETE, 0l));
         }
+        // System.out.println("Producer exiting");
     }
 
     public void indexDocs(Path path){
@@ -35,7 +39,12 @@ public class IndexThreadProducer implements Runnable{
                   @Override
                   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                       try {
-                        queue.put(new IndexThreadObject(file.toString(), attrs.lastModifiedTime().toMillis()));
+                          if(Functions.parseTitle(file.toString()).endsWith(Constants.TEMP_EXT)){
+                              System.out.println("Did not add: " + file.toString() + " since it appears to be a temp file");
+                          }else{
+                              queue.put(new IndexThreadObject(file.toString(), attrs.lastModifiedTime().toMillis()));
+                          }
+                              
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

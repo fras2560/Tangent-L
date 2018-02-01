@@ -522,7 +522,7 @@ public class FindOptimal {
         // default arguments
         boolean wiki = true;
         boolean formulaOnly = true;
-        boolean documentLevel = false;
+        boolean documentLevel = true;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
@@ -604,13 +604,18 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.SYNONYMS);
+        config.flipBit(ConvertConfig.TERMINAL);
+        config.flipBit(ConvertConfig.COMPOUND);
+        config.flipBit(ConvertConfig.EXPAND_LOCATION);
+        config.flipBit(ConvertConfig.UNBOUNDED);
+        config.flipBit(ConvertConfig.SHORTENED);
         //config.setMathBM25(true);
         
-        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
-        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
-        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
-        config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
-        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+//        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+//        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+//        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+//        config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+//        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
         
         // config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
         // this are all backwards compatible

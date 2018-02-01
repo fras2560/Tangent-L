@@ -338,6 +338,53 @@ def convert_file_to_words(filename,
     return tokens
 
 
+def parse_file_to_output(filename,
+                         file_id,
+                         window_size=1,
+                         symbol_pairs=True,
+                         eol=False,
+                         compound_symbols=False,
+                         terminal_symbols=False,
+                         edge_pairs=False,
+                         unbounded=False,
+                         shortened=True,
+                         location=False,
+                         synonyms=False,
+                         query=True,
+                         expand_location=False):
+    """Parses a file and outputs to standard out
+
+    Parameters:
+        filename: the name of the file to parse
+        file_id: the file id
+    """
+    (ext, content) = MathDocument.read_doc_file(filename)
+    while len(content) != 0:
+        (start, end) = MathExtractor.next_math_token(content)
+        if start == -1:
+            # can just print the rest
+            print(format_paragraph(content, query), end="")
+            content = ""
+        else:
+            paragraph = format_paragraph(content[0:start], query)
+            ex = convert_math_expression(content[start:end],
+                                         window_size=1,
+                                         symbol_pairs=symbol_pairs,
+                                         eol=eol,
+                                         compound_symbols=compound_symbols,
+                                         terminal_symbols=terminal_symbols,
+                                         edge_pairs=edge_pairs,
+                                         unbounded=unbounded,
+                                         shortened=shortened,
+                                         location=location,
+                                         synonyms=synonyms,
+                                         expand_location=expand_location)
+            print(paragraph)
+            print(ex)
+            # now move the content further along
+            content = content[end:]
+
+
 def parse_file(filename,
                file_id,
                output_file,
@@ -400,8 +447,7 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument('-outfile',
                         '--outfile',
-                        help='The file to output to',
-                        required=True)
+                        help='The file to output to')
     parser.add_argument("-query",
                         dest="query",
                         action="store_true",
@@ -471,23 +517,37 @@ if __name__ == "__main__":
         infile = args.infile
     if args.outfile is not None:
         outfile = args.outfile
-    logger.info(infile)
-    logger.info(outfile)
-    parse_file(infile,
-               0,
-               outfile,
-               window_size=args.window_size,
-               symbol_pairs=args.symbol_pairs,
-               eol=args.eol,
-               compound_symbols=args.compound_symbols,
-               terminal_symbols=args.terminal_symbols,
-               edge_pairs=args.edge_pairs,
-               unbounded=args.unbounded,
-               shortened=args.shortened,
-               location=args.location,
-               synonyms=args.synonyms,
-               query=args.query,
-               expand_location=args.expand_location
-               )
-    print(args)
+        logger.info(infile)
+        logger.info(outfile)
+        parse_file(infile,
+                   0,
+                   outfile,
+                   window_size=args.window_size,
+                   symbol_pairs=args.symbol_pairs,
+                   eol=args.eol,
+                   compound_symbols=args.compound_symbols,
+                   terminal_symbols=args.terminal_symbols,
+                   edge_pairs=args.edge_pairs,
+                   unbounded=args.unbounded,
+                   shortened=args.shortened,
+                   location=args.location,
+                   synonyms=args.synonyms,
+                   query=args.query,
+                   expand_location=args.expand_location
+                   )
+    else:
+        parse_file_to_output(infile,
+                             0,
+                             window_size=args.window_size,
+                             symbol_pairs=args.symbol_pairs,
+                             eol=args.eol,
+                             compound_symbols=args.compound_symbols,
+                             terminal_symbols=args.terminal_symbols,
+                             edge_pairs=args.edge_pairs,
+                             unbounded=args.unbounded,
+                             shortened=args.shortened,
+                             location=args.location,
+                             synonyms=args.synonyms,
+                             query=args.query,
+                             expand_location=args.expand_location)
     logger.info("Done")

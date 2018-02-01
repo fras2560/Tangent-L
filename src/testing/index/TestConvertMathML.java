@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import index.ConvertConfig;
 import index.ConvertMathML;
 
 public class TestConvertMathML {
@@ -52,8 +53,10 @@ public class TestConvertMathML {
     public void test() {
         System.out.println(this.path.toString());
         ConvertMathML math =  new ConvertMathML(this.path);
+        ConvertConfig config = new ConvertConfig();
+        config.optimalConfig();
         try {
-            Path result = math.convert();
+            Path result = math.convertPath(config);
             this.temp_file = result;
             Path expect = Paths.get(System.getProperty("user.dir"),
                                     "resources",

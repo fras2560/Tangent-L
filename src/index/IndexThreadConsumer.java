@@ -40,5 +40,6 @@ public class IndexThreadConsumer implements Runnable{
             System.out.println("Interrupted Thread");
             ex.printStackTrace();
         }
+        // System.out.println("Thread Exiting");
     }
 }
