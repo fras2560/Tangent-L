@@ -1,0 +1,14 @@
+# the index directory where output directories are stored
+indexDirectory: /home/d6fraser/git/UWResearch/resources/index/wikipedia_formula/
+# the the query file to use
+queriesFile: /home/d6fraser/git/UWResearch/resources/query/NTCIR11-Math-Wikipedia.xml
+# the judgements of the queries to use
+judgements: /home/d6fraser/git/UWResearch/resources/results/NTCIR11-wikipedia-formula-11.txt
+# the file path to the documents directory
+documentsDirectory: /home/d6fraser/Documents/Research/Datasets/NTCIR11_wikipedia_formula/
+# the folder where to put logfiles
+logFile: /home/d6fraser/git/UWResearch/resources/logs/
+# the folder where to put results and outputs
+resultsFile: /home/d6fraser/git/UWResearch/resources/output
+# the folder where to put query results
+queriesOutputFile: /home/d6fraser/git/UWResearch/resources/output

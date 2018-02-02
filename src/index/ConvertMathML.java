@@ -78,6 +78,14 @@ public class ConvertMathML {
         return this.convert(config);
     }
 
+    /**
+     * Converts the MathML file to Tuples using Tangent
+     * Returns a temporary file
+     * @param config the config file with the features to use
+     * @return Path the path to the temporary file
+     * @throws IOException raised when issues with file occur
+     * @throws InterruptedException raised when the process has an interruption
+     */
     public Path convertPath(ConvertConfig config) throws IOException, InterruptedException{
      // the output file
         Path new_file = Functions.createtempFile(this.file);
@@ -126,7 +134,7 @@ public class ConvertMathML {
      * @param config the configuration of features to be used when converting
      * @exception IOException
      * @exception InterruptedException
-     * @return path to the file that was converted
+     * @return Reader the reader to the output stream
      */
     public Reader convert(ConvertConfig config) throws IOException, InterruptedException{
         // the output file
@@ -165,7 +173,7 @@ public class ConvertMathML {
             }
             if (stdError.ready()) {
                 if ((s = stdError.readLine()) != null) {
-                    this.logger.log(Level.SEVERE, s);
+                    this.logger.log(Level.SEVERE, this.file.toString() + ":" + s);
                 }
             }
         }

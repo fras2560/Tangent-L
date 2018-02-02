@@ -503,6 +503,8 @@ public class FindOptimal {
                    // TODO Auto-generated catch block
                    e.printStackTrace();
                    this.logger.warning("unable to load config:" + child.toPath());
+               } catch (ConvertConfigException e){
+                   this.logger.warning("Folder did not have config file so was it was skipped");
                }
                if (indexConfig.compatible(config)){
                    compatible = child.toPath();
@@ -522,7 +524,7 @@ public class FindOptimal {
         // default arguments
         boolean wiki = true;
         boolean formulaOnly = true;
-        boolean documentLevel = true;
+        boolean documentLevel = false;
         Path documents, indexDirectory, output,queries, results, logFile;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new java.util.Date());
         if (!wiki){
@@ -604,11 +606,11 @@ public class FindOptimal {
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
         config.flipBit(ConvertConfig.SYNONYMS);
-        config.flipBit(ConvertConfig.TERMINAL);
-        config.flipBit(ConvertConfig.COMPOUND);
-        config.flipBit(ConvertConfig.EXPAND_LOCATION);
-        config.flipBit(ConvertConfig.UNBOUNDED);
-        config.flipBit(ConvertConfig.SHORTENED);
+//        config.flipBit(ConvertConfig.TERMINAL);
+//        config.flipBit(ConvertConfig.COMPOUND);
+//        config.flipBit(ConvertConfig.EXPAND_LOCATION);
+//        config.flipBit(ConvertConfig.UNBOUNDED);
+//        config.flipBit(ConvertConfig.SHORTENED);
         //config.setMathBM25(true);
         
 //        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);

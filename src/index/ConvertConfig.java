@@ -100,6 +100,9 @@ public class ConvertConfig {
         this.initConfig();
     }
 
+    /**
+     * Initializes the Configuration
+     */
     private void initConfig(){
         this.windowSize = 1;
         this.shortened = true;
@@ -139,6 +142,10 @@ public class ConvertConfig {
         return this.mathbm25;
     }
 
+    /**
+     * Retursn a Config that can be used for searching
+     * @return ConvertConfig the config to use for searching
+     */
     public ConvertConfig getSearchConfig(){
         ConvertConfig searchConfig = this.copy();
         searchConfig.setBooleanAttribute(ConvertConfig.SYNONYMS, false);
@@ -256,6 +263,7 @@ public class ConvertConfig {
             this.windowSize = n;
         }
     }
+
     /**
      * Getter for different attributes
      * @param attribute the Attribute to get
@@ -587,6 +595,12 @@ public class ConvertConfig {
         }
     }
 
+    /**
+     * An Exception raised when config do not match or settings are set that conflicts
+     * @author Dallas Fraser
+     * @see ConvertConfigException
+     * @since 2017-09-06
+     */
     public class ConvertConfigException extends Exception{
         /**
          * 
