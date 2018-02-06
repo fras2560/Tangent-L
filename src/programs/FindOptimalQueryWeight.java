@@ -22,7 +22,7 @@ public class FindOptimalQueryWeight {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "arXiv", "current");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "tunaIndex");
         Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
         Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());

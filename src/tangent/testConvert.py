@@ -17,7 +17,8 @@ try:
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
-                                WILDCARD_MOCK, START_TAG, END_TAG
+                                WILDCARD_MOCK, START_TAG, END_TAG,\
+                                PAYLOAD_DELIMITER as P_D
 except ImportError:
     from convert import convert_math_expression,\
                                 check_node,\
@@ -27,7 +28,8 @@ except ImportError:
                                 expand_node_with_wildcards,\
                                 EDGE_PAIR_NODE, COMPOUND_NODE, \
                                 EOL_NODE, TERMINAL_NODE, SYMBOL_PAIR_NODE,\
-                                WILDCARD_MOCK, START_TAG, END_TAG
+                                WILDCARD_MOCK, START_TAG, END_TAG,\
+                                PAYLOAD_DELIMITER as P_D
 
 
 class TestBase(unittest.TestCase):
@@ -47,6 +49,51 @@ class TestBase(unittest.TestCase):
     def log(self, out):
         if self.debug:
             print(out)
+
+
+class TestSpecial(TestBase):
+    def setUp(self):
+        self.debug = True
+        self.mathml = """
+<m:math>
+  <m:semantics xml:id="m1.1a">
+    <m:apply xml:id="m1.1.4" xref="m1.1.4.pmml">
+      <m:plus xml:id="m1.1.2" xref="m1.1.2.pmml"/>
+      <m:ci xml:id="m1.1.1" xref="m1.1.1.pmml">x</m:ci>
+      <mws:qvar xmlns:mws="http://search.mathweb.org/ns" name="y"/>
+    </m:apply>
+    <m:annotation-xml encoding="MathML-Presentation" xml:id="m1.1b">
+      <m:mrow xml:id="m1.1.4.pmml" xref="m1.1.4">
+        <m:mi xml:id="m1.1.1.pmml" xref="m1.1.1">x</m:mi>
+        <m:mo xml:id="m1.1.2.pmml" xref="m1.1.2">+</m:mo>
+        <mws:qvar xmlns:mws="http://search.mathweb.org/ns" name="y"/>
+      </m:mrow>
+    </m:annotation-xml>
+    <m:annotation encoding="application/x-tex" xml:id="m1.1c">
+        x+\qvar@construct{y}
+    </m:annotation>
+  </m:semantics>
+</m:math>
+                      """
+
+    def testConvert(self):
+        results = convert_math_expression(self.mathml,
+                                          terminal_symbols=True,
+                                          compound_symbols=True,
+                                          expand_location=True,
+                                          unbounded=True,
+                                          synonyms=True)
+        expect = [START_TAG,
+                  """#('v!x','+','n','-')""" + P_D + """-:4#""",
+                  """#('v!x','+','n')""" + P_D + """-:4#""",
+                  """#('*','+','n','-')""" + P_D + """-:4#""",
+                  """#('*','+','n')""" + P_D + """-:4#""",
+                  """#('v!x','*','n','-')""" + P_D + """-:4#""",
+                  """#('v!x','*','n')""" + P_D + """-:4#""",
+                  """#('+','*','n','n')""" + P_D + """n:4#""",
+                  """#('+','*','n')""" + P_D + """n:4#""",
+                  END_TAG]
+        self.assertEqual(" ".join(expect), results)
 
 
 class TestSymbolPairs(TestBase):
@@ -70,7 +117,7 @@ class TestSymbolPairs(TestBase):
                                           symbol_pairs=False,
                                           eol=True)
         expect = [START_TAG,
-                  """#('*','!0','n')||b:1#""",
+                  """#('*','!0','n')""" + P_D + """b:1#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -82,14 +129,14 @@ class TestSymbolPairs(TestBase):
                                           symbol_pairs=False,
                                           edge_pairs=True)
         expect = [START_TAG,
-                  """#('n','a','v!k')||nnnnn:8#""",
-                  """#('n','n','/')||nnnn:8#""",
-                  """#('n','n','n!2')||nnn:8#""",
-                  """#('n','a','n!2')||nnn:8#""",
-                  """#('n','n','gt')||nn:8#""",
-                  """#('w','n','n!2')||nw:8#""",
-                  """#('w','e','n!2')||nw:8#""",
-                  """#('n','n','m!()1x2')||n:8#""",
+                  """#('n','a','v!k')""" + P_D + """nnnnn:8#""",
+                  """#('n','n','/')""" + P_D + """nnnn:8#""",
+                  """#('n','n','n!2')""" + P_D + """nnn:8#""",
+                  """#('n','a','n!2')""" + P_D + """nnn:8#""",
+                  """#('n','n','gt')""" + P_D + """nn:8#""",
+                  """#('w','n','n!2')""" + P_D + """nw:8#""",
+                  """#('w','e','n!2')""" + P_D + """nw:8#""",
+                  """#('n','n','m!()1x2')""" + P_D + """n:8#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -110,26 +157,26 @@ class TestExpandLocation(TestBase):
         results = convert_math_expression(mathml,
                                           expand_location=True)
         expect = [START_TAG,
-                  """#('v!w','m!()1x2','n','-')||-:10#""",
-                  """#('v!w','m!()1x2','n')||-:10#""",
-                  """#('m!()1x2','gt','n','n')||n:10#""",
-                  """#('m!()1x2','gt','n')||n:10#""",
-                  """#('gt','n!2','n','nn')||nn:10#""",
-                  """#('gt','n!2','n')||nn:10#""",
-                  """#('n!2','/','n','nnn')||nnn:10#""",
-                  """#('n!2','/','n')||nnn:10#""",
-                  """#('/','v!k','n','nnnn')||nnnn:10#""",
-                  """#('/','v!k','n')||nnnn:10#""",
-                  """#('v!k','v!ε','a','nnnnn')||nnnnn:10#""",
-                  """#('v!k','v!ε','a')||nnnnn:10#""",
-                  """#('n!2','v!k','a','nnn')||nnn:10#""",
-                  """#('n!2','v!k','a')||nnn:10#""",
-                  """#('m!()1x2','n!2','w','n')||n:10#""",
-                  """#('m!()1x2','n!2','w')||n:10#""",
-                  """#('n!2','comma','n','nw')||nw:10#""",
-                  """#('n!2','comma','n')||nw:10#""",
-                  """#('n!2','v!k','e','nw')||nw:10#""",
-                  """#('n!2','v!k','e')||nw:10#""",
+                  """#('v!w','m!()1x2','n','-')""" + P_D + """-:10#""",
+                  """#('v!w','m!()1x2','n')""" + P_D + """-:10#""",
+                  """#('m!()1x2','gt','n','n')""" + P_D + """n:10#""",
+                  """#('m!()1x2','gt','n')""" + P_D + """n:10#""",
+                  """#('gt','n!2','n','nn')""" + P_D + """nn:10#""",
+                  """#('gt','n!2','n')""" + P_D + """nn:10#""",
+                  """#('n!2','/','n','nnn')""" + P_D + """nnn:10#""",
+                  """#('n!2','/','n')""" + P_D + """nnn:10#""",
+                  """#('/','v!k','n','nnnn')""" + P_D + """nnnn:10#""",
+                  """#('/','v!k','n')""" + P_D + """nnnn:10#""",
+                  """#('v!k','v!ε','a','nnnnn')""" + P_D + """nnnnn:10#""",
+                  """#('v!k','v!ε','a')""" + P_D + """nnnnn:10#""",
+                  """#('n!2','v!k','a','nnn')""" + P_D + """nnn:10#""",
+                  """#('n!2','v!k','a')""" + P_D + """nnn:10#""",
+                  """#('m!()1x2','n!2','w','n')""" + P_D + """n:10#""",
+                  """#('m!()1x2','n!2','w')""" + P_D + """n:10#""",
+                  """#('n!2','comma','n','nw')""" + P_D + """nw:10#""",
+                  """#('n!2','comma','n')""" + P_D + """nw:10#""",
+                  """#('n!2','v!k','e','nw')""" + P_D + """nw:10#""",
+                  """#('n!2','v!k','e')""" + P_D + """nw:10#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -155,8 +202,8 @@ class TestDifferentWildcardReplacements(TestBase):
     def testConvertEOL(self):
         results = convert_math_expression(self.mathml, eol=True)
         expect = [START_TAG,
-                  """#('v!t','*','b')||-:2#""",
-                  """#('*','!0','n')||b:2#""",
+                  """#('v!t','*','b')""" + P_D + """-:2#""",
+                  """#('*','!0','n')""" + P_D + """b:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -167,8 +214,8 @@ class TestDifferentWildcardReplacements(TestBase):
                                           compound_symbols=True,
                                           edge_pairs=True)
         expect = [START_TAG,
-                  """#('v!t','*','b')||-:2#""",
-                  """#('*','!0')||b:2#""",
+                  """#('v!t','*','b')""" + P_D + """-:2#""",
+                  """#('*','!0')""" + P_D + """b:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -248,15 +295,15 @@ class TestSynonym(TestBase):
                                           eol=True,
                                           synonyms=True)
         expect = [START_TAG,
-                  """#('*',"['n','b']")||-:9#""",
-                  """#('*','=','n')||-:9#""",
-                  """#('=','n!1','n')||n:9#""",
-                  """#('*','n!1','n')||n:9#""",
-                  """#('=','*','n')||n:9#""",
-                  """#('n!1','!0')||nn:9#""",
-                  """#('n','n','=')||n:9#""",
-                  """#('n','n','*')||n:9#""",
-                  """#('b','n','*')||b:9#""",
+                  """#('*',"['n','b']")""" + P_D + """-:9#""",
+                  """#('*','=','n')""" + P_D + """-:9#""",
+                  """#('=','n!1','n')""" + P_D + """n:9#""",
+                  """#('*','n!1','n')""" + P_D + """n:9#""",
+                  """#('=','*','n')""" + P_D + """n:9#""",
+                  """#('n!1','!0')""" + P_D + """nn:9#""",
+                  """#('n','n','=')""" + P_D + """n:9#""",
+                  """#('n','n','*')""" + P_D + """n:9#""",
+                  """#('b','n','*')""" + P_D + """b:9#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -268,42 +315,42 @@ class TestSynonym(TestBase):
                                           eol=True,
                                           synonyms=True)
         expect = [START_TAG,
-                  """#('v!α',"['n','b']")||-:36#""",
-                  """#('*',"['n','b']")||-:36#""",
-                  """#('v!α','m!()1x1','n')||-:36#""",
-                  """#('*','m!()1x1','n')||-:36#""",
-                  """#('v!α','*','n')||-:36#""",
-                  """#('m!()1x1',"['n','w']")||n:36#""",
-                  """#('*',"['n','w']")||n:36#""",
-                  """#('m!()1x1','=','n')||n:36#""",
-                  """#('*','=','n')||n:36#""",
-                  """#('m!()1x1','*','n')||n:36#""",
-                  """#('=','v!y','n')||nn:36#""",
-                  """#('*','v!y','n')||nn:36#""",
-                  """#('=','*','n')||nn:36#""",
-                  """#('v!y','n!0','b')||nnn:36#""",
-                  """#('*','n!0','b')||nnn:36#""",
-                  """#('v!y','*','b')||nnn:36#""",
-                  """#('n!0','!0')||nnnb:36#""",
-                  """#('n','b','v!y')||nnn:36#""",
-                  """#('n','b','*')||nnn:36#""",
-                  """#('n','n','=')||nn:36#""",
-                  """#('n','n','*')||nn:36#""",
-                  """#('m!()1x1','v!x','w')||n:36#""",
-                  """#('*','v!x','w')||n:36#""",
-                  """#('m!()1x1','*','w')||n:36#""",
-                  """#('v!x','n!0','b')||nw:36#""",
-                  """#('*','n!0','b')||nw:36#""",
-                  """#('v!x','*','b')||nw:36#""",
-                  """#('n!0','!0')||nwb:36#""",
-                  """#('w','b','v!x')||nw:36#""",
-                  """#('w','b','*')||nw:36#""",
-                  """#('n','n','m!()1x1')||n:36#""",
-                  """#('n','n','*')||n:36#""",
-                  """#('v!α','n!0','b')||-:36#""",
-                  """#('*','n!0','b')||-:36#""",
-                  """#('v!α','*','b')||-:36#""",
-                  """#('n!0','!0')||b:36#""",
+                  """#('v!α',"['n','b']")""" + P_D + """-:36#""",
+                  """#('*',"['n','b']")""" + P_D + """-:36#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:36#""",
+                  """#('*','m!()1x1','n')""" + P_D + """-:36#""",
+                  """#('v!α','*','n')""" + P_D + """-:36#""",
+                  """#('m!()1x1',"['n','w']")""" + P_D + """n:36#""",
+                  """#('*',"['n','w']")""" + P_D + """n:36#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:36#""",
+                  """#('*','=','n')""" + P_D + """n:36#""",
+                  """#('m!()1x1','*','n')""" + P_D + """n:36#""",
+                  """#('=','v!y','n')""" + P_D + """nn:36#""",
+                  """#('*','v!y','n')""" + P_D + """nn:36#""",
+                  """#('=','*','n')""" + P_D + """nn:36#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:36#""",
+                  """#('*','n!0','b')""" + P_D + """nnn:36#""",
+                  """#('v!y','*','b')""" + P_D + """nnn:36#""",
+                  """#('n!0','!0')""" + P_D + """nnnb:36#""",
+                  """#('n','b','v!y')""" + P_D + """nnn:36#""",
+                  """#('n','b','*')""" + P_D + """nnn:36#""",
+                  """#('n','n','=')""" + P_D + """nn:36#""",
+                  """#('n','n','*')""" + P_D + """nn:36#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:36#""",
+                  """#('*','v!x','w')""" + P_D + """n:36#""",
+                  """#('m!()1x1','*','w')""" + P_D + """n:36#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:36#""",
+                  """#('*','n!0','b')""" + P_D + """nw:36#""",
+                  """#('v!x','*','b')""" + P_D + """nw:36#""",
+                  """#('n!0','!0')""" + P_D + """nwb:36#""",
+                  """#('w','b','v!x')""" + P_D + """nw:36#""",
+                  """#('w','b','*')""" + P_D + """nw:36#""",
+                  """#('n','n','m!()1x1')""" + P_D + """n:36#""",
+                  """#('n','n','*')""" + P_D + """n:36#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:36#""",
+                  """#('*','n!0','b')""" + P_D + """-:36#""",
+                  """#('v!α','*','b')""" + P_D + """-:36#""",
+                  """#('n!0','!0')""" + P_D + """b:36#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -362,7 +409,7 @@ class TestTerminalQuery(TestBase):
         results = convert_math_expression(self.mathml, terminal_symbols=True)
         self.log(results)
         expect = [START_TAG,
-                  "#('v!𝖿𝗏','!0')||-:1#",
+                  """#('v!𝖿𝗏','!0')""" + P_D + """-:1#""",
                   END_TAG]
         self.assertEqual(results, " ".join(expect))
 
@@ -371,7 +418,7 @@ class TestTerminalQuery(TestBase):
         results = convert_math_expression(self.mathml, terminal_symbols=True)
         self.log(results)
         expect = [START_TAG,
-                  "#('v!𝒔','!0')||-:1#",
+                  """#('v!𝒔','!0')""" + P_D + """-:1#""",
                   END_TAG]
         self.assertEqual(results, " ".join(expect))
 
@@ -388,8 +435,8 @@ class TestArxivQuery(TestBase):
     def testBase(self):
         results = convert_math_expression(self.mathml)
         expect = [START_TAG,
-                  "#('*','=','n')||-:2#",
-                  "#('=','n!1','n')||n:2#",
+                  """#('*','=','n')""" + P_D + """-:2#""",
+                  """#('=','n!1','n')""" + P_D + """n:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -397,9 +444,9 @@ class TestArxivQuery(TestBase):
     def testWindowSize(self):
         results = convert_math_expression(self.mathml, window_size=2)
         expect = [START_TAG,
-                  "#('*','=','n')||-:3#",
-                  "#('*','n!1','nn')||-:3#",
-                  "#('=','n!1','n')||n:3#",
+                  """#('*','=','n')""" + P_D + """-:3#""",
+                  """#('*','n!1','nn')""" + P_D + """-:3#""",
+                  """#('=','n!1','n')""" + P_D + """n:3#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -408,8 +455,8 @@ class TestArxivQuery(TestBase):
         # height too big
         results = convert_math_expression(self.mathml, eol=True)
         expect = [START_TAG,
-                  "#('*','=','n')||-:2#",
-                  "#('=','n!1','n')||n:2#",
+                  """#('*','=','n')""" + P_D + """-:2#""",
+                  """#('=','n!1','n')""" + P_D + """n:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -417,9 +464,9 @@ class TestArxivQuery(TestBase):
     def testCompoundSymbols(self):
         results = convert_math_expression(self.mathml, compound_symbols=True)
         expect = [START_TAG,
-                  '''#('*',"['n','b']")||-:3#''',
-                  '''#('*','=','n')||-:3#''',
-                  '''#('=','n!1','n')||n:3#''',
+                  """#('*',"['n','b']")""" + P_D + """-:3#""",
+                  """#('*','=','n')""" + P_D + """-:3#""",
+                  """#('=','n!1','n')""" + P_D + """n:3#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -427,9 +474,9 @@ class TestArxivQuery(TestBase):
     def testTerminalSymbols(self):
         results = convert_math_expression(self.mathml, terminal_symbols=True)
         expect = [START_TAG,
-                  '''#('*','=','n')||-:3#''',
-                  '''#('=','n!1','n')||n:3#''',
-                  '''#('n!1','!0')||nn:3#''',
+                  """#('*','=','n')""" + P_D + """-:3#""",
+                  """#('=','n!1','n')""" + P_D + """n:3#""",
+                  """#('n!1','!0')""" + P_D + """nn:3#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -437,10 +484,10 @@ class TestArxivQuery(TestBase):
     def testEdgePairs(self):
         results = convert_math_expression(self.mathml, edge_pairs=True)
         expect = [START_TAG,
-                  '''#('*','=','n')||-:4#''',
-                  '''#('=','n!1','n')||n:4#''',
-                  '''#('n','n','=')||n:4#''',
-                  '''#('b','n','*')||b:4#''',
+                  """#('*','=','n')""" + P_D + """-:4#""",
+                  """#('=','n!1','n')""" + P_D + """n:4#""",
+                  """#('n','n','=')""" + P_D + """n:4#""",
+                  """#('b','n','*')""" + P_D + """b:4#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -448,8 +495,8 @@ class TestArxivQuery(TestBase):
     def testUnbounded(self):
         results = convert_math_expression(self.mathml, unbounded=True)
         expect = [START_TAG,
-                  '''#('*','=','n')||-:2#''',
-                  '''#('=','n!1','n')||n:2#''',
+                  """#('*','=','n')""" + P_D + """-:2#""",
+                  """#('=','n!1','n')""" + P_D + """n:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -457,8 +504,8 @@ class TestArxivQuery(TestBase):
     def testLocation(self):
         results = convert_math_expression(self.mathml, location=True)
         expect = [START_TAG,
-                  '''#('*','=','n','-')||-:2#''',
-                  '''#('=','n!1','n','n')||n:2#''',
+                  """#('*','=','n','-')""" + P_D + """-:2#""",
+                  """#('=','n!1','n','n')""" + P_D + """n:2#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -476,13 +523,13 @@ class TestRandomEquation(TestBase):
     def testBase(self):
         results = convert_math_expression(self.mathml)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:7#""",
-                  """#('m!()1x1','=','n')||n:7#""",
-                  """#('=','v!y','n')||nn:7#""",
-                  """#('v!y','n!0','b')||nnn:7#""",
-                  """#('m!()1x1','v!x','w')||n:7#""",
-                  """#('v!x','n!0','b')||nw:7#""",
-                  """#('v!α','n!0','b')||-:7#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:7#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:7#""",
+                  """#('=','v!y','n')""" + P_D + """nn:7#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:7#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:7#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:7#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:7#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -490,18 +537,18 @@ class TestRandomEquation(TestBase):
     def testWindowSize(self):
         results = convert_math_expression(self.mathml, window_size=2)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:12#""",
-                  """#('v!α','v!x','nw')||-:12#""",
-                  """#('v!α','=','nn')||-:12#""",
-                  """#('m!()1x1','=','n')||n:12#""",
-                  """#('m!()1x1','v!y','nn')||n:12#""",
-                  """#('=','v!y','n')||nn:12#""",
-                  """#('=','n!0','nb')||nn:12#""",
-                  """#('v!y','n!0','b')||nnn:12#""",
-                  """#('m!()1x1','v!x','w')||n:12#""",
-                  """#('m!()1x1','n!0','wb')||n:12#""",
-                  """#('v!x','n!0','b')||nw:12#""",
-                  """#('v!α','n!0','b')||-:12#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:12#""",
+                  """#('v!α','v!x','nw')""" + P_D + """-:12#""",
+                  """#('v!α','=','nn')""" + P_D + """-:12#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:12#""",
+                  """#('m!()1x1','v!y','nn')""" + P_D + """n:12#""",
+                  """#('=','v!y','n')""" + P_D + """nn:12#""",
+                  """#('=','n!0','nb')""" + P_D + """nn:12#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:12#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:12#""",
+                  """#('m!()1x1','n!0','wb')""" + P_D + """n:12#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:12#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:12#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -510,13 +557,13 @@ class TestRandomEquation(TestBase):
         # height too big
         results = convert_math_expression(self.mathml, eol=True)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:7#""",
-                  """#('m!()1x1','=','n')||n:7#""",
-                  """#('=','v!y','n')||nn:7#""",
-                  """#('v!y','n!0','b')||nnn:7#""",
-                  """#('m!()1x1','v!x','w')||n:7#""",
-                  """#('v!x','n!0','b')||nw:7#""",
-                  """#('v!α','n!0','b')||-:7#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:7#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:7#""",
+                  """#('=','v!y','n')""" + P_D + """nn:7#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:7#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:7#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:7#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:7#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -524,15 +571,15 @@ class TestRandomEquation(TestBase):
     def testCompoundSymbols(self):
         results = convert_math_expression(self.mathml, compound_symbols=True)
         expect = [START_TAG,
-                  """#('v!α',"['n','b']")||-:9#""",
-                  """#('v!α','m!()1x1','n')||-:9#""",
-                  """#('m!()1x1',"['n','w']")||n:9#""",
-                  """#('m!()1x1','=','n')||n:9#""",
-                  """#('=','v!y','n')||nn:9#""",
-                  """#('v!y','n!0','b')||nnn:9#""",
-                  """#('m!()1x1','v!x','w')||n:9#""",
-                  """#('v!x','n!0','b')||nw:9#""",
-                  """#('v!α','n!0','b')||-:9#""",
+                  """#('v!α',"['n','b']")""" + P_D + """-:9#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:9#""",
+                  """#('m!()1x1',"['n','w']")""" + P_D + """n:9#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:9#""",
+                  """#('=','v!y','n')""" + P_D + """nn:9#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:9#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:9#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:9#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:9#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -540,16 +587,16 @@ class TestRandomEquation(TestBase):
     def testTerminalSymbols(self):
         results = convert_math_expression(self.mathml, terminal_symbols=True)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:10#""",
-                  """#('m!()1x1','=','n')||n:10#""",
-                  """#('=','v!y','n')||nn:10#""",
-                  """#('v!y','n!0','b')||nnn:10#""",
-                  """#('n!0','!0')||nnnb:10#""",
-                  """#('m!()1x1','v!x','w')||n:10#""",
-                  """#('v!x','n!0','b')||nw:10#""",
-                  """#('n!0','!0')||nwb:10#""",
-                  """#('v!α','n!0','b')||-:10#""",
-                  """#('n!0','!0')||b:10#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:10#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:10#""",
+                  """#('=','v!y','n')""" + P_D + """nn:10#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:10#""",
+                  """#('n!0','!0')""" + P_D + """nnnb:10#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:10#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:10#""",
+                  """#('n!0','!0')""" + P_D + """nwb:10#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:10#""",
+                  """#('n!0','!0')""" + P_D + """b:10#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -557,17 +604,17 @@ class TestRandomEquation(TestBase):
     def testEdgePairs(self):
         results = convert_math_expression(self.mathml, edge_pairs=True)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:11#""",
-                  """#('m!()1x1','=','n')||n:11#""",
-                  """#('=','v!y','n')||nn:11#""",
-                  """#('v!y','n!0','b')||nnn:11#""",
-                  """#('n','b','v!y')||nnn:11#""",
-                  """#('n','n','=')||nn:11#""",
-                  """#('m!()1x1','v!x','w')||n:11#""",
-                  """#('v!x','n!0','b')||nw:11#""",
-                  """#('w','b','v!x')||nw:11#""",
-                  """#('n','n','m!()1x1')||n:11#""",
-                  """#('v!α','n!0','b')||-:11#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:11#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:11#""",
+                  """#('=','v!y','n')""" + P_D + """nn:11#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:11#""",
+                  """#('n','b','v!y')""" + P_D + """nnn:11#""",
+                  """#('n','n','=')""" + P_D + """nn:11#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:11#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:11#""",
+                  """#('w','b','v!x')""" + P_D + """nw:11#""",
+                  """#('n','n','m!()1x1')""" + P_D + """n:11#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:11#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -575,22 +622,22 @@ class TestRandomEquation(TestBase):
     def testUnbounded(self):
         results = convert_math_expression(self.mathml, unbounded=True)
         expect = [START_TAG,
-                  """#('v!α','m!()1x1','n')||-:16#""",
-                  """#('v!α','v!x')||-:16#""",
-                  """#('v!α','n!0')||-:16#""",
-                  """#('v!α','=')||-:16#""",
-                  """#('v!α','v!y')||-:16#""",
-                  """#('v!α','n!0')||-:16#""",
-                  """#('m!()1x1','=','n')||n:16#""",
-                  """#('m!()1x1','v!y')||n:16#""",
-                  """#('m!()1x1','n!0')||n:16#""",
-                  """#('=','v!y','n')||nn:16#""",
-                  """#('=','n!0')||nn:16#""",
-                  """#('v!y','n!0','b')||nnn:16#""",
-                  """#('m!()1x1','v!x','w')||n:16#""",
-                  """#('m!()1x1','n!0')||n:16#""",
-                  """#('v!x','n!0','b')||nw:16#""",
-                  """#('v!α','n!0','b')||-:16#""",
+                  """#('v!α','m!()1x1','n')""" + P_D + """-:16#""",
+                  """#('v!α','v!x')""" + P_D + """-:16#""",
+                  """#('v!α','n!0')""" + P_D + """-:16#""",
+                  """#('v!α','=')""" + P_D + """-:16#""",
+                  """#('v!α','v!y')""" + P_D + """-:16#""",
+                  """#('v!α','n!0')""" + P_D + """-:16#""",
+                  """#('m!()1x1','=','n')""" + P_D + """n:16#""",
+                  """#('m!()1x1','v!y')""" + P_D + """n:16#""",
+                  """#('m!()1x1','n!0')""" + P_D + """n:16#""",
+                  """#('=','v!y','n')""" + P_D + """nn:16#""",
+                  """#('=','n!0')""" + P_D + """nn:16#""",
+                  """#('v!y','n!0','b')""" + P_D + """nnn:16#""",
+                  """#('m!()1x1','v!x','w')""" + P_D + """n:16#""",
+                  """#('m!()1x1','n!0')""" + P_D + """n:16#""",
+                  """#('v!x','n!0','b')""" + P_D + """nw:16#""",
+                  """#('v!α','n!0','b')""" + P_D + """-:16#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)
@@ -598,13 +645,13 @@ class TestRandomEquation(TestBase):
     def testLocation(self):
         results = convert_math_expression(self.mathml, location=True)
         expect = [START_TAG,
-                  '''#('v!α','m!()1x1','n','-')||-:7#''',
-                  '''#('m!()1x1','=','n','n')||n:7#''',
-                  '''#('=','v!y','n','nn')||nn:7#''',
-                  '''#('v!y','n!0','b','nnn')||nnn:7#''',
-                  '''#('m!()1x1','v!x','w','n')||n:7#''',
-                  '''#('v!x','n!0','b','nw')||nw:7#''',
-                  '''#('v!α','n!0','b','-')||-:7#''',
+                  """#('v!α','m!()1x1','n','-')""" + P_D + """-:7#""",
+                  """#('m!()1x1','=','n','n')""" + P_D + """n:7#""",
+                  """#('=','v!y','n','nn')""" + P_D + """nn:7#""",
+                  """#('v!y','n!0','b','nnn')""" + P_D + """nnn:7#""",
+                  """#('m!()1x1','v!x','w','n')""" + P_D + """n:7#""",
+                  """#('v!x','n!0','b','nw')""" + P_D + """nw:7#""",
+                  """#('v!α','n!0','b','-')""" + P_D + """-:7#""",
                   END_TAG]
         self.log(results)
         self.assertEqual(" ".join(expect), results)

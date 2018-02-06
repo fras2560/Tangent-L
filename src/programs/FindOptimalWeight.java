@@ -23,9 +23,9 @@ public class FindOptimalWeight {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-MathWiki-main.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-MathWiki-main.dat");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "tunaIndex");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
+        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path output = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", "weights", date + ".csv");
         Path logFile = Paths.get(System.getProperty("user.dir"),

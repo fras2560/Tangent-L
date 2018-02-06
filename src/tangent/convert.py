@@ -122,7 +122,7 @@ def check_node(node):
         # does it make sense to keep pairs of symbols with no path
         # if one of those symbols is a wildcard
         if len(node) == 3:
-            # if one is a wildcard the dont want to keep it
+            # if one is a wildcard then dont want to keep it
             check = not(check_wildcard(node[0]) or check_wildcard(node[1]))
         else:
             # then both need to be a wildcard
