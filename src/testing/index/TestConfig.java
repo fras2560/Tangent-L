@@ -139,10 +139,10 @@ public class TestConfig extends BaseTest {
         // default they are both compatible
         assertEquals(config.compatible(compare), true);
         assertEquals(compare.compatible(config), true);
-        // check shortened not backwards compatible
+        // shortened is now backwards compatiable unless it is both unbounded
         config.setBooleanAttribute(ConvertConfig.SHORTENED, false);
-        assertEquals(config.compatible(compare), false);
-        assertEquals(compare.compatible(config), false);
+        assertEquals(config.compatible(compare), true);
+        assertEquals(compare.compatible(config), true);
         config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
         // check location not backwards compatible
         config.setBooleanAttribute(ConvertConfig.LOCATION, true);

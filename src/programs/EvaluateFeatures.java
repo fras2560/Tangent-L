@@ -100,7 +100,6 @@ public class EvaluateFeatures extends FindOptimal{
         if(documentLevel){
             this.evaulateAtDocumentLevel();;
         }
-        
     }
 
     public double outputFeatureMeasure(Map<String, double[]> scoreLookup,
@@ -115,17 +114,8 @@ public class EvaluateFeatures extends FindOptimal{
         for(int i = 0; i < Math.pow(2, copyFeatures.size()); i++){
             try {
                 config = this.initConfig(i, copyFeatures);
-                if(feature.equals(config.getAttribute(ConvertConfig.SHORTENED)) &&
-                   config.getAttribute(ConvertConfig.UNBOUNDED) == false){
-                    // only care about shortened when it is unbounded
-                    throw new ConfigException("Skipping this config");
-                }
-                if(feature.equals(config.getAttribute(ConvertConfig.UNBOUNDED)) &&
-                   config.getAttribute(ConvertConfig.SHORTENED) == true){
-                    // should have another config that tests for this
-                    throw new ConfigException("Skipping this config");
-                }
-                // get score when feature is true
+                // get score when feature is true\
+                
                 config.setBooleanAttribute(feature, true);
                 mrrPos = scoreLookup.get(config.toString())[measurement];
                 // get score when feature is false
@@ -141,7 +131,7 @@ public class EvaluateFeatures extends FindOptimal{
                 count += 1d;
             } catch (ConfigException e) {
                 // TODO Auto-generated catch block
-                System.out.println("Skipped config");
+                System.out.println(e.getMessage());
             }
         }
         return sumDelta / count;
@@ -189,7 +179,7 @@ public class EvaluateFeatures extends FindOptimal{
             for(String feature: features){
                 this.output.write(feature + ":");
                 copyFeatures.remove(feature);
-                average = this.outputFeatureMeasure(scoreLookup, copyFeatures, feature, 0);
+                average = this.outputFeatureMeasure(scoreLookup, copyFeatures, feature, measurement);
                 this.output.write("Total:" + Double.toString(average));
                 this.output.newLine();
                 copyFeatures.add(feature);
@@ -241,7 +231,7 @@ public class EvaluateFeatures extends FindOptimal{
             } catch (ConfigException e) {
                 // TODO Auto-generated catch block
                 //e.printStackTrace();
-                System.out.println("Skip config");
+                System.out.println(e.getMessage());
             }
         }
         return scorings;
@@ -257,7 +247,6 @@ public class EvaluateFeatures extends FindOptimal{
     public ConvertConfig initConfig(int i, List<String> featureList) throws ConfigException{
         String bitString = this.generateBitString(i, featureList.size());
         ConvertConfig config = this.base.copy();
-        
         for (int pos = 0; pos <  bitString.length(); pos ++){
             if(bitString.charAt(pos) == '0'){
                 config.setBooleanAttribute(featureList.get(pos), false);
@@ -265,14 +254,14 @@ public class EvaluateFeatures extends FindOptimal{
                 config.setBooleanAttribute(featureList.get(pos), true);
             }
         }
-        if(config.getAttribute(ConvertConfig.UNBOUNDED) == false && config.getAttribute(ConvertConfig.SHORTENED)){
-            throw new ConfigException("Cannot shortened when not unbounded");
+        if(config.getAttribute(ConvertConfig.SHORTENED) == true){
+            config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
         }
         return config;
     }
 
     /**
-     * generates a bit string of a certain size
+     * generates a bit string of a certain sizey
      * @param i the number the bitstring represents
      * @param size the size of the bitstring should be
      * @return String
@@ -337,6 +326,7 @@ public class EvaluateFeatures extends FindOptimal{
             // get the users what features to run and what level to perform at
             // lay out what features to use
             config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+            config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
             Scanner reader = new Scanner(System.in);  // Reading from System.in
             System.out.println("Evaluate at Formula Level(y/n): ");
             String readLine = reader.nextLine().trim().toLowerCase();
@@ -405,6 +395,8 @@ public class EvaluateFeatures extends FindOptimal{
             }else{
                 fo.evaulateAtDocumentLevel();
             }
+            config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, false);
+            System.out.println(config);
             fo.evaluateFeatures(features, config);
             outputWriter.close();
         } catch (CommandLineException e1) {

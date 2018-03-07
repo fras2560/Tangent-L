@@ -36,7 +36,7 @@ public class TestCommandLineArguments {
         try {
             CommandLineArguments cla = new CommandLineArguments(args, required);
             assertEquals(cla.getPath(CommandLineArguments.DOCUMENTSDIRECTORY), Paths.get("test"));
-            assertEquals(cla.getPath(CommandLineArguments.INDEXDIRECTORY), Paths.get("/home/d6fraser/git/UWResearch/resources/index/wikipedia_formula"));
+            assertEquals(cla.getPath(CommandLineArguments.INDEXDIRECTORY), Paths.get("/home/d6fraser/git/UWResearch/resources/index/wikipedia_formula/split"));
             
         } catch (CommandLineException e) {
             // TODO Auto-generated catch block
@@ -55,7 +55,7 @@ public class TestCommandLineArguments {
         try {
             result = CommandLineArguments.loadConfig();
             // just make sure equal to something
-            String expect = "{judgements=/home/d6fraser/git/UWResearch/resources/results/NTCIR11-wikipedia-formula-11.txt, resultsFile=/home/d6fraser/git/UWResearch/resources/output, queriesFile=/home/d6fraser/git/UWResearch/resources/query/NTCIR12-MathWiki-formula.xml, logFile=/home/d6fraser/git/UWResearch/resources/logs, indexDirectory=/home/d6fraser/git/UWResearch/resources/index/wikipedia_formula, queriesOutputFile=/home/d6fraser/git/UWResearch/resources/output, documentsDirectory=/home/d6fraser/Documents/Research/Datasets/NTCIR11_wikipedia_formula}";
+            String expect = "{judgements=/home/d6fraser/git/UWResearch/resources/results/NTCIR11-wikipedia-11.txt, resultsFile=/home/d6fraser/git/UWResearch/resources/output, queriesFile=/home/d6fraser/git/UWResearch/resources/query/NTCIR11-Math-Wikipedia.xml, logFile=/home/d6fraser/git/UWResearch/resources/logs, indexDirectory=/home/d6fraser/git/UWResearch/resources/index/wikipedia_formula/split, queriesOutputFile=/home/d6fraser/git/UWResearch/resources/output, documentsDirectory=/home/d6fraser/Documents/Research/Datasets/NTCIR11_wikipedia_formula}";
             assertEquals(result.toString(), expect);
         } catch (IOException e) {
             // TODO Auto-generated catch block

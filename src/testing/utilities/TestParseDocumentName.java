@@ -19,6 +19,12 @@ public class TestParseDocumentName {
     }
 
     @Test
+    public void testSpecial(){
+        String path = "/home/arkane/arxiv/unzipped/xhtml5/3/gr-qc0502086/gr-qc0502086_1_10.xhtml";
+        String document = Functions.parseDocumentName(path);
+        assertEquals(document, "gr");
+    }
+    @Test
     public void test() {
         String path = "/home/d6fraser/Documents/Research/Datasets/wikipedia_formula/00004-1.html";
         String document = Functions.parseDocumentName(path);

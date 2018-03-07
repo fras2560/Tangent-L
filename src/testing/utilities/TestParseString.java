@@ -74,7 +74,7 @@ public class TestParseString {
            String text = Functions.parseString(this.temp_file);
            System.out.println(text);
            System.out.println(text.length());
-           assertEquals(text.length(), 3523);
+           assertEquals(text.length(), 8396);
        } catch (IOException e) {
            // TODO Auto-generated catch block
            e.printStackTrace();

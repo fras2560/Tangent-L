@@ -36,6 +36,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.CollectionStatistics;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -55,6 +56,8 @@ public class MathQuery {
     private Logger logger;
     private String fieldName;
     private ConvertConfig config;
+    private List<String> phrases;
+    private int mathCount;
     /**
      * Class Constructor
      * @param queryName the name of the query
@@ -72,10 +75,12 @@ public class MathQuery {
     public MathQuery(String queryName, ConvertConfig config){
         this.terms = new ArrayList<String>();
         this.formulas = new ArrayList<String>();
+        this.phrases = new ArrayList<String>();
         this.queryName = queryName;
         this.logger = ProjectLogger.getLogger();
         this.fieldName = Constants.FIELD;
         this.config = config;
+        this.mathCount = 0;
     }
 
     /**
@@ -85,6 +90,7 @@ public class MathQuery {
      */
     public MathQuery(Node node, ConvertConfig config){
         this.formulas = new ArrayList<String>();
+        this.phrases = new ArrayList<String>();
         this.config = config;
         this.fieldName = Constants.FIELD;
         this.logger = ProjectLogger.getLogger();
@@ -95,6 +101,7 @@ public class MathQuery {
         NodeList termList =  element.getElementsByTagName("query").item(0).getChildNodes();
         this.logger.log(Level.FINEST, "Term List: " + termList.getLength());
         MathAnalyzer analyzer = new MathAnalyzer(this.config);
+        String phrase;
         for (int j = 0; j < termList.getLength(); j++){
             this.logger.log(Level.FINEST, "Term List Element: " + j);
             Node nNode = termList.item(j);
@@ -102,8 +109,18 @@ public class MathQuery {
                 Element e = (Element) nNode;
                 String term = e.getTextContent().replaceAll("\n", "").replaceAll("\t", "").trim();
                 this.logger.log(Level.FINEST, "Text Content:" + term);
+                phrase = "";
                 for (String t : Functions.analyzeTokens(analyzer, Constants.FIELD, term)){
+                    phrase = phrase + " " + t;
                     this.terms.add(t);
+                    if(this.isTermMath(t)){
+                        this.mathCount += 1;
+                    }
+                }
+                phrase = phrase.trim();
+                // if a phrase has two or more keywords and is not a math tuple
+                if(phrase.length() - phrase.replace(" ", "").length() > 0 && !phrase.startsWith("(")){
+                    this.phrases.add(phrase);
                 }
                 this.formulas.addAll(Functions.parseFormulas(term));
             }else{
@@ -112,6 +129,27 @@ public class MathQuery {
         }
     }
 
+    /**
+     * Returns a list of phrases that were listed as keywords
+     * @return
+     */
+    public List<String> getPhrases(){
+        return this.phrases;
+    }
+
+    /**
+     * Checks where a term is a math tuple or not
+     * @param term the term the check
+     * @return boolean True if term is a math tuple
+     */
+    public boolean isTermMath(String term){
+        boolean mathTerm = false;
+        term = term.trim();
+        if(term.startsWith("(") && term.endsWith(")")){
+            mathTerm = true;
+        }
+        return mathTerm;
+    }
 
     /**
      * Adds a term to the query parses the term using MathAnalyzer.
@@ -130,6 +168,9 @@ public class MathQuery {
     public void addTerm(String term, String field){
         for(String t: Functions.analyzeTokens(new MathAnalyzer(this.config), field, term)){
             this.terms.add(t);
+            if(this.isTermMath(t)){
+                this.mathCount += 1;
+            }
         }
     }
     /**
@@ -162,6 +203,14 @@ public class MathQuery {
      */
     public String getQuery(){
         return String.join(" ", this.terms);
+    }
+
+    /**
+     * Returns the number of math tuples in the query
+     * @return int the number of math tuples
+     */
+    public int getMathCount(){
+        return this.mathCount;
     }
 
     /*
@@ -289,6 +338,13 @@ public class MathQuery {
             // add the query
             bq.add(tempQuery, BooleanClause.Occur.SHOULD);
         }
+        // try phrase queries
+        if(config.getAttribute(ConvertConfig.PROXIMITY)){
+            for(String phrase :  this.phrases){
+                System.out.println("Added Phrase Query: " + phrase);
+                bq.add(new PhraseQuery(5, field, phrase.split(" ")), BooleanClause.Occur.SHOULD);
+            }
+        }
         if (tempQuery ==  null){
             bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
         }
@@ -318,6 +374,102 @@ public class MathQuery {
         return bq.build();
     }
 
+    public Query buildMustWeightedQuery(String field,
+                                        BooleanQuery.Builder bq,
+                                        boolean synonym,
+                                        ConvertConfig config,
+                                        CollectionStatistics stats,
+                                        float mathWeight,
+                                        float textWeight) throws IOException{
+        BooleanQuery.Builder textBuilder = new BooleanQuery.Builder();
+        BooleanQuery.Builder mathBuilder = new BooleanQuery.Builder();
+        List<TermCountPair> uniqueTerms = this.uniqueTerms(this.terms);
+        Query tempQuery = null;
+        String tfield;
+        int mathCount = 0;
+        int textCount = 0;
+        for (TermCountPair termPair : uniqueTerms){
+            if (config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
+                // want our query to seperate math from the texts
+                if (termPair.getTerm().startsWith("(")){
+                    tfield = Constants.MATHFIELD;
+                }else{
+                    tfield = Constants.TEXTFIELD;
+                }
+            }else{
+                // want to query on them being in the same field
+                tfield = field;
+            }
+            if(termPair.getTerm().trim().startsWith("(") && config.getMathBM25()){
+                // if a math term and using an adjusted math bm25
+                tempQuery = new MathTermQuery(new Term(tfield, termPair.getTerm().trim()), (int) termPair.getCount());
+            }else{
+                tempQuery = new TermQuery(new Term(tfield, termPair.getTerm().trim()));
+            }
+            if (!synonym && Functions.containsWildcard(termPair.getTerm())){
+                // do not have synonyms indexed so use wildcard query
+                // this term has a wildcard so need it for match wildcard
+                tempQuery = new WildcardQuery(new Term(tfield, termPair.getTerm().trim()));
+                // boost the wildcard
+                tempQuery = new BoostQuery(tempQuery, MathQuery.WILDCARD_BOOST);
+            }
+            if (config.getAttribute(ConvertConfig.BOOST_QUERIES)){
+                // boost the term by the number of times it appears in the query
+                tempQuery =  new BoostQuery(tempQuery, termPair.getCount());
+            }
+            if (config.getAttribute(ConvertConfig.BOOST_LOCATION)){
+                // boost the term if location matches
+                tempQuery = new LocationBoostedQuery(tempQuery, termPair, field);
+            }
+            if(termPair.getTerm().trim().startsWith("(")){
+                tempQuery = new BoostQuery(tempQuery, mathWeight);
+                mathBuilder.add(tempQuery, BooleanClause.Occur.SHOULD);
+                mathCount += 1;
+            }else{
+                tempQuery = new BoostQuery(tempQuery, textWeight);
+                textBuilder.add(tempQuery, BooleanClause.Occur.SHOULD);
+                textCount += 1;
+            }
+            // add the query
+            // bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+        }
+        // try phrase queries
+        if(config.getAttribute(ConvertConfig.PROXIMITY)){
+            for(String phrase :  this.phrases){
+                bq.add(new PhraseQuery(5, field, phrase.split(" ")), BooleanClause.Occur.SHOULD);
+            }
+        }
+        if (tempQuery ==  null){
+            bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);
+        }else{
+            if(textCount > 0 && mathCount > 0){
+                mathBuilder.setMinimumNumberShouldMatch((int) Math.ceil(mathCount));
+                textBuilder.setMinimumNumberShouldMatch((int) Math.ceil(textCount));
+                bq.add(mathBuilder.build(), BooleanClause.Occur.MUST);
+                bq.add(textBuilder.build(), BooleanClause.Occur.MUST);
+            }else if(textCount == 0){
+                // just search for math
+                bq.add(mathBuilder.build(), BooleanClause.Occur.SHOULD);
+            }else if(mathCount == 0){
+                bq.add(textBuilder.build(), BooleanClause.Occur.SHOULD);
+            }
+        }
+        Query result = bq.build();
+        return (Query) (new MathScoreQuery(result, uniqueTerms, field, config, stats));
+    }
+
+    /**
+     * Builds a Lucene Query that has differnet weights for text and math tuples
+     * @param field the Lucene field being queries
+     * @param bq the booleanquery builder
+     * @param synonym whether included synonyms when indexing
+     * @param config config file to use
+     * @param stats the collection statistics (used for various types of queries)
+     * @param alpha the math weight
+     * @param beta the text weight
+     * @return Query a Lucene Query
+     * @throws IOException
+     */
     public Query buildWeightedQuery(String field,
                                     BooleanQuery.Builder bq,
                                     boolean synonym,
@@ -368,6 +520,13 @@ public class MathQuery {
             }
             // add the query
             bq.add(tempQuery, BooleanClause.Occur.SHOULD);
+        }
+        // try phrase queries
+        if(config.getAttribute(ConvertConfig.PROXIMITY)){
+            for(String phrase :  this.phrases){
+                System.out.println("Added Phrase Query: " + phrase);
+                bq.add(new PhraseQuery(5, field, phrase.split(" ")), BooleanClause.Occur.SHOULD);
+            }
         }
         if (tempQuery ==  null){
             bq.add(new TermQuery(new Term(field, "")), BooleanClause.Occur.SHOULD);

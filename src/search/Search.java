@@ -318,6 +318,13 @@ public class Search {
                                                               this.searcher.collectionStatistics(mathQuery.getFieldName()),
                                                               this.alpha,
                                                               this.beta);
+//                    buildQuery = mathQuery.buildMustWeightedQuery(mathQuery.getFieldName(),
+//                                                                  bq,
+//                                                                  this.synonym,
+//                                                                  this.config,
+//                                                                  this.searcher.collectionStatistics(mathQuery.getFieldName()),
+//                                                                  this.alpha,
+//                                                                  this.beta);
                 }else{
                      buildQuery = mathQuery.buildQuery(mathQuery.getFieldName(),
                                                        bq,
@@ -624,9 +631,9 @@ public class Search {
             hits = queryResult.getResults().scoreDocs;
             index = 0;
             for (ScoreDoc hit : hits){
-                // loop through every result of the 
+                // loop through every result of the
                 doc = this.searcher.doc(hit.doc);
-                queryWriter.write(query.getQueryName() + " 1 " + doc.get("path") + " " + (index+1) + " " + hit.score + " RITUW");
+                queryWriter.write(query.getQueryName() + " 2 " + Functions.parseTitle(doc.get("path")) + " " + (index+1) + " " + hit.score + " UW");
                 queryWriter.newLine();
                 index += 1;
             }
@@ -758,7 +765,7 @@ public class Search {
                                                                                            SAXException,
                                                                                            InterruptedException,
                                                                                            ParseException{
-        ArrayList<SearchResult> queryResults = this.searchQueries(queries, 20);
+        ArrayList<SearchResult> queryResults = this.searchQueries(queries, 1000);
         Judgements answers = new Judgements(results.toFile());
         ArrayList<ArrayList<Double>> scores;
         for (SearchResult queryResult: queryResults){
@@ -905,6 +912,11 @@ public class Search {
         partialScores.add(new Double (0));
         partialScores.add(new Double (0));
         int index = 0;
+        int r = 0;
+        int pr = 0;
+        int nr = 0;
+        int unknown = 0;
+        System.out.println(query.getQueryName());
         for (ScoreDoc hit : hits){
             Document doc = this.searcher.doc(hit.doc);
             rank = judgements.findResult(query, Functions.parseTitle(doc.get("path")));
@@ -916,6 +928,7 @@ public class Search {
                             " Path:" +
                             doc.get("path"));
             if (rank > Judgements.rLower){
+                r += 1;
                 if (index < 5){
                     relevantScores.set(0, relevantScores.get(0) + new Double(1));
                 }
@@ -930,6 +943,7 @@ public class Search {
                 }
             }
             if (rank > Judgements.pLower){
+                pr += 1;
                 if (index < 5){
                     partialScores.set(0, partialScores.get(0) + new Double(1));
                 }
@@ -943,13 +957,22 @@ public class Search {
                     partialScores.set(3, partialScores.get(3) + new Double(1));
                 }
             }
+            if (rank < (Judgements.pLower + 1) && rank > -1){
+                nr += 1;
+            }else if (rank < 0){
+                unknown += 1;
+            }
+            if(index == 4 || index == 9 || index == 14 || index == 19 || index == 999){
+                System.out.println(index + "," + r + "," + pr + "," + nr + "," + unknown);
+            }
             if (rank < 0 && !countNonRank){
                 // do nothin since if it not counted
             }else{
                 index += 1;
             }
-            
         }
+        
+        
         ArrayList<ArrayList<Double>> scores = new ArrayList<ArrayList<Double>>();
         scores.add(relevantScores);
         scores.add(partialScores);

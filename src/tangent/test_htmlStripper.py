@@ -40,7 +40,7 @@ Willick, J.A., Courteau, S., Faber, S.M., Burstein, D., Dekel, A., &amp; Strauss
 
     def testPartHtml(self):
         test = """<p class="ltx_p" id="S2.p1.1">We first explain formulation of full conformal quantum field theory on the"""
-        expect = """ We first explain formulation of full conformal quantum field theory on the"""
+        expect = """We first explain formulation of full conformal quantum field theory on the"""
         self.assertEqual(strip_tags(test), expect)
 
 if __name__ == "__main__":

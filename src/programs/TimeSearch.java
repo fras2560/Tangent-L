@@ -122,31 +122,35 @@ public class TimeSearch{
                                              ParseException,
                                              SearchConfigException,
                                              ConvertConfigException{
-        Date queryLoadStart = new Date();
+        long queryLoadStart = System.currentTimeMillis();
         ParseQueries queryLoader = new ParseQueries(queries.toFile(), config);
-        Date queryLoadEnd = new Date();
-        System.out.println(new Double(queryLoadEnd.getTime() - queryLoadStart .getTime()));
         ArrayList<MathQuery> mathQueries = queryLoader.getQueries();
         queryLoader.deleteFile();
-        Date start, end;
-        ArrayList<Double> times = new ArrayList<Double>();
+        long start, end;
+        ArrayList<Long> times = new ArrayList<Long>();
         Search searcher = new Search(index, config);
-        for (MathQuery mq: mathQueries){
-            start = new Date();
-            searcher.searchQuery(mq, size);
-            end = new Date();
-            times.add(new Double(end.getTime() - start.getTime()));
+        long queryLoadEnd = System.currentTimeMillis();
+        System.out.println(new Double(queryLoadEnd - queryLoadStart));
+        for (int i = 0; i < 10 ; i++){
+            for (MathQuery mq: mathQueries){
+                start = System.currentTimeMillis();
+                searcher.searchQuery(mq, size);
+                end = System.currentTimeMillis();
+                times.add(new Long(end - start));
+            }
+            System.out.println(i);
         }
-        Double min = new Double(0);
-        Double max = new Double(0);
-        Double total = new Double(0);
-        Double variance = new Double(0);
-        Double std = new Double(0);
-        Double mean = new Double(0);
+        Long min = new Long(0);
+        Long max = new Long(0);
+        Long total = new Long(0);
+        Long variance = new Long(0);
+        Long std = new Long(0);
+        Long mean = new Long(0);
+        Long temp;
         if (times.size() > 0){
             min = times.get(0);
             max = times.get(0);
-            for (Double time: times){
+            for (Long time: times){
                 if (time < min){
                     min = time;
                 }
@@ -155,18 +159,30 @@ public class TimeSearch{
                 }
                 total += time;
             }
-            mean = total / times.size();
-            for (Double time: times){
-                variance += Math.pow((time - mean), 2);
+            mean = total / (long) times.size();
+            for (Long time: times){
+                temp = (time - mean);
+                variance += (long) powerN(temp.longValue(), 2);
             }
-            std = Math.sqrt((variance / times.size()));
+            std = (long) Math.sqrt((variance / times.size()));
         }
         System.out.println(" Total time:" + total  +
                            " Mean:" + mean +
                            " Min:" + min + 
                            " Max:" + max +
-                           " Std:" + std
+                           " Std:" + std + 
+                           " Variance:" + variance 
                            );
+    }
+
+    public static long powerN(long number, int power) {
+        if(power == 0) return 1;
+        long result = number;
+        while(power > 1) {
+            result*=number;
+            power--;
+        }
+        return (long)result;
     }
 
     public static void main(String[] args) {
@@ -177,8 +193,8 @@ public class TimeSearch{
         }
         ConvertConfig config = new ConvertConfig();
         // default values
-        int precision = 1000;
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia_formula", "current");
+        int precision = 100;
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "wikipedia_formula", "findOptimal", "-LOCATION-COMPOUND_SYMBOLS-TERMINAL_SYMBOLS-EDGE_PAIRS-SYNONYMS");
         Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR11-Math-Wikipedia.xml");
         Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "wikipedia_formula", "recallChceck.log");
         for(int i = 0;i < args.length;i++) {
@@ -198,9 +214,8 @@ public class TimeSearch{
         }
         try {
             // setup the logger
-            
             config.loadConfig(index);
-            ProjectLogger.setLevel(Level.INFO);
+            ProjectLogger.setLevel(Level.OFF);
             ProjectLogger.setLogFile(logFile);
             // time all the different queries
             new TimeSearch(index, queries, config, precision);

@@ -478,8 +478,10 @@ public class ConvertConfig {
                   (config.proximity == false)){
             // requires proximity to use bm25tp
             result = false;
-        }else if (config.shortened != this.shortened){
-            // shortened is no backwards compatible
+        }else if (config.unbounded == true && config.shortened != this.shortened){
+            // shortened is not backwards compatible if using unbounded window size
+            // otherwise we dont care
+            // if the they are not using unbounded window size then should allow it
             result = false;
         }else if (config.location != this.location && this.expandLocation != true){
             // if expand location is true than do have  backwards compatible
@@ -556,7 +558,10 @@ public class ConvertConfig {
         fileWriter.write(ConvertConfig.BAGS_OF_WORDS + ConvertConfig.SEPERATOR + this.bags);
         fileWriter.newLine();
         fileWriter.write(ConvertConfig.SEPERATE_MATH_TEXT + ConvertConfig.SEPERATOR + this.seperate);
+        fileWriter.newLine();
+        fileWriter.write(ConvertConfig.PROXIMITY + ConvertConfig.SEPERATOR + this.proximity);
         fileWriter.close();
+        
     }
 
     /**

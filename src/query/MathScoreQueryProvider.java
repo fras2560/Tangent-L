@@ -113,8 +113,8 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      */
     public float bm25DistanceCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
         float newScore = subQueryScore;
-        float minDistance = this.minDistancePair(doc);
-        newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-minDistance)));
+        float measurement = this.minDistancePair(doc);
+        newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-measurement)));
         return newScore;
     }
 

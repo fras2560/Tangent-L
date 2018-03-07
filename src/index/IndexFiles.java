@@ -223,7 +223,7 @@ public class IndexFiles {
             while (!bq.isEmpty()){
                 System.out.println("Number of files left: "  + bq.size());
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.MINUTES.sleep(1);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -302,18 +302,16 @@ public class IndexFiles {
                        Path file,
                        long lastModified,
                        ConvertConfig config) throws IOException, InterruptedException {
-    Reader reader = new ConvertMathML(file).convert(config);
+    ConvertResult cr = new ConvertMathML(file).convert(config); 
+    Reader reader = cr.getReader(); 
     int docLength = 1;
-    String text = "";
     // make a new, empty document
     Document doc = new Document();
     if(config.getAttribute(ConvertConfig.PROXIMITY) || config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
-        text = Functions.parseString(reader);
-        docLength = text.split(" ").length;
-        int formulaCount = Functions.countTuples(text);
+        
         // a field to keep track of the doc length and formula length
-        doc.add(new StoredField(Constants.FORMULA_COUNT, formulaCount));
-        doc.add(new StoredField(Constants.DOCUMENT_LENGTH, docLength));
+        doc.add(new StoredField(Constants.FORMULA_COUNT, cr.getFormulaCount()));
+        doc.add(new StoredField(Constants.DOCUMENT_LENGTH, cr.getDocLength()));
     }
     // Add the path of the file as a field named "path".  Use a
     Field pathField = new StringField("path", file.toString(), Field.Store.YES);
@@ -341,8 +339,8 @@ public class IndexFiles {
     freqType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
     freqType.setTokenized(true);
     if(config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
-        doc.add(new Field(Constants.TEXTFIELD, text, freqType));
-        doc.add(new Field(Constants.MATHFIELD, text, freqType));
+        doc.add(new Field(Constants.TEXTFIELD, cr.getText(), freqType));
+        doc.add(new Field(Constants.MATHFIELD, cr.getText(), freqType));
     }else{
         doc.add(new Field(Constants.FIELD, reader, storeField));
     }
@@ -363,8 +361,8 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "firstAttempt");
-    Path docsPath = Paths.get(System.getProperty("user.dir"), "resources", "documents", "TODO");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
+    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_MathIR_WikiCorpus");
     Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIRFull.log");
     boolean create = false;
     for(int i=0;i<args.length;i++) {
@@ -401,11 +399,11 @@ public class IndexFiles {
         // -!SHORTENED -LOCATION -COMPOUND_SYMBOLS -TERMINAL_SYMBOLS -UNBOUNDED -SYNONYMS -BAG_OF_WORDS
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
-        config.setBooleanAttribute(ConvertConfig.UNBOUNDED, true);
+        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
         config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
         config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
-        config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+        config.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

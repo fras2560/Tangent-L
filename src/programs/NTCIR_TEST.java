@@ -42,9 +42,9 @@ public class NTCIR_TEST {
             System.out.println(usage);  
             System.exit(0);
         }
-        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "full_arXiv", "firstAttempt");
-        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-ArXiv.xml");
-        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-ArXiv-Math.dat");
+        Path index = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
+        Path queries = Paths.get(System.getProperty("user.dir"), "resources", "query", "NTCIR12-MathWiki-main.xml");
+        Path results = Paths.get(System.getProperty("user.dir"), "resources", "results", "NTCIR12-MathWiki-main.dat");
         String date = new SimpleDateFormat("dd-MM-yyyy:HH:mm").format(new Date());
         Path logFile = Paths.get(System.getProperty("user.dir"),
                                  "resources",
@@ -102,13 +102,18 @@ public class NTCIR_TEST {
             // setup the config file by loading what it is in the index
             ConvertConfig config = new ConvertConfig();
             config.loadConfig(index);
-            // config.setQueryType(ConvertConfig.BM25TP_QUERY);
-            config.setQueryType(ConvertConfig.DIFFERENT_WEIGHTED_QUERY);
+            config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+            config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+            config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+            config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+            config.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
+            config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
+            config.setQueryType(ConvertConfig.BM25_DISTANCE_QUERY);
             // do the actual searching
             Search searcher = new Search(index, config);
-            searcher.setAlpha(0.60f);
+            searcher.setAlpha(0.41f);
             searcher.ntcirTest(queries, results, resultsWriter);
-            searcher.recordQueries(queries, queryWriter, 100);;
+            searcher.recordQueries(queries, queryWriter, 1000);;
             // close the files
             resultsWriter.close();
             queryWriter.close();

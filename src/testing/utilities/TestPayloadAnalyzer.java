@@ -32,7 +32,7 @@ public class TestPayloadAnalyzer {
 
     @Test
     public void test1() {
-        String queryText = "hello #('a','b','n')||nn:5#";
+        String queryText = "hello #('a','b','n')|__|nn:5#";
         Map<String, TermCountPair> expect = new HashMap<String, TermCountPair>();
         expect.put("hello", new TermCountPair("hello"));
         TermCountPair tcp = new TermCountPair("('a','b','n')");
@@ -58,7 +58,7 @@ public class TestPayloadAnalyzer {
 
     @Test
     public void test2(){
-        String queryText = "#('a','b','n')||nn:5# #('a','b','n')||nn:5#";
+        String queryText = "#('a','b','n')|__|nn:5# #('a','b','n')|__|nn:5#";
         Map<String, TermCountPair> expect = new HashMap<String, TermCountPair>();
         TermCountPair tcp = new TermCountPair("('a','b','n')");
         tcp.increment();

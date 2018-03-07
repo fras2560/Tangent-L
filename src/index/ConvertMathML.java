@@ -67,12 +67,12 @@ public class ConvertMathML {
     }
 
     /**
-     * Converts a file and returns a path to the converted file path
+     * Converts a file and returns a reader to the converted file
      * @exception IOException
      * @exception InterruptedException
      * @return path to the file that was converted
      */
-    public Reader convert() throws IOException, InterruptedException{
+    public ConvertResult convert() throws IOException, InterruptedException{
         ConvertConfig config = new ConvertConfig();
         config.optimalConfig();
         return this.convert(config);
@@ -129,14 +129,14 @@ public class ConvertMathML {
     }
 
     /**
-     * Converts a file using the specified config and returns a path to the converted file path
+     * Converts a file using the specified config and ConvertResult which contains a reader
      * @see ConvertConfig
      * @param config the configuration of features to be used when converting
      * @exception IOException
      * @exception InterruptedException
-     * @return Reader the reader to the output stream
+     * @return ConvertResult contains a reader and some stats about the document
      */
-    public Reader convert(ConvertConfig config) throws IOException, InterruptedException{
+    public ConvertResult convert(ConvertConfig config) throws IOException, InterruptedException{
         // the output file
         String[] attributes = config.toCommands();
         String[] program = {"python3",
@@ -178,7 +178,7 @@ public class ConvertMathML {
             }
         }
         proc.waitFor();
-        Reader bufferedString = new StringReader(outBuffer.toString());
-        return bufferedString;
+        ConvertResult cr = new ConvertResult(outBuffer);
+        return cr;
     }
 }

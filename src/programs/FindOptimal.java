@@ -536,7 +536,7 @@ public class FindOptimal {
             logFile = Paths.get(System.getProperty("user.dir"), "resources", "output", "arXiv", timeStamp + "findOptimal.log");
         }else{
             if(formulaOnly){
-                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "wikipedia_formula");
+                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR11_wikipedia_formula");
                 indexDirectory = Paths.get(System.getProperty("user.dir"),
                                            "resources",
                                            "index",
@@ -559,7 +559,7 @@ public class FindOptimal {
                                     "wikipedia_formula",
                                     timeStamp + "findOptimal.log");
             }else{
-                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "wikipedia");
+                documents = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR11_wikipedia");
                 indexDirectory = Paths.get(System.getProperty("user.dir"),
                                            "resources",
                                            "index",
@@ -605,7 +605,19 @@ public class FindOptimal {
         ConvertConfig config = new ConvertConfig();
         // lay out what features to use
         ArrayList<String> features = new ArrayList<String>();
-        config.flipBit(ConvertConfig.SYNONYMS);
+        config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
+//        config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+//        config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
+//        config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+        // config.setMathBM25(true);
+        // config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
+        // config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
+        // config.setBooleanAttribute(ConvertConfig.UNBOUNDED, false);
+        // config.setBooleanAttribute(ConvertConfig.EDGE, true);
+        // config.setBooleanAttribute(ConvertConfig.SHORTENED, true);
+        // config.setBooleanAttribute(ConvertConfig.EDGE, true);
+        // config.setBooleanAttribute(ConvertConfig.SHORTENED, false);
+        // config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
 //        config.flipBit(ConvertConfig.TERMINAL);
 //        config.flipBit(ConvertConfig.COMPOUND);
 //        config.flipBit(ConvertConfig.EXPAND_LOCATION);

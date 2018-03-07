@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.junit.Test;
@@ -46,6 +48,43 @@ public class TestParseQueries {
             assertEquals(mq.getTerms().get(1), "('+','*','n')");
             assertEquals(mq.getTerms().get(2), "mean");
             assertEquals(mq.getTerms().get(3), "arithmet");
+        } catch (IOException | InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Threw InterruptException | IOException");
+        } catch (XPathExpressionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Threw XPathExpressionException");
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Threw ParserConfigurationException");
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Threw SAXException");
+        }
+    }
+
+    @Test
+    public void testPhrase() {
+        Path p = Paths.get(System.getProperty("user.dir"),
+                           "resources",
+                           "test",
+                           "test_phrase_query",
+                           "test.xml");
+        try {
+            ParseQueries pq = new ParseQueries(p.toFile());
+            ArrayList<MathQuery> queries = pq.getQueries();
+            MathQuery mq = queries.get(0);
+            assertEquals(mq.getQueryName(), "NTCIR12-MathIR-23");
+            assertEquals(mq.getTerms().size(), 8);
+            List<String> phrases = mq.getPhrases();
+            assertEquals(phrases.get(0), "warp drive");
+            assertEquals(phrases.get(1), "alcubierr drive");
+            assertEquals(phrases.get(2), "faster than light travel");
+            
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
