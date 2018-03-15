@@ -49,7 +49,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import search.MathSimilarityWrapper;
 import utilities.Constants;
-import utilities.Functions;
 import utilities.ProjectLogger;
 
 
@@ -304,11 +303,9 @@ public class IndexFiles {
                        ConvertConfig config) throws IOException, InterruptedException {
     ConvertResult cr = new ConvertMathML(file).convert(config); 
     Reader reader = cr.getReader(); 
-    int docLength = 1;
     // make a new, empty document
     Document doc = new Document();
     if(config.getAttribute(ConvertConfig.PROXIMITY) || config.getAttribute(ConvertConfig.SEPERATE_MATH_TEXT)){
-        
         // a field to keep track of the doc length and formula length
         doc.add(new StoredField(Constants.FORMULA_COUNT, cr.getFormulaCount()));
         doc.add(new StoredField(Constants.DOCUMENT_LENGTH, cr.getDocLength()));

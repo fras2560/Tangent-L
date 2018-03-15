@@ -21,6 +21,26 @@ def compare_doc_id(document_id, doc_id):
     return doc_id in document_id
 
 
+def parse_formula_id_wiki(document_id, mathml):
+    """Returns the formula id for the mathml equation if wikipedia
+    """
+    index = mathml.index('id="')
+    formula_id = "?"
+    if(index != -1):
+        # find document id
+        start = index + len('id="')
+        end = start
+        while (not mathml[start:end+1].endswith('"') or
+               document_id not in mathml[start:end+1]):
+            end += 1
+        doc_id = mathml[start:end]
+        formula_id = doc_id.split(":")[-1]
+    else:
+        print("FAILED PARSING FORMULA ID: " + document_id)
+        print(mathml)
+    return formula_id
+
+
 def parse_formula_id(document_id, mathml):
     """Returns the formula id for the mathml equation
     """
@@ -50,7 +70,7 @@ def parse_formula_id(document_id, mathml):
     return formula_id
 
 
-def save_formulas(file, directory):
+def save_formulas(file, directory, wikipedia=False):
     """Saves the formulas from the file in their seperate files in the directory
     """
     (__, content) = MathDocument.read_doc_file(file)
@@ -59,7 +79,14 @@ def save_formulas(file, directory):
         if(start != -1):
             file_name = os.path.splitext(os.path.basename(file))[0]
             ext = os.path.splitext(os.path.basename(file))[1]
-            formula_id = parse_formula_id(file_name, content[start:end])
+            if not wikipedia:
+                formula_id = parse_formula_id(file_name, content[start:end])
+            else:
+                try:
+                    formula_id = parse_formula_id_wiki(file_name,
+                                                       content[start:end])
+                except ValueError:
+                    print("Math tag formula id not valid {}".format(content[start:end]))
             formula_path = os.path.join(directory,
                                         file_name + "-" + formula_id + ext)
             with open(formula_path, "w+") as f:
@@ -71,11 +98,17 @@ def save_formulas(file, directory):
     return
 
 
-def parse_directory(directory, move_to):
+def parse_directory(directory, move_to, wikipedia=False):
     for subdir, __, files in os.walk(directory):
         for file in files:
-            print(file)
-            save_formulas(os.path.join(subdir, file), move_to)
+            try:
+                save_formulas(os.path.join(subdir, file),
+                              move_to,
+                              wikipedia=wikipedia)
+            except UnicodeDecodeError:
+                print("Failed to convert File {}".format(file))
+            except ValueError:
+                print("Failed to find id in File{}".format(file))
 
 
 class Test(unittest.TestCase):
@@ -109,6 +142,17 @@ class Test(unittest.TestCase):
         self.assertEqual(compare_doc_id("02457", "2459"), False)
         self.assertEqual(compare_doc_id("02459.html", "2459"), True)
 
+    def testWikipedia(self):
+        mathml = ''' <math display="inline" id="Euclidean_algorithm:9"> '''
+        self.assertEqual(parse_formula_id_wiki("Euclidean_algorithm", mathml),
+                         "9")
+
+    def testSaveFormulasWikipedia(self):
+        save_formulas(os.path.join(os.getcwd(),
+                                   "testFiles",
+                                   "Euclidean_algorithm.html"),
+                      self.test_folder,
+                      wikipedia=True)
 
 if __name__ == "__main__":
     descp = "Parse out formulas to their own files"
@@ -121,5 +165,12 @@ if __name__ == "__main__":
                         '--out_directory',
                         help='The folder to output the formula files',
                         required=True)
+    parser.add_argument('-wikipedia',
+                        dest="wikipedia",
+                        action="store_true",
+                        help="The formulas have a wikipedia style id",
+                        default=False)
     args = parser.parse_args()
-    parse_directory(args.in_directory, args.out_directory)
+    parse_directory(args.in_directory,
+                    args.out_directory,
+                    wikipedia=args.wikipedia)

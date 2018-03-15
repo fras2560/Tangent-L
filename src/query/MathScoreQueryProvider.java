@@ -17,6 +17,7 @@ package query;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -113,11 +114,140 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
      */
     public float bm25DistanceCustomScore(int doc, float subQueryScore, float valSrcScores []) throws IOException{
         float newScore = subQueryScore;
-        float measurement = this.minDistancePair(doc);
+        // comment one out if you want to switch the distance measurement used
+        float measurement = this.minSpan(doc);
+        // float measurement = this.minDistancePair(doc);
         newScore = (float) (newScore + Math.log(MathScoreQueryProvider.ALPHA + Math.exp(-measurement)));
         return newScore;
     }
 
+    /**
+     * Returns the maximum value of the list of lists
+     * @param positions a list of positions lists
+     * @return int the maximum value
+     */
+    public int maxValue(List<List<Integer>> positions){
+        int value = 0;
+        for (List<Integer> values : positions){
+            int temp = Collections.max(values).intValue();
+            if (temp > value){
+                value = temp;
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Return the maximum of the min value of each position listing
+     * @param positions a list of position lists
+     * @return int the maximum of the min values
+     */
+    public int maxMinValue(List<List<Integer>> positions){
+        int value = 0;
+        for (List<Integer> values : positions){
+            int temp = Collections.min(values).intValue();
+            if(temp > value){
+                value = temp;
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Return the minimum of the min value of each position listing
+     * @param positions a list of position lists
+     * @return int the minimum of the min values
+     */
+    public int minMinValue(List<List<Integer>> positions){
+        int value = Integer.MAX_VALUE;
+        for (List<Integer> values : positions){
+            int temp = Collections.min(values).intValue();
+            if(temp < value){
+                value = temp;
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Removes any positions that are lower than the start
+     * @param positions a list of positions lists
+     * @param start the start value or left border 
+     */
+    public void removeLowerPositions(List<List<Integer>> positions, int start){
+        for (List<Integer> values : positions){
+            while(values.get(0).floatValue() < start){
+                values.remove(0);
+            }
+        }
+    }
+
+    /**
+     * Calculates the min span from a list of position lists
+     * @param positions a list of position lists
+     * @return float the min span measurement
+     */
+    public int minSpanCalc(List<List<Integer>> positions){
+        int start = 0;
+        int end = this.maxValue(positions);
+        int spanStart, spanEnd;
+        List<Integer> spans = new ArrayList<Integer>();
+        if (start == end){
+            spans.add(new Integer(0));
+        }
+        while (start < end){
+            spanStart = this.minMinValue(positions);
+            spanEnd = this.maxMinValue(positions);
+            spans.add(new Integer(Math.abs(spanEnd - spanStart)));
+            start = spanStart + 1;
+            try{
+                this.removeLowerPositions(positions, start);
+            }catch (IndexOutOfBoundsException e){
+                // we are done the one position lists is out of values
+                start = end;
+            }
+        }
+        return Collections.min(spans).intValue();
+    }
+
+    /**
+     * Returns the minimum span for all matched terms
+     * @param doc the doc id number
+     * @return float the minimum span
+     * @throws IOException
+     */
+    public float minSpan(int doc) throws IOException{
+        float distance = 0f;
+        LeafReader reader = this.context.reader();
+        List<List<Integer>> positions = new ArrayList<List<Integer>>();
+        if (reader != null){
+            // get a sorted list of positions
+            for (TermCountPair term: this.terms){
+                List<Integer> pos = new ArrayList<Integer>();
+                PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
+                if (posting != null){
+                    // move to the document currently looking at
+                    posting.advance(doc);
+                    int count = 0;
+                    int freq = posting.freq();
+                    // make sure to add them all
+                    while (count < freq){
+                        pos.add(new Integer(posting.nextPosition()));
+                        count += 1;
+                    }
+                }
+                if(pos.size() > 0){
+                    positions.add(pos);
+                }
+            }
+        }
+        if (positions.size() < 2){
+            distance = this.getDocLength(doc);
+        }else{
+            distance = (float) this.minSpanCalc(positions);
+        }
+        return distance;
+    }
     /**
      * Returns the minimum distance between pairs of terms
      * @param doc the doc id number
@@ -128,7 +258,7 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         float distance = 0f;
         SortedSet<Integer> pos = new TreeSet<Integer>();
         LeafReader reader = this.context.reader();
-        if (reader != null){
+        if (reader != null && this.terms.size() > 1){
             // get a sorted list of positions
             for (TermCountPair term: this.terms){
                 PostingsEnum posting = reader.postings(new Term(this._field, term.getTerm()), PostingsEnum.POSITIONS);
@@ -157,6 +287,8 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
                 prev = current;
             }
             distance = (float) dist.intValue();
+        }else if(this.terms.size() > 1){
+            distance = (float) this.getDocLength(doc);
         }
         return distance;
     }
@@ -241,7 +373,8 @@ public class MathScoreQueryProvider extends CustomScoreProvider{
         long docLength = 1;
         LeafReader reader = this.context.reader();
         if (reader != null){
-            docLength = reader.getNumericDocValues(Constants.DOCUMENT_LENGTH).get(doc);
+            docLength = Long.parseLong(reader.document(doc).get(Constants.DOCUMENT_LENGTH));
+            // docLength = reader.getNumericDocValues(Constants.DOCUMENT_LENGTH).get(doc);
         }
         return docLength;
     }
