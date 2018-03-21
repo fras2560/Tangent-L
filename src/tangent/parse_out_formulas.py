@@ -10,9 +10,11 @@ import shutil
 try:
     from math_extractor import MathExtractor
     from mathdocument import MathDocument
+    from tqdm import tqdm
 except ImportError:
     from tangent.math_extractor import MathExtractor
     from tangent.mathdocument import MathDocument
+    from tangent.tqdm import tqdm
 
 
 def compare_doc_id(document_id, doc_id):
@@ -30,8 +32,7 @@ def parse_formula_id_wiki(document_id, mathml):
         # find document id
         start = index + len('id="')
         end = start
-        while (not mathml[start:end+1].endswith('"') or
-               document_id not in mathml[start:end+1]):
+        while (not mathml[start:end+1].endswith('"')):
             end += 1
         doc_id = mathml[start:end]
         formula_id = doc_id.split(":")[-1]
@@ -79,19 +80,22 @@ def save_formulas(file, directory, wikipedia=False):
         if(start != -1):
             file_name = os.path.splitext(os.path.basename(file))[0]
             ext = os.path.splitext(os.path.basename(file))[1]
-            if not wikipedia:
-                formula_id = parse_formula_id(file_name, content[start:end])
-            else:
-                try:
+            try:
+                if not wikipedia:
+                    formula_id = parse_formula_id(file_name, content[start:end])
+                else:
                     formula_id = parse_formula_id_wiki(file_name,
                                                        content[start:end])
-                except ValueError:
-                    print("Math tag formula id not valid {}".format(content[start:end]))
-            formula_path = os.path.join(directory,
-                                        file_name + "-" + formula_id + ext)
-            with open(formula_path, "w+") as f:
-                print(content[start:end], file=f)
+                formula_path = os.path.join(directory,
+                                            file_name + "-" + formula_id + ext)
+                with open(formula_path, "w+") as f:
+                    print(content[start:end], file=f)
             # move to the next equation
+            except ValueError:
+                prompt = "Math tag formula id not valid"
+                print("File: {} {} {}".format(file_name,
+                                              content[start:end],
+                                              prompt))
             content = content[end:]
         else:
             content = ""
@@ -100,7 +104,7 @@ def save_formulas(file, directory, wikipedia=False):
 
 def parse_directory(directory, move_to, wikipedia=False):
     for subdir, __, files in os.walk(directory):
-        for file in files:
+        for file in tqdm(files):
             try:
                 save_formulas(os.path.join(subdir, file),
                               move_to,

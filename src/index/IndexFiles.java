@@ -358,8 +358,8 @@ public class IndexFiles {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-logfile file] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
-    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia", "current");
-    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_MathIR_WikiCorpus");
+    Path indexPath = Paths.get(System.getProperty("user.dir"), "resources", "index", "ntcir-12-wikipedia-formula", "current");
+    Path docsPath = Paths.get("/home", "d6fraser", "Documents", "Research", "Datasets", "NTCIR12_MathIR_WikiCorpusFormulas");
     Path logFile = Paths.get(System.getProperty("user.dir"), "resources", "logs", "NTCIRFull.log");
     boolean create = false;
     for(int i=0;i<args.length;i++) {
@@ -396,11 +396,10 @@ public class IndexFiles {
         // -!SHORTENED -LOCATION -COMPOUND_SYMBOLS -TERMINAL_SYMBOLS -UNBOUNDED -SYNONYMS -BAG_OF_WORDS
         config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         config.setBooleanAttribute(ConvertConfig.SYNONYMS, true);
-        config.setBooleanAttribute(ConvertConfig.BAGS_OF_WORDS, true);
         config.setBooleanAttribute(ConvertConfig.TERMINAL, true);
         config.setBooleanAttribute(ConvertConfig.COMPOUND, true);
         config.setBooleanAttribute(ConvertConfig.EXPAND_LOCATION, true);
-        config.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
+//        config.setBooleanAttribute(ConvertConfig.PROXIMITY, true);
         IndexFiles idf = new IndexFiles();
         idf.indexDirectory(indexPath, docsPath, create, config);
     } catch (IOException e) {

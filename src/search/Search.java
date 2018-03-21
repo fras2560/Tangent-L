@@ -971,7 +971,9 @@ public class Search {
                 index += 1;
             }
         }
-        
+        if(index < 999){
+            System.out.println(index + "," + r + "," + pr + "," + nr + "," + unknown);
+        }
         
         ArrayList<ArrayList<Double>> scores = new ArrayList<ArrayList<Double>>();
         scores.add(relevantScores);

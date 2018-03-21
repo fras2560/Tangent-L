@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topics xmlns="http://ntcir-math.nii.ac.jp/" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <topic>
+    <num>NTCIR12-MathIR-23</num>
+    <query>
+      <formula id="f.0">
+        <m:math>
+          <m:semantics xml:id="m36.1a">
+            <m:ci xml:id="m36.1.1" xref="m36.1.1.pmml">c</m:ci>
+            <m:annotation-xml encoding="MathML-Presentation" xml:id="m36.1b">
+              <m:mi xml:id="m36.1.1.pmml" xref="m36.1.1">c</m:mi>
+            </m:annotation-xml>
+            <m:annotation encoding="application/x-tex" xml:id="m36.1c">c</m:annotation>
+          </m:semantics>
+        </m:math>
+      </formula>
+      <keyword id="w.0">warp drive</keyword>
+      <keyword id="w.1">alcubierre drive</keyword>
+      <keyword id="w.2">faster than light travel</keyword>
+    </query>
+  </topic>
+</topics>
