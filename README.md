@@ -1,2 +1,2 @@
-# UWResearch
-A private repo for my research at UW
+# Tangent-L
+A system that explores using traditional text retrieval approaches for formula retrieval so that it can be easily integrated with keyword retrieval, thus combining text and math at a low level to improve effectiveness, while using a single inverted index for efficiency. The first aim is to determine how traditional text retrieval methods can be applied to formula retrieval to achieve results that are comparable to using expensive math-specific scoring functions.
