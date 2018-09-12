@@ -1,0 +1,5 @@
+/**
+*  This file defines the relationship between different Gradle projects. 
+* It will be updated in the future to link to the different test projects
+**/
+rootProject.name = 'Tangent-L'
