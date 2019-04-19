@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import index.ConvertConfig;
-import index.ConvertMathML;
+import index.ConvertMathMl;
 import query.MathQuery;
 import utilities.ProjectLogger;
 
@@ -92,7 +92,7 @@ public class ParseQueries{
     public ParseQueries(File f, ConvertConfig config, Logger logger) throws IOException, InterruptedException{
         this.logger = logger;
         this.logger = ProjectLogger.getLogger();
-        Path new_file = new ConvertMathML(f.toPath()).convertPath(config.getSearchConfig());
+        Path new_file = new ConvertMathMl(f.toPath()).convertPath(config.getSearchConfig());
         this.f = new File(new_file.toString());
         this.queries = new ArrayList<MathQuery>();
         this.config = config;

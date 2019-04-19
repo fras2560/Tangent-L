@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import index.ConvertConfig;
-import index.ConvertMathML;
+import index.ConvertMathMl;
 
 public class TestConvertMathML {
     Path path;
@@ -52,7 +52,7 @@ public class TestConvertMathML {
     @Test
     public void test() {
         System.out.println(this.path.toString());
-        ConvertMathML math =  new ConvertMathML(this.path);
+        ConvertMathMl math =  new ConvertMathMl(this.path);
         ConvertConfig config = new ConvertConfig();
         config.optimalConfig();
         try {

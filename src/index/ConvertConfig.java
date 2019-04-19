@@ -32,7 +32,7 @@ import java.util.LinkedList;
  * tuples. @Todo - update to use enumeration
  *
  * @author Dallas Fraser
- * @see ConvertMathML
+ * @see ConvertMathMl
  * @since 2017-09-06
  */
 public class ConvertConfig {

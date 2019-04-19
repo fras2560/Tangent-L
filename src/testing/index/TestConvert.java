@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import index.ConvertConfig;
-import index.ConvertMathML;
+import index.ConvertMathMl;
 
 
 public class TestConvert {
@@ -53,7 +53,7 @@ public class TestConvert {
     public void testConvertSymbolsPairs(){
         ConvertConfig config = new ConvertConfig();
         config.setBooleanAttribute(ConvertConfig.SYMBOLS, true);
-        ConvertMathML math = new ConvertMathML(this.path);
+        ConvertMathMl math = new ConvertMathMl(this.path);
         try{
             Path result = math.convertPath(config);
             this.temp_file = result;
@@ -84,7 +84,7 @@ public class TestConvert {
     @Test
     public void test() {
         System.out.println(this.path.toString());
-        ConvertMathML math =  new ConvertMathML(this.path);
+        ConvertMathMl math =  new ConvertMathMl(this.path);
         ConvertConfig config = new ConvertConfig();
         config.optimalConfig();
         try {

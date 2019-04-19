@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package index;
-/**
- * A Exception thrown when  the Query Type given to the ConvertConfig is incompatible 
- * @author Dallas Fraser
- * @since 2017-11-06 
- */
-public class QueryTypeException extends Exception{
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
-    public QueryTypeException(String message){
-        super(message);
-    }
+package index;
+
+/**
+ * A Exception thrown when the Query Type given to the ConvertConfig is incompatible .
+ *
+ * @author Dallas Fraser
+ * @since 2017-11-06
+ */
+public class QueryTypeException extends Exception {
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Constructor.
+   *
+   * @param message - the exception message
+   */
+  public QueryTypeException(String message) {
+    super(message);
+  }
 }

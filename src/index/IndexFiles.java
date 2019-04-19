@@ -311,7 +311,7 @@ public class IndexFiles {
    */
   static void indexDoc(IndexWriter writer, Path file, long lastModified, ConvertConfig config)
       throws IOException, InterruptedException {
-    final ConvertResult cr = new ConvertMathML(file).convert(config);
+    final ConvertResult cr = new ConvertMathMl(file).convert(config);
     final Reader reader = cr.getReader();
     // make a new, empty document
     final Document doc = new Document();
