@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package utilities;
 
 /**
- * Holds some constants for the project
+ * Holds some constants for the project.
+ *
  * @author Dallas Fraser
  * @since 2017-11-09
  */
 public class Constants {
-    public final static String WILDCARD = "*";
-    public final static String ESCAPED_WILDCARD = "/*";
-    public final static String FIELD = "contents";
-    public final static String MATHFIELD = "math-contents";
-    public final static String TEXTFIELD = "text-contents";
-    public final static String DOCUMENT_LENGTH = "documentLength";
-    public final static String FORMULA_COUNT = "numberOfFormulas";
-    public final static String WORD_COUNT = "numberOfWords";
-    public final static String MAX_FORMULA_SIZE = "maxFormulaSize";
-    public final static String AVERAGE_FORMULA_SIZE = "averageFormulaSize";
-    public final static String FORMULA_PREFIX = "(";
-    public final static String FORMULA_SUFFIX = ")";
-    public final static String FORMULA_START_TAG = "(start)";
-    public final static String FORMULA_END_TAG = "(end)";
-    public final static String PAYLOAD_DELIMITER = "\\|__\\|";
-    public final static String PAYLOAD_SEPARATOR = ":";
-    public final static String DOCUMENT_SIZE = "DOCUMENT SIZE";
-    public final static String TEMP_EXT = "_temp";
+  public static final String WILDCARD = "*";
+  public static final String ESCAPED_WILDCARD = "/*";
+  public static final String FIELD = "contents";
+  public static final String MATHFIELD = "math-contents";
+  public static final String TEXTFIELD = "text-contents";
+  public static final String DOCUMENT_LENGTH = "documentLength";
+  public static final String FORMULA_COUNT = "numberOfFormulas";
+  public static final String WORD_COUNT = "numberOfWords";
+  public static final String MAX_FORMULA_SIZE = "maxFormulaSize";
+  public static final String AVERAGE_FORMULA_SIZE = "averageFormulaSize";
+  public static final String FORMULA_PREFIX = "(";
+  public static final String FORMULA_SUFFIX = ")";
+  public static final String FORMULA_START_TAG = "(start)";
+  public static final String FORMULA_END_TAG = "(end)";
+  public static final String PAYLOAD_DELIMITER = "\\|__\\|";
+  public static final String PAYLOAD_SEPARATOR = ":";
+  public static final String DOCUMENT_SIZE = "DOCUMENT SIZE";
+  public static final String TEMP_EXT = "_temp";
 }

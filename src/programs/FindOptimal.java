@@ -40,7 +40,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.xml.sax.SAXException;
 import query.MathQuery;
 import query.ParseQueries;
-import search.Judgements;
+import search.Judgments;
 import search.Search;
 import search.Search.SearchConfigException;
 import search.SearchResult;
@@ -62,7 +62,7 @@ public class FindOptimal {
   protected Path index;
   protected BufferedWriter output;
   private ArrayList<MathQuery> mathQueries;
-  private final Judgements answers;
+  private final Judgments answers;
   private static Float RELEVANT_LOWER = new Float(0.0);
   private static int TOP_K = 10000;
   private final Path queries;
@@ -147,7 +147,7 @@ public class FindOptimal {
     this.documents = documents;
     this.index = index;
     this.output = output;
-    this.answers = new Judgements(results.toFile());
+    this.answers = new Judgments(results.toFile());
     this.logger = logger;
     this.queries = queries;
     this.greedy = greedy;

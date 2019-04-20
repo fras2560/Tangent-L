@@ -30,7 +30,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.xml.sax.SAXException;
 import query.MathQuery;
 import query.ParseQueries;
-import search.Judgements;
+import search.Judgments;
 import search.Search;
 import search.Search.SearchConfigException;
 import utilities.ProjectLogger;
@@ -120,7 +120,7 @@ public class RecallCheck {
     int relevantFound;
     int partialRelevantFound;
     int[] recalls;
-    final Judgements answers = new Judgements(results.toFile());
+    final Judgments answers = new Judgments(results.toFile());
     while (increasing && size <= maxSize) {
       relevantDocs = 0;
       partialRelevantDocs = 0;

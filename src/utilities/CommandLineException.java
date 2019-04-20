@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package utilities;
 
 /**
- * 
+ * Exception when parsing/dealing with command line arguments.
+ *
  * @author Dallas Fraser
  * @since 2018-02-02
  */
-public class CommandLineException extends Exception{
+public class CommandLineException extends Exception {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public CommandLineException(String message){
-        super(message);
-    }
+  public CommandLineException(String message) {
+    super(message);
+  }
 }

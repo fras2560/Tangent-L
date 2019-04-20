@@ -44,7 +44,7 @@ import index.ConvertConfig;
 import index.IndexFiles;
 import query.MathQuery;
 import query.ParseQueries;
-import search.Judgements;
+import search.Judgments;
 import search.Search;
 import search.SearchResult;
 import testing.BaseTest;
@@ -266,7 +266,7 @@ public class TestSearch extends BaseTest{
     @Test
     public void testarxivScore() {
         // load the judgements
-        Judgements answers = new Judgements(this.judgements.toFile());
+        Judgments answers = new Judgments(this.judgements.toFile());
         // load the queries
         ParseQueries queryLoader;
         ArrayList<ArrayList<Double>> scores;

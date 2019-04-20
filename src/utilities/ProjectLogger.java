@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package utilities;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.ConsoleHandler;
@@ -24,60 +26,62 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
- * The logger to be used for the project
+ * The logger to be used for the project.
+ *
  * @author Dallas Fraser
  * @since 2017-11-09
  */
 public class ProjectLogger {
-    private static Logger logger = Logger.getLogger(ProjectLogger.class.getName());
-    private static Level level = Level.INFO;
-    /**
-     * The class constructor
-     */
-    public ProjectLogger(){
-        
-    }
+  private static Logger logger = Logger.getLogger(ProjectLogger.class.getName());
+  private static Level level = Level.INFO;
 
-    /**
-     * Set the level of the logger
-     * @param level the level of the logger
-     */
-    public static void setLevel(Level level){
-        ProjectLogger.level = level;
-        ProjectLogger.logger.setLevel(level);
-        Handler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(level);
-        ProjectLogger.logger.addHandler(consoleHandler);
-        ProjectLogger.logger.setUseParentHandlers( false );
-    }
+  /** The class constructor. */
+  public ProjectLogger() {}
 
-    /**
-     * Returns the logger
-     * @return Logger
-     */
-    public static Logger getLogger(){
-        return ProjectLogger.logger;
-    }
+  /**
+   * Set the level of the logger.
+   *
+   * @param level the level of the logger
+   */
+  public static void setLevel(Level level) {
+    ProjectLogger.level = level;
+    ProjectLogger.logger.setLevel(level);
+    final Handler consoleHandler = new ConsoleHandler();
+    consoleHandler.setLevel(level);
+    ProjectLogger.logger.addHandler(consoleHandler);
+    ProjectLogger.logger.setUseParentHandlers(false);
+  }
 
-    /**
-     * Set the logger to the given logger
-     * @param logger
-     */
-    public static void setLogger(Logger logger){
-        ProjectLogger.logger = logger;
-    }
+  /**
+   * Returns the logger.
+   *
+   * @return Logger
+   */
+  public static Logger getLogger() {
+    return ProjectLogger.logger;
+  }
 
-    /**
-     * Sets the file to log to
-     * @param logFile the path to the file to log to
-     * @throws SecurityException
-     * @throws IOException
-     */
-    public static void setLogFile(Path logFile) throws SecurityException, IOException{
-        Handler fileHandler  = new FileHandler(logFile.toString());
-        SimpleFormatter formatter = new SimpleFormatter(); 
-        fileHandler.setFormatter(formatter);
-        fileHandler.setLevel(ProjectLogger.level);
-        ProjectLogger.logger.addHandler(fileHandler);
-    }
+  /**
+   * Set the logger to the given logger.
+   *
+   * @param logger - the logger to use
+   */
+  public static void setLogger(Logger logger) {
+    ProjectLogger.logger = logger;
+  }
+
+  /**
+   * Sets the file to log to.
+   *
+   * @param logFile the path to the file to log to
+   * @throws SecurityException - issue with the security level
+   * @throws IOException - issue while dealing with a file
+   */
+  public static void setLogFile(Path logFile) throws SecurityException, IOException {
+    final Handler fileHandler = new FileHandler(logFile.toString());
+    final SimpleFormatter formatter = new SimpleFormatter();
+    fileHandler.setFormatter(formatter);
+    fileHandler.setLevel(ProjectLogger.level);
+    ProjectLogger.logger.addHandler(fileHandler);
+  }
 }
