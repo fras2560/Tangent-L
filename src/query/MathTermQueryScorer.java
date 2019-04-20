@@ -14,35 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package query;
 
-
 import java.io.IOException;
-
 import org.apache.lucene.index.PostingsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Weight;
 import org.apache.lucene.search.similarities.Similarity;
 
-/** Expert: A <code>Scorer</code> for documents matching a <code>Term</code>.
- */
-final class MathTermScorer extends Scorer {
+/** Expert: A <code>Scorer</code> for documents matching a <code>Term</code>. */
+final class MathTermQueryScorer extends Scorer {
   private final PostingsEnum postingsEnum;
   private final Similarity.SimScorer docScorer;
   private final int termCount;
+
   /**
    * Construct a <code>TermScorer</code>.
    *
-   * @param weight
-   *          The weight of the <code>Term</code> in the query.
-   * @param td
-   *          An iterator over the documents matching the <code>Term</code>.
-   * @param docScorer
-   *          The <code>Similarity.SimScorer</code> implementation
-   *          to be used for score computations.
+   * @param weight The weight of the <code>Term</code> in the query.
+   * @param td An iterator over the documents matching the <code>Term</code>.
+   * @param docScorer The <code>Similarity.SimScorer</code> implementation to be used for score
+   *     computations.
    */
-  MathTermScorer(Weight weight, PostingsEnum td, Similarity.SimScorer docScorer, int termCount) {
+  MathTermQueryScorer(
+      Weight weight, PostingsEnum td, Similarity.SimScorer docScorer, int termCount) {
     super(weight);
     this.docScorer = docScorer;
     this.postingsEnum = td;
@@ -51,27 +48,29 @@ final class MathTermScorer extends Scorer {
 
   @Override
   public int docID() {
-    return postingsEnum.docID();
+    return this.postingsEnum.docID();
   }
 
   @Override
   public int freq() throws IOException {
-    return postingsEnum.freq();
+    return this.postingsEnum.freq();
   }
 
   @Override
   public DocIdSetIterator iterator() {
-    return postingsEnum;
+    return this.postingsEnum;
   }
 
   @Override
   public float score() throws IOException {
-    assert docID() != DocIdSetIterator.NO_MORE_DOCS;
-    int maxFreq = Math.min(postingsEnum.freq(), this.termCount );
-    return docScorer.score(postingsEnum.docID(), maxFreq);
+    assert this.docID() != DocIdSetIterator.NO_MORE_DOCS;
+    final int maxFreq = Math.min(this.postingsEnum.freq(), this.termCount);
+    return this.docScorer.score(this.postingsEnum.docID(), maxFreq);
   }
 
   /** Returns a string representation of this <code>TermScorer</code>. */
   @Override
-  public String toString() { return "scorer(" + weight + ")[" + super.toString() + "]"; }
+  public String toString() {
+    return "scorer(" + this.weight + ")[" + super.toString() + "]";
+  }
 }
