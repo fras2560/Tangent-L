@@ -376,7 +376,7 @@ public class BM25PlusSimilarity extends Similarity {
   /**
    * Returns the <code>k1</code> parameter.
    *
-   * @see #BM25Similarity(float, float)
+   * @see org.apache.lucene.search.similarities.BM25Similarity
    */
   public final float getK1() {
     return this.k1;
@@ -385,7 +385,7 @@ public class BM25PlusSimilarity extends Similarity {
   /**
    * Returns the <code>b</code> parameter.
    *
-   * @see #BM25Similarity(float, float)
+   * @see org.apache.lucene.search.similarities.BM25Similarity
    */
   public final float getB() {
     return this.bvalue;

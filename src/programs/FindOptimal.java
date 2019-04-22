@@ -63,7 +63,7 @@ public class FindOptimal {
   protected BufferedWriter output;
   private ArrayList<MathQuery> mathQueries;
   private final Judgments answers;
-  private static Float RELEVANT_LOWER = new Float(0.0);
+  private static Float RELEVANT_LOWER = Float.valueOf(0);
   private static int TOP_K = 10000;
   private final Path queries;
   protected Logger logger;
@@ -80,11 +80,9 @@ public class FindOptimal {
    * @param results path to the ground truth of the queries
    * @throws IOException - issue with parsing file
    * @throws XPathExpressionException - issue parsing math ml
-   * @throws ConvertConfigException - exception when converting mathml
    * @throws InterruptedException - issue when python process
    * @throws ParserConfigurationException - parsing issue
    * @throws SAXException - parsing issue
-   * @throws SearchConfigException - search config not compatible with index
    */
   public FindOptimal(Path documents, Path index, BufferedWriter output, Path queries, Path results)
       throws IOException, InterruptedException, XPathExpressionException,
@@ -103,11 +101,9 @@ public class FindOptimal {
    * @param greedy True if a greedy algorithm should be used, False then it is exhaustive
    * @throws IOException - issue with parsing file
    * @throws XPathExpressionException - issue parsing math ml
-   * @throws ConvertConfigException - exception when converting mathml
    * @throws InterruptedException - issue when python process
    * @throws ParserConfigurationException - parsing issue
    * @throws SAXException - parsing issue
-   * @throws SearchConfigException - search config not compatible with index
    */
   public FindOptimal(
       Path documents, Path index, BufferedWriter output, Path queries, Path results, boolean greedy)
@@ -128,11 +124,9 @@ public class FindOptimal {
    * @param greedy True if a greedy algorithm should be used, False then it is exhaustive
    * @throws IOException - issue with parsing file
    * @throws XPathExpressionException - issue parsing math ml
-   * @throws ConvertConfigException - exception when converting mathml
    * @throws InterruptedException - issue when python process
    * @throws ParserConfigurationException - parsing issue
    * @throws SAXException - parsing issue
-   * @throws SearchConfigException - search config not compatible with index
    */
   public FindOptimal(
       Path documents,
@@ -170,11 +164,9 @@ public class FindOptimal {
    * @param config Tangent features to be used when converting the queries
    * @throws IOException - issue with parsing file
    * @throws XPathExpressionException - issue parsing math ml
-   * @throws ConvertConfigException - exception when converting mathml
    * @throws InterruptedException - issue when python process
    * @throws ParserConfigurationException - parsing issue
    * @throws SAXException - parsing issue
-   * @throws SearchConfigException - search config not compatible with index
    */
   public void updateQueries(ConvertConfig config)
       throws XPathExpressionException, ParserConfigurationException, SAXException, IOException,
@@ -291,7 +283,7 @@ public class FindOptimal {
    *
    * @param searcher searcher that produced the results
    * @param result - the results returned by the searcher
-   * @return a the reciprocal rank (<1.0)
+   * @return a the reciprocal rank (less than 1.0)
    * @throws IOException - issue with reading/writing to file
    */
   public double reciprocal_rank(IndexSearcher searcher, SearchResult result) throws IOException {
