@@ -278,8 +278,6 @@ public class Functions {
    * @param valueB - the value of B
    * @param docScore - the score of the document
    * @return Double the formula score
-   * @throws NumberFormatException - issue when parsing with file
-   * @throws IOException - issue while dealing with file
    */
   public static Double scoreFormula(
       double docLength,
