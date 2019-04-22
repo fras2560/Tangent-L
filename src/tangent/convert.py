@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import argparse
 import logging
 import sys
@@ -363,7 +365,7 @@ def parse_file_to_output(filename,
         (start, end) = MathExtractor.next_math_token(content)
         if start == -1:
             # can just print the rest
-            print(format_paragraph(content, query), end="")
+            print(format_paragraph(content, query).encode(ENCODING), end="")
             content = ""
         else:
             paragraph = format_paragraph(content[0:start], query)
@@ -379,8 +381,8 @@ def parse_file_to_output(filename,
                                          location=location,
                                          synonyms=synonyms,
                                          expand_location=expand_location)
-            print(paragraph)
-            print(ex)
+            print(paragraph.encode(ENCODING))
+            print(ex.encode(ENCODING))
             # now move the content further along
             content = content[end:]
 
