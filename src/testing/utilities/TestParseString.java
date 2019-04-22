@@ -25,7 +25,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import index.ConvertConfig;
-import index.ConvertMathML;
+import index.ConvertMathMl;
 import utilities.Functions;
 
 public class TestParseString {
@@ -70,7 +70,7 @@ public class TestParseString {
        try {
            ConvertConfig config = new ConvertConfig();
            config.optimalConfig();
-           this.temp_file = new ConvertMathML(file).convertPath(config);
+           this.temp_file = new ConvertMathMl(file).convertPath(config);
            String text = Functions.parseString(this.temp_file);
            System.out.println(text);
            System.out.println(text.length());

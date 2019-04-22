@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package query;
 
+package query;
 
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
-
 import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
@@ -31,6 +30,7 @@ import org.apache.lucene.index.TermContext;
 import org.apache.lucene.index.TermState;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
@@ -42,21 +42,24 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.search.similarities.Similarity.SimScorer;
 
 /**
- * A Query that matches documents containing a term. This may be combined with
- * other terms with a {@link BooleanQuery}.
+ * A Query that matches documents containing a term. This may be combined with other terms with a
+ * {@link BooleanQuery}.
  */
 public class MathTermQuery extends Query {
 
   private final Term term;
   private final TermContext perReaderTermState;
   private final int termCount;
+
   final class MathTermWeight extends Weight {
     private final Similarity similarity;
     private final Similarity.SimWeight stats;
     private final TermContext termStates;
     private final boolean needsScores;
     private final int termCount;
-    public MathTermWeight(IndexSearcher searcher, boolean needsScores, TermContext termStates, int termCount)
+
+    public MathTermWeight(
+        IndexSearcher searcher, boolean needsScores, TermContext termStates, int termCount)
         throws IOException {
       super(MathTermQuery.this);
       this.termCount = termCount;
@@ -70,21 +73,22 @@ public class MathTermQuery extends Query {
       final CollectionStatistics collectionStats;
       final TermStatistics termStats;
       if (needsScores) {
-        collectionStats = searcher.collectionStatistics(term.field());
-        termStats = searcher.termStatistics(term, termStates);
+        collectionStats = searcher.collectionStatistics(MathTermQuery.this.term.field());
+        termStats = searcher.termStatistics(MathTermQuery.this.term, termStates);
       } else {
         // we do not need the actual stats, use fake stats with docFreq=maxDoc and ttf=-1
         final int maxDoc = searcher.getIndexReader().maxDoc();
-        collectionStats = new CollectionStatistics(term.field(), maxDoc, -1, -1, -1);
-        termStats = new TermStatistics(term.bytes(), maxDoc, -1);
+        collectionStats =
+            new CollectionStatistics(MathTermQuery.this.term.field(), maxDoc, -1, -1, -1);
+        termStats = new TermStatistics(MathTermQuery.this.term.bytes(), maxDoc, -1);
       }
-     
-      this.stats = similarity.computeWeight(collectionStats, termStats);
+
+      this.stats = this.similarity.computeWeight(collectionStats, termStats);
     }
 
     @Override
     public void extractTerms(Set<Term> terms) {
-      terms.add(getTerm());
+      terms.add(MathTermQuery.this.getTerm());
     }
 
     @Override
@@ -94,50 +98,63 @@ public class MathTermQuery extends Query {
 
     @Override
     public float getValueForNormalization() {
-      return stats.getValueForNormalization();
+      return this.stats.getValueForNormalization();
     }
 
     @Override
     public void normalize(float queryNorm, float boost) {
-      stats.normalize(queryNorm, boost);
+      this.stats.normalize(queryNorm, boost);
     }
 
     @Override
     public Scorer scorer(LeafReaderContext context) throws IOException {
-      assert termStates == null || termStates.wasBuiltFor(ReaderUtil.getTopLevelContext(context)) : "The top-reader used to create Weight is not the same as the current reader's top-reader (" + ReaderUtil.getTopLevelContext(context);;
-      final TermsEnum termsEnum = getTermsEnum(context);
+      assert this.termStates == null
+              || this.termStates.wasBuiltFor(ReaderUtil.getTopLevelContext(context))
+          : "The top-reader used to create Weight"
+              + "is not the same as the current reader's top-reader ("
+              + ReaderUtil.getTopLevelContext(context);
+      ;
+      final TermsEnum termsEnum = this.getTermsEnum(context);
       if (termsEnum == null) {
         return null;
       }
-      PostingsEnum docs = termsEnum.postings(null, needsScores ? PostingsEnum.FREQS : PostingsEnum.NONE);
+      final PostingsEnum docs =
+          termsEnum.postings(null, this.needsScores ? PostingsEnum.FREQS : PostingsEnum.NONE);
       assert docs != null;
-      return new MathTermScorer(this, docs, similarity.simScorer(stats, context), this.termCount);
+      return new MathTermQueryScorer(
+          this, docs, this.similarity.simScorer(this.stats, context), this.termCount);
     }
 
     /**
-     * Returns a {@link TermsEnum} positioned at this weights Term or null if
-     * the term does not exist in the given context
+     * Returns a {@link TermsEnum} positioned at this weights Term or null if the term does not
+     * exist in the given context.
      */
     private TermsEnum getTermsEnum(LeafReaderContext context) throws IOException {
-      if (termStates != null) {
-        // TermQuery either used as a Query or the term states have been provided at construction time
-        assert termStates.wasBuiltFor(ReaderUtil.getTopLevelContext(context)) : "The top-reader used to create Weight is not the same as the current reader's top-reader (" + ReaderUtil.getTopLevelContext(context);
-        final TermState state = termStates.get(context.ord);
+      if (this.termStates != null) {
+        // TermQuery either used as a Query or the term states have been provided at construction
+        // time
+        assert this.termStates.wasBuiltFor(ReaderUtil.getTopLevelContext(context))
+            : "The top-reader used to create Weight"
+                + "is not the same as the current reader's top-reader ("
+                + ReaderUtil.getTopLevelContext(context);
+        final TermState state = this.termStates.get(context.ord);
         if (state == null) { // term is not present in that reader
-          assert termNotInReader(context.reader(), term) : "no termstate found but term exists in reader term=" + term;
+          assert this.termNotInReader(context.reader(), MathTermQuery.this.term)
+              : "no termstate found but term exists in reader term=" + MathTermQuery.this.term;
           return null;
         }
-        final TermsEnum termsEnum = context.reader().terms(term.field()).iterator();
-        termsEnum.seekExact(term.bytes(), state);
+        final TermsEnum termsEnum =
+            context.reader().terms(MathTermQuery.this.term.field()).iterator();
+        termsEnum.seekExact(MathTermQuery.this.term.bytes(), state);
         return termsEnum;
       } else {
         // TermQuery used as a filter, so the term states have not been built up front
-        Terms terms = context.reader().terms(term.field());
+        final Terms terms = context.reader().terms(MathTermQuery.this.term.field());
         if (terms == null) {
           return null;
         }
         final TermsEnum termsEnum = terms.iterator();
-        if (termsEnum.seekExact(term.bytes())) {
+        if (termsEnum.seekExact(MathTermQuery.this.term.bytes())) {
           return termsEnum;
         } else {
           return null;
@@ -145,6 +162,14 @@ public class MathTermQuery extends Query {
       }
     }
 
+    /**
+     * Returns whether the given term is in the reader.
+     *
+     * @param reader - the reader
+     * @param term - the term
+     * @return true if reader contains the term, false otherwise
+     * @throws IOException - issue with reading/writing from a file
+     */
     private boolean termNotInReader(LeafReader reader, Term term) throws IOException {
       // only called from assert
       // System.out.println("TQ.termNotInReader reader=" + reader + " term=" +
@@ -154,18 +179,23 @@ public class MathTermQuery extends Query {
 
     @Override
     public Explanation explain(LeafReaderContext context, int doc) throws IOException {
-      Scorer scorer = scorer(context);
+      final Scorer scorer = this.scorer(context);
       if (scorer != null) {
-        int newDoc = scorer.iterator().advance(doc);
+        final int newDoc = scorer.iterator().advance(doc);
         if (newDoc == doc) {
-          float freq = scorer.freq();
-          SimScorer docScorer = similarity.simScorer(stats, context);
-          Explanation freqExplanation = Explanation.match(freq, "termFreq=" + freq);
-          Explanation scoreExplanation = docScorer.explain(doc, freqExplanation);
+          final float freq = scorer.freq();
+          final SimScorer docScorer = this.similarity.simScorer(this.stats, context);
+          final Explanation freqExplanation = Explanation.match(freq, "termFreq=" + freq);
+          final Explanation scoreExplanation = docScorer.explain(doc, freqExplanation);
           return Explanation.match(
               scoreExplanation.getValue(),
-              "weight(" + getQuery() + " in " + doc + ") ["
-                  + similarity.getClass().getSimpleName() + "], result of:",
+              "weight("
+                  + this.getQuery()
+                  + " in "
+                  + doc
+                  + ") ["
+                  + this.similarity.getClass().getSimpleName()
+                  + "], result of:",
               scoreExplanation);
         }
       }
@@ -175,37 +205,36 @@ public class MathTermQuery extends Query {
 
   /** Constructs a query for the term <code>t</code>. */
   public MathTermQuery(Term t, int termCount) {
-    term = Objects.requireNonNull(t);
-    perReaderTermState = null;
+    this.term = Objects.requireNonNull(t);
+    this.perReaderTermState = null;
     this.termCount = termCount;
   }
 
   /**
-   * Expert: constructs a TermQuery that will use the provided docFreq instead
-   * of looking up the docFreq against the searcher.
+   * Expert: constructs a TermQuery that will use the provided docFreq instead of looking up the
+   * docFreq against the searcher.
    */
   public MathTermQuery(Term t, TermContext states, int termCount) {
     assert states != null;
-    term = Objects.requireNonNull(t);
-    perReaderTermState = Objects.requireNonNull(states);
+    this.term = Objects.requireNonNull(t);
+    this.perReaderTermState = Objects.requireNonNull(states);
     this.termCount = termCount;
   }
 
   /** Returns the term of this query. */
   public Term getTerm() {
-    return term;
+    return this.term;
   }
 
   @Override
   public Weight createWeight(IndexSearcher searcher, boolean needsScores) throws IOException {
     final IndexReaderContext context = searcher.getTopReaderContext();
     final TermContext termState;
-    if (perReaderTermState == null
-        || perReaderTermState.wasBuiltFor(context) == false) {
+    if (this.perReaderTermState == null || this.perReaderTermState.wasBuiltFor(context) == false) {
       if (needsScores) {
         // make TermQuery single-pass if we don't have a PRTS or if the context
         // differs!
-        termState = TermContext.build(context, term);
+        termState = TermContext.build(context, this.term);
       } else {
         // do not compute the term state, this will help save seeks in the terms
         // dict on segments that have a cache entry for this query
@@ -222,24 +251,23 @@ public class MathTermQuery extends Query {
   /** Prints a user-readable version of this query. */
   @Override
   public String toString(String field) {
-    StringBuilder buffer = new StringBuilder();
-    if (!term.field().equals(field)) {
-      buffer.append(term.field());
+    final StringBuilder buffer = new StringBuilder();
+    if (!this.term.field().equals(field)) {
+      buffer.append(this.term.field());
       buffer.append(":");
     }
-    buffer.append(term.text());
+    buffer.append(this.term.text());
     return buffer.toString();
   }
 
   /** Returns true iff <code>o</code> is equal to this. */
   @Override
   public boolean equals(Object other) {
-    return sameClassAs(other) &&
-           term.equals(((MathTermQuery) other).term);
+    return this.sameClassAs(other) && this.term.equals(((MathTermQuery) other).term);
   }
 
   @Override
   public int hashCode() {
-    return classHash() ^ term.hashCode();
+    return this.classHash() ^ this.term.hashCode();
   }
 }

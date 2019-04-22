@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package index;
 
 import java.io.IOException;
@@ -23,45 +24,47 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.util.BytesRef;
 import utilities.Constants;
+
 /**
- * Filter adds a payload to appropriate terms
- * 
+ * Filter adds a payload to appropriate terms.
+ *
  * @author Dallas Fraser
  * @since 2017-11-06
- *
  */
 public class PayloadFilter extends TokenFilter {
-    private PayloadAttribute payloadAtt;
-    private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
-    /**
-     * Class Constructor
-     * @param in the token stream
-     */
-    public PayloadFilter(TokenStream in){
-        super(in);
-        this.payloadAtt = addAttribute(PayloadAttribute.class);
-    }
+  private final PayloadAttribute payloadAtt;
+  private final CharTermAttribute termAtt = this.addAttribute(CharTermAttribute.class);
 
-    @Override
-    public final boolean incrementToken() throws IOException {
-        if (!this.input.incrementToken()) {
-            return false;
-        }
-        // get the current token
-        final char[] token = Arrays.copyOfRange(this.termAtt.buffer(), 0, this.termAtt.length());
-        String stoken = String.valueOf(token);
-        String[] parts = stoken.split(Constants.PAYLOAD_DELIMITER);
-        if (parts.length > 1 && parts.length == 2){
-            termAtt.setLength(parts[0].length());
-            // the rest is the payload
-            BytesRef br = new BytesRef(parts[1]);
-            payloadAtt.setPayload(br);
-        }else if (parts.length > 1){
-            // skip
-        }else{
-            // no payload here
-            payloadAtt.setPayload(null);
-        }
-        return true;
+  /**
+   * Class Constructor.
+   *
+   * @param in the token stream
+   */
+  public PayloadFilter(TokenStream in) {
+    super(in);
+    this.payloadAtt = this.addAttribute(PayloadAttribute.class);
+  }
+
+  @Override
+  public final boolean incrementToken() throws IOException {
+    if (!this.input.incrementToken()) {
+      return false;
     }
+    // get the current token
+    final char[] token = Arrays.copyOfRange(this.termAtt.buffer(), 0, this.termAtt.length());
+    final String stoken = String.valueOf(token);
+    final String[] parts = stoken.split(Constants.PAYLOAD_DELIMITER);
+    if (parts.length > 1 && parts.length == 2) {
+      this.termAtt.setLength(parts[0].length());
+      // the rest is the payload
+      final BytesRef br = new BytesRef(parts[1]);
+      this.payloadAtt.setPayload(br);
+    } else if (parts.length > 1) {
+      // skip
+    } else {
+      // no payload here
+      this.payloadAtt.setPayload(null);
+    }
+    return true;
+  }
 }

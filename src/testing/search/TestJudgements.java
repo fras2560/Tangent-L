@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import query.MathQuery;
-import search.Judgements;
+import search.Judgments;
 
 
 public class TestJudgements {
@@ -33,7 +33,7 @@ public class TestJudgements {
                            "index_test_1",
                            "judgements",
                            "judgements.txt");
-        Judgements r = new Judgements(p.toFile());
+        Judgments r = new Judgments(p.toFile());
         assertEquals(r.length(), 3);
     }
 
@@ -45,7 +45,7 @@ public class TestJudgements {
                            "index_test_1" ,
                            "judgements",
                            "judgements.txt");
-        Judgements r = new Judgements(p.toFile());
+        Judgments r = new Judgments(p.toFile());
         MathQuery query = new MathQuery("NTCIR12-MathIR-1");
         assertEquals(r.findResult(query, "1301.6848_1_17"), new Float(3.0));
         assertEquals(r.findResult(query, "math-ph0607065_1_57"), new Float(0.0));
@@ -59,7 +59,7 @@ public class TestJudgements {
                            "index_test_1",
                            "judgements",
                            "NTCIR12-ArXiv-Math.dat");
-        Judgements r = new Judgements(p.toFile());
+        Judgments r = new Judgments(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         Float rank = r.findResult(q, "0808.1204_1_258");
         assertEquals(rank, new Float(0.0));
@@ -77,7 +77,7 @@ public class TestJudgements {
                            "index_test_1",
                            "judgements",
                             "NTCIR12-ArXiv-Math.dat");
-        Judgements r = new Judgements(p.toFile());
+        Judgments r = new Judgments(p.toFile());
         MathQuery q = new MathQuery("NTCIR12-MathIR-1");
         ArrayList<String> results = new ArrayList<String>(); 
         int[] result = r.recallResult(q, results);
